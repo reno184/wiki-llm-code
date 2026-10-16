@@ -5,7 +5,7 @@ Usage: génération du token côté client, sans interaction utilisateur (v3 inv
 
 ## Choix d'implémentation (standard du wiki)
 
-- Le token est envoyé **dans le header** `g-recaptcha-response` de la requête fetch (équivalent d'un header `authorization`), pas dans le body JSON.
+- Le token est envoyé **dans le header** `g-recaptcha-response` de la requête fetch, pas dans le body JSON.
 - La clé de site (publique) est passée dans l'URL du script de chargement.
 
 ## Code
@@ -34,6 +34,10 @@ const text = await rep.text();
 ```
 
 ## Notes
+
+### `g-recaptcha-response` : le "header d'autorisation" du formulaire
+
+Le header `'g-recaptcha-response': token` joue **exactement le même rôle que le header `authorization` dans une application web sécurisée** : comme on transmettrait un JWT via `'authorization': 'Bearer <token>'` pour prouver l'identité d'un utilisateur, on transmet ici le token reCAPTCHA via son header dédié pour **prouver que la requête provient d'un humain, pas d'un bot**. Le back le lit comme n'importe quel header (`req.get('g-recaptcha-response')`) et le valide auprès de Google — l'équivalent du `siteverify` de notre côté, comme le serait la vérification d'un JWT auprès de son émetteur.
 
 - La clé de site est **publique par conception** (aucun risque à l'exposer). Pour la propreté, la sortir dans une variable de config plutôt que de la dupliquer en dur dans le HTML et le JS.
 - Toujours ajouter `'Content-Type': 'application/json'` : sinon Express ne parse pas `req.body` (bug constaté sur la première version).
