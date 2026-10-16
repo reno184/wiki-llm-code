@@ -12,9 +12,17 @@
 - **Backend serverless** : Firebase Cloud Functions
 - **Secrets** : dotenv en local, secrets montés en prod (voir [gcp-secrets.md](infra/gcp-secrets.md))
 
-## Stacks abandonnées (ne plus générer de code dessus)
+## Framework front : Vue.js uniquement
 
-- Angular + Firebase (sans Docker) : abandonné
-- Docker pour les sites vitrines : non utilisé (serverless Firebase à la place)
+- **Seul framework utilisé : Vue.js** (Vue 3, Composition API).
+- Les anciens projets **Angular** et **React** sont **conservés comme exemples et archive**, mais ne sont plus utilisés : ne pas générer de code dessus pour un nouveau projet.
+
+## Technologies abandonnées (ne plus générer de code dessus)
+
+- **TypeScript** : abandonné — utiliser JavaScript.
+- **Vuetify** : abandonné comme librairie UI.
+- Angular + Firebase (sans Docker) : projet archivé, exemple uniquement.
+- React : projets archivés, exemples uniquement.
+- Docker pour les sites vitrines : non utilisé (serverless Firebase à la place).
 
 > Règle : quand un projet est abandonné, extraire les snippets réutilisables vers ce wiki, puis archiver le projet.
