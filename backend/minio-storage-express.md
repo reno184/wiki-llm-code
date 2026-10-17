@@ -2,19 +2,16 @@
 
 ## Contexte d'usage
 - Backend Express (ESM) qui reçoit des fichiers et les stocke dans MinIO.
-- Bucket public en lecture (URLs directement affichables navigateur).
-- Bucket accessible depuis le navigateur
-- Bucket inclus dans une image, et données stockés dans un volume Docker
-
+- Bucket public en lecture : URLs directement affichables depuis le navigateur.
+- MinIO containerisé (Docker Compose), données persistées dans un volume Docker externe.
 
 ## Stack
 Node 20+ / Express / minio (sdk) / busboy / docker
 
-
-## install
-
-```npm install minio```
-
+## Install
+```bash
+npm install minio
+```
 
 ## Config client (singleton)
 ```js
@@ -30,25 +27,47 @@ export const minioClient = new Minio.Client({
 })
 ```
 
-## Init du bucket au démarrage (idempotent) index.js
- ```js
- const startServer = async () => {
-    try {
-        // 1. Connexion à MongoDB
-        await connectDB()
+## Init du bucket au démarrage (idempotent)
+> Pas de try/catch ici : une erreur remonte au `startServer()` qui fait `process.exit(1)` (fail fast). Un bucket absent ne doit jamais laisser le serveur démarrer.
 
-        // 2. Initialisation du/des buckets MinIO
+```js
+// config/minio.js
+export const BUCKET_NAME = 'pdf-thumbnails'
+
+export const initBucket = async (bucketName) => {
+    const exists = await minioClient.bucketExists(bucketName)
+    if (!exists) {
+        await minioClient.makeBucket(bucketName)
+        console.log(`Bucket '${bucketName}' créé avec succès.`)
+    }
+
+    // Politique rendant les fichiers lisibles publiquement depuis le navigateur
+    const policy = {
+        Version: '2012-10-17',
+        Statement: [
+            {
+                Effect: 'Allow',
+                Principal: {AWS: ['*']},
+                Action: ['s3:GetObject'],
+                Resource: [`arn:aws:s3:::${bucketName}/*`],
+            },
+        ],
+    }
+    await minioClient.setBucketPolicy(bucketName, JSON.stringify(policy))
+}
+```
+
+Appel dans `index.js`, **avant** `app.listen()` :
+```js
+const startServer = async () => {
+    try {
+        await connectDB()
         await initBucket('pdf-thumbnails')
 
-        // 3. Lancement de l'écoute du serveur HTTP
         const PORT = process.env.PORT || 3000
-        const server = app.listen(PORT, '0.0.0.0', () => {
-            console.log(`Serveur backend démarré sur le port ${PORT}`);
-        });
-
-        // Timeout d'inactivité des sockets HTTP
-        server.setTimeout(4000)
-
+        app.listen(PORT, '0.0.0.0', () => {
+            console.log(`Serveur backend démarré sur le port ${PORT}`)
+        })
     } catch (error) {
         console.error('❌ Échec du démarrage du serveur :', error)
         process.exit(1)
@@ -56,128 +75,23 @@ export const minioClient = new Minio.Client({
 }
 ```
 
-## setting de setBucketPolicy (example)
-
-```js 
-
-export const BUCKET_NAME = 'pdf-thumbnails'
-
-
-export const initBucket = async (bucketName) => {
-    try {
-        const exists = await minioClient.bucketExists(bucketName)
-        if (!exists) {
-            await minioClient.makeBucket(bucketName)
-            console.log(`Bucket '${bucketName}' créé avec succès.`)
-        }
-
-        // Politique rendant les fichiers lisibles publiquement depuis le navigateur
-        const policy = {
-            Version: '2012-10-17',
-            Statement: [
-                {
-                    Effect: 'Allow',
-                    Principal: {AWS: ['*']},
-                    Action: ['s3:GetObject'],
-                    Resource: [`arn:aws:s3:::${bucketName}/*`],
-                },
-            ],
-        }
-        await minioClient.setBucketPolicy(bucketName, JSON.stringify(policy))
-    } catch (err) {
-        console.error('Erreur lors de l’initialisation du bucket MinIO:', err)
-    }
-}
-
-```
-
-### minio manager (example)
-
+## Manager upload (retourne l'URL logique `<bucket>/<objectName>`)
 ```js
 export const uploadToMinio = async (bucketName, objectName, buffer, mimeType) => {
     await minioClient.putObject(bucketName, objectName, buffer, buffer.length, {
         'Content-Type': mimeType,
     })
-    
     return `${bucketName}/${objectName}`
 }
 ```
 
-### appel example dans la route (pas de fallback)
-
-> note: reste simple pas de fallback si problème écriture
-
+## Appel dans une route (pattern)
+> Rester simple, pas de fallback en cas d'échec d'écriture : l'erreur remonte au `next(err)` global.
 ```js
-
-const handlePdfUpload = ({limitMo, firstPageOnly}) => async (req, res, next) => {
-    try {
-        const fileData = await parseSinglePdf(req, limitMo)
-
-        const timestamp = Date.now()
-        const baseFilename = fileData.filename.split('.').slice(0, -1).join('.')
-
-        // 2. Upload du fichier PDF original dans MinIO
-        const pdfKey = `${timestamp}-${fileData.filename}`
-        const pdfUrl = await uploadToMinio(BUCKET_NAME, pdfKey, fileData.buffer, fileData.mimeType)
-
-        // 3. Conversion PDF -> WebP (L'erreur est automatiquement attrapée par le catch global)
-        let webpResult
-        try {
-            webpResult = await convertPdfToWebp(fileData.buffer, {firstPageOnly})
-        } catch (err) {
-            throw new AppError(`Erreur conversion PDF: ${err.message}`, 500)
-        }
-
-        let imagesData = []
-
-        // 4. Cas A : Première page uniquement (miniature)
-        if (firstPageOnly) {
-            const webpKey = `${timestamp}-${baseFilename}-thumb.webp`
-            const imageUrl = await uploadToMinio(BUCKET_NAME, webpKey, webpResult, 'image/webp')
-
-            imagesData.push({
-                page: 1,
-                key: webpKey,
-                src: imageUrl
-            })
-        }
-        // 4. Cas B : Toutes les pages
-        else {
-            imagesData = await Promise.all(
-                webpResult.map(async (buffer, index) => {
-                    const pageNum = index + 1
-                    const webpKey = `${timestamp}-${baseFilename}-page-${pageNum}.webp`
-                    const imageUrl = await uploadToMinio(BUCKET_NAME, webpKey, buffer, 'image/webp')
-
-                    return {
-                        page: pageNum,
-                        key: webpKey,
-                        src: imageUrl
-                    }
-                })
-            )
-        }
-
-        // 5. Sauvegarde du document dans MongoDB via Mongoose
-        const pdfDocument = await PdfDocument.create({
-            originalName: fileData.filename,
-            pdfKey: pdfKey,
-            pdfUrl: pdfUrl,
-            images: imagesData
-        })
-
-        return res.status(201).json({
-            message: 'Document PDF uploadé et enregistré avec succès',
-            document: pdfDocument
-        })
-
-    } catch (err) {
-        next(err)
-    }
-}
-
-
+const pdfUrl = await uploadToMinio(BUCKET_NAME, pdfKey, fileData.buffer, fileData.mimeType)
+// ... traitements dérivés éventuels, puis persistance en base (clé + URL logique)
 ```
+
 ## Console web MinIO
 Accessible directement depuis le navigateur : `http://localhost:9001` — consulter/gérer buckets et objets via l'UI. Connexion avec `MINIO_ROOT_USER` / `MINIO_ROOT_PASSWORD`.
 
@@ -189,13 +103,10 @@ Accessible directement depuis le navigateur : `http://localhost:9001` — consul
 - Ne pas commiter les secrets : `.env` — stocker `MINIO_ROOT_USER` / `MINIO_ROOT_PASSWORD` dans une **note sécurisée macOS** (app Mots de passe / Notes verrouillées).
 - `MINIO_ROOT_USER` / `MINIO_ROOT_PASSWORD` sont aussi les identifiants de la **console web MinIO** (http://localhost:9001).
 
-
-example .env
-
+Example `.env` (valeurs à remplacer par des identifiants forts) :
 ```
-MINIO_ROOT_USER=minioadmin
-MINIO_ROOT_PASSWORD=minioadmin
-MINIO_PUBLIC_URL=http://localhost:9000
+MINIO_ROOT_USER=<user-fort>
+MINIO_ROOT_PASSWORD=<mot-de-passe-fort>
 ```
 
 ## État

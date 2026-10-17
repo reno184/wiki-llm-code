@@ -5,7 +5,6 @@
 - Console web d'admin sur :9001.
 
 ## Service MinIO
-
 ```yaml
 minio:
   image: minio/minio:latest
@@ -22,14 +21,28 @@ minio:
 ```
 
 ## Points attention
-
 - Volume `minio_data` **en `external: true`** : le volume est géré hors compose → `docker compose down -v` ou `docker system prune` ne **suppriment pas** les données MinIO. Le créer une fois avec `docker volume create minio_data`.
+- `depends_on` seul garantit seulement que le container est démarré, pas que MinIO est prêt. Ajouter un healthcheck et l'exprimer chez le consommateur :
 
-- Les services consommateurs déclarent `depends_on: [minio]`.
+```yaml
+minio:
+  # ... (config ci-dessus)
+  healthcheck:
+    test: ["CMD", "mc", "ready", "local"]
+    interval: 5s
+    timeout: 5s
+    retries: 5
+
+backend:
+  depends_on:
+    minio:
+      condition: service_healthy
+    mongodb:
+      condition: service_started
+```
 
 ## Variables à mettre dans `.env` (non commité)
 `MONGO_USER`, `MONGO_PASSWORD`, `MONGO_DB`, `JWT_SECRET`, `JWT_REFRESH_SECRET`, `MINIO_ROOT_USER`, `MINIO_ROOT_PASSWORD`
-
 
 ## État
 vivant
