@@ -5,6 +5,7 @@ Usage: recevoir un upload multipart/form-data dans une route Express, valider le
 
 ```bash
 npm install busboy
+npm install joi
 ```
 
 ## Middleware de validation du Content-Type (avant tout parsing)
@@ -127,25 +128,38 @@ busboy.on('file', (fieldName, file, { filename, mimeType }) => {
 })
 ```
 
-### Ajout d'infos sur `on field`
+### Récupération des champs supplémentaires (`on field`)
 
-Permet de récupérer la valeur de champs supplémentaires (champs texte du formulaire envoyés avec le fichier). Possibilité de contrôler leur validité avec les schemas npm Joi.
+Permet de récupérer la valeur de champs texte du formulaire envoyés avec le fichier.
 
 ```js
 const fields = {}
 
 busboy.on('field', (name, value) => { fields[name] = value })
-
 ```
 
-Optionnel controle Joi de fields
+### Optionnel — validation Joi des fields (erreur 400)
 
-```
+Contrôle la validité des champs avec un schema npm Joi. Un champ de formulaire mal rempli est une erreur **probable** (saisie utilisateur) → 400.
 
-   const {error} = Joi.object({
-                    title: Joi.string().required(),
-                    author: Joi.string().required()
-                }).validate(fields);
+⚠️ La validation s'exécute dans le `busboy.on('finish')` — quand **tous** les champs sont reçus. Pas à côté du `on('field')`, sinon on valide un objet à moitié rempli.
+
+```js
+import Joi from 'joi'
+
+busboy.on('finish', () => {
+    const { error } = Joi.object({
+        title: Joi.string().required(),
+        author: Joi.string().required()
+    }).validate(fields)
+
+    if (error) {
+        reject(new AppError(error.details[0].message, 400))
+        return
+    }
+
+    resolve(uploadedFile)
+})
 ```
 
 ## Notes
@@ -157,4 +171,4 @@ Optionnel controle Joi de fields
 
 ## État
 
-**vivant** — pattern busboy minimal + middleware `uploadValidator` + contrôles optionnels + délégation du stockage au driver via la fiche Strategy.
+**vivant** — pattern busboy minimal + middleware `uploadValidator` + contrôles optionnels (types, poids, fichier unique, champs + Joi) + délégation du stockage au driver via la fiche Strategy.
