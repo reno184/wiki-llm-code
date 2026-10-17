@@ -5,6 +5,7 @@ Point d'entrée pour un LLM : charger INDEX.md, puis seulement les fiches utiles
 | Fiche | Stack | Usage | État |
 |---|---|---|---|
 | [backend/nodejs-express-env.md](backend/nodejs-express-env.md) | Node/Express + dotenv | Lire process.env : dotenv en 1re ligne, .env non commité, express.json(), fail fast | vivant |
+| [backend/express-error-handling.md](backend/express-error-handling.md) | Node/Express (ESM) | Erreurs API : classe `AppError` (statut + stack propre), middleware `errorHandler` monté en DERNIER (4 args obligatoires), 400 JSON / dev verbeux filtré / prod sobre sans fuite | vivant |
 | [backend/minio-storage-express.md](backend/minio-storage-express.md) | Node/Express + minio sdk + busboy | Stockage S3 MinIO : client singleton, init bucket idempotent + policy publique, upload Buffer, pattern route upload | vivant |
 | [backend/recaptcha-siteverify.md](backend/recaptcha-siteverify.md) | Node/Express + GCP Cloud Functions | reCAPTCHA : vérification serveur du token (header `g-recaptcha-response` → siteverify) | vivant |
 | [backend/upload-file-busboy.md](backend/upload-file-busboy.md) | Node/Express + busboy | Upload multipart : middleware uploadValidator (Content-Type), streaming busboy (req.pipe, drain des streams, limits fileSize), validation type/taille serveur, route pattern | vivant |
