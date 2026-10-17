@@ -135,6 +135,17 @@ Permet de récupérer la valeur de champs supplémentaires (champs texte du form
 const fields = {}
 
 busboy.on('field', (name, value) => { fields[name] = value })
+
+```
+
+Optionnel controle Joi de fields
+
+```
+
+   const {error} = Joi.object({
+                    title: Joi.string().required(),
+                    author: Joi.string().required()
+                }).validate(fields);
 ```
 
 ## Notes
