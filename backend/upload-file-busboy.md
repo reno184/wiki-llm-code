@@ -1,9 +1,7 @@
 # Upload de fichier — backend (Express + busboy, streaming multipart)
 
-> Miroir local de [backend/upload-file-busboy.md](https://github.com/reno184/wiki-llm-code/blob/main/backend/upload-file-busboy.md) — source de vérité : repo GitHub wiki-llm-code.
-
 Stack: Node 20+ / Express (ESM) / busboy.
-Usage: recevoir un upload multipart/form-data dans une route Express, streamer le fichier, valider, déléguer le stockage à un driver (Strategy). Fiche back du trio upload fullstack (voir [upload-file.md](upload-file.md) et [upload-strategy.md](upload-strategy.md)).
+Usage: recevoir un upload multipart/form-data dans une route Express, valider le Content-Type via middleware, streamer le fichier, valider, déléguer le stockage à un driver (Strategy). Fiche back du trio upload fullstack (voir [../front/upload-file.md](../front/upload-file.md) et [../patterns/upload-strategy.md](../patterns/upload-strategy.md)).
 
 ```bash
 npm install busboy
@@ -136,8 +134,8 @@ export const put = (stream, objectName, mimeType, maxFileSize) =>
 - Validation MIME côté back obligatoire : le front est contournable (curl, Postman).
 - Pas de validation de l'extension seule : toujours le MIME annoncé + idéalement une détection de contenu (magic bytes) pour les uploads sensibles.
 - Un seul fichier ici ; pour un lot, cumuler les `uploadPromise` dans un tableau et `Promise.all` dans `finish`.
-- Si des secrets interviennent (clés MinIO), ils viennent de `.env` — jamais en dur (voir docker-secrets-env.md).
+- Si des secrets interviennent (clés MinIO), ils viennent de `.env` — jamais en dur (voir [docker-secrets-env.md](../infra/docker-secrets-env.md)).
 
 ## État
 
-**vivant** — pattern busboy streaming + délégation au driver via Strategy (voir [upload-strategy.md](upload-strategy.md)) et client MinIO de [minio-storage-express.md](minio-storage-express.md).
+**vivant** — pattern busboy streaming + middleware `uploadValidator` + délégation au driver via Strategy (voir [../patterns/upload-strategy.md](../patterns/upload-strategy.md)) et client MinIO de [minio-storage-express.md](minio-storage-express.md)).
