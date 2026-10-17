@@ -46,13 +46,34 @@ Points critiques :
 
 ### 3. Vérification
 
-Le serveur `github` doit apparaître connecté avec ses outils listés (`get_file_contents`…). Test dans le chat :
+Le serveur `github` doit apparaître connecté avec ses outils listés (`get_file_contents`…).
 
-> *"Via MCP GitHub, lis INDEX.md du repo reno184/wiki-llm-code et résume les fiches front."*
+### 4. Premier prompt de test (à copier tel quel dans le chat AI Assistant)
+
+```
+Via le serveur MCP GitHub, lis le fichier INDEX.md du repo reno184/wiki-llm-code
+(branche main), puis charge la fiche front/vuejs-router-menu.md.
+
+Ensuite, décris-moi en 5 lignes comment tu ajouterais une page "DeleteMaterial"
+à un projet Vue 3 selon ce pattern : liste exacte des fichiers à modifier,
+avec ce qui change dans chacun. Ne modifie rien, juste le plan.
+```
+
+Pourquoi ce prompt est un bon test :
+
+- **"Via le serveur MCP GitHub"** force l'agent à utiliser l'outil MCP (`get_file_contents`), pas une réponse générique.
+- **INDEX.md d'abord, puis la fiche** : valide le workflow en 2 étapes conçu dans le wiki.
+- **"Ne modifie rien, juste le plan"** : test sans risque, on vérifie que l'agent lit bien *notre* contenu avant de le laisser coder.
+
+Critères de validation :
+
+- ✅ La réponse contient des détails qui ne peuvent venir que de la fiche : `linkActiveClass: 'menu-active'`, entrée `menus[]` avec `short`, `:key="route.path"`, piège de l'unique élément racine.
+- ❌ Réponse générique sans mention de `menu-active` → la fiche n'a pas été lue, MCP non utilisé.
+- ❌ "Tool call refusé" / "pas d'accès à ce repo" → vérifier le header `Bearer <token>` et le périmètre du fine-grained token.
 
 ## Workflow agent : charger le wiki avant de coder
 
-### 4. Règle persistante — `.junie/guidelines.md` (racine du projet)
+### 5. Règle persistante — `.junie/guidelines.md` (racine du projet)
 
 ```markdown
 # Règles projet
@@ -66,7 +87,7 @@ repo reno184/wiki-llm-code → charger INDEX.md, puis uniquement les fiches util
 
 Junie lit ce fichier à chaque session → plus besoin de répéter la consigne dans les prompts.
 
-### 5. Prompt de tâche type
+### 6. Prompt de tâche type
 
 ```
 Ajoute une page DeleteMaterial. Entrée menu : label 'Delete material', short 'Delete', icône fa-trash.
