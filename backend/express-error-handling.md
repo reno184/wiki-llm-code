@@ -38,8 +38,8 @@ Usage dans une route/service :
 ```js
 import { AppError } from '../utils/AppError.js'
 
-throw new AppError('Matériel introuvable.', 404)   // → next(err) ou throw dans un handler async
-throw new AppError('Type de fichier non autorisé.', 400)
+throw new AppError('Fichier trop volumineux', 400)   // erreur probable → 400
+throw new AppError('Type non autorisé', 500)            // erreur improbable → 500
 ```
 
 - `Error.captureStackTrace(this, this.constructor)` : la stack démarre **à l'endroit du throw**, pas dans le constructeur — le bruit de la classe elle-même est éliminé.
