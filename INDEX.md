@@ -17,6 +17,7 @@ Point d'entrée pour un LLM : charger INDEX.md, puis seulement les fiches utiles
 | [infra/gcp-cloud-functions-checklist.md](infra/gcp-cloud-functions-checklist.md) | GCP Cloud Functions | Checklist création : permissions allUsers, région, secrets, test | vivant |
 | [infra/docker-minio-compose.md](infra/docker-minio-compose.md) | Docker Compose + MinIO | Service MinIO en compose : ports 9000/9001, UI navigateur, volume externe (external: true), hostname = nom du service, .env | vivant |
 | [infra/docker-secrets-env.md](infra/docker-secrets-env.md) | Docker / Compose / Node | Secrets et .env : périmètre d'exposition (inspect, layers image), checklist .dockerignore/secrets compose/user MinIO dédié | vivant |
+| [patterns/express-strategy.md](patterns/express-strategy.md) | Node/Express (protos) | Style délibéré proto : toute la logique dans la route (pas de controller/service), try/catch + next(err) systématique, AppError pour erreurs attendues, signaux d'extraction | vivant |
 | [patterns/recaptcha-choix-offre.md](patterns/recaptcha-choix-offre.md) | — | Décision : reCAPTCHA v3 classique vs Enterprise/Fraud Defense | vivant |
 | [patterns/upload-strategy.md](patterns/upload-strategy.md) | Strategy pattern (Node) | Drivers de stockage interchangeables : contrat `put`/`delete`, drivers minio/local, factory `UPLOAD_DRIVER` par env, Open/Closed | vivant |
 | [stacks.md](stacks.md) | — | Stack de référence + stacks abandonnées | vivant |
