@@ -41,8 +41,8 @@ backend:
       condition: service_started
 ```
 
-## Variables à mettre dans `.env` (non commité)
-`MONGO_USER`, `MONGO_PASSWORD`, `MONGO_DB`, `JWT_SECRET`, `JWT_REFRESH_SECRET`, `MINIO_ROOT_USER`, `MINIO_ROOT_PASSWORD`
+## Variables à mettre dans `.env` (non commité) - valeur stocké dans doc sécurisée macOS
+`MINIO_ROOT_USER`, `MINIO_ROOT_PASSWORD`
 
 ## État
 vivant
