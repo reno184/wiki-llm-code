@@ -5,7 +5,7 @@ Usage: fiche de base pour tout back Express — projets en **modules ES (import/
 
 ## Règle 0 — JavaScript en type module (ESM)
 
-**Tous les projets Node du wiki sont en ES Modules : `"type": "module"` dans `package.json`.**
+**Les projets Node/Express du wiki sont en ES Modules : `"type": "module"` dans `package.json`.**
 
 ```json
 {
@@ -13,7 +13,7 @@ Usage: fiche de base pour tout back Express — projets en **modules ES (import/
 }
 ```
 
-- `import`/`export` partout, **jamais de `require()`** — sauf code légué CommonJS.
+- `import`/`export` partout, **jamais de `require()`** — sauf exceptions ci-dessous.
 - Imports **avec l'extension `.js`** (ex. `import { uploadValidator } from '../middlewares/uploadValidator.js'`) : obligatoire en ESM Node, un `import` sans extension casse en exécution directe.
 - `import.meta.url` remplace `__dirname` si besoin du chemin du fichier :
 
@@ -26,6 +26,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 - `process.env` reste identique en ESM.
 - Top-level `await` disponible (aucun besoin d'envelopper dans un `async` main).
+
+**Exception : les applications Node/Express en syntaxe Pug (sites vitrines multipage) restent en CommonJS — `require()` et pas de `"type": "module"`.** Voir stacks.md : la stack sites vitrines (Pug + View Transitions + Firebase) est l'exception historique, ne pas la convertir.
 
 ## Principe
 
