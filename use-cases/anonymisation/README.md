@@ -1,16 +1,16 @@
 ---
 use-case: anonymisation
-version: 0 (squelette)
+version: 1
 ---
 
-# Use case : anonymisation de documents
+# Use case : anonymisation de documents Markdown
 
-Workflow complet : document entrant → pipeline Python → prompt canonique → qwen3.5 → document anonymisé.
+Workflow complet : Markdown (produit par [pdf-to-md](../pdf-to-md/README.md)) → pipeline Python → prompt canonique → qwen3.5 → document anonymisé.
 
 ## Architecture
 
 ```
-Document (PDF/TXT)
+Markdown source (issu de use-cases/pdf-to-md/)
    │
    ▼
 pipeline-python.md          ← chunking + préparation
@@ -25,10 +25,15 @@ langchain-api.md            ← API Node + LangChain + qwen3.5
 Document anonymisé + mapping table
 ```
 
+## Format d'entrée
+
+**Markdown uniquement** (`text/markdown`). La conversion PDF → Markdown est gérée par le use case [pdf-to-md](../pdf-to-md/README.md) (OCRmyPDF → PyMuPDF4LLM) — jamais de PDF direct ici.
+
 ## Fiches liées
 - [../../prompts/anonymisation.md](../../prompts/anonymisation.md) — prompt canonique (frontmatter versionné)
 - [pipeline-python.md](pipeline-python.md) — fonctions Python (chunking, réassemblage)
 - [langchain-api.md](langchain-api.md) — API Node LangChain
+- [../pdf-to-md/README.md](../pdf-to-md/README.md) — use case amont : PDF → Markdown
 
 ## Règle de synchronisation
 
