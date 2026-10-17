@@ -67,7 +67,9 @@ try {
 
 Ensuite, en fonction des besoins, ajouter les contrôles ci-dessous.
 
-### Vérification des types autorisés (erreur 415)
+### Vérification des types autorisés (erreur 500)
+
+Le type de fichier accepté est fixé **explicitement côté front** (input `accept`) : une erreur de type est donc improbable → 500.
 
 ```js
 const ALLOWED_TYPES = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp']
@@ -75,7 +77,7 @@ const ALLOWED_TYPES = ['application/pdf', 'image/jpeg', 'image/png', 'image/webp
 busboy.on('file', (fieldName, file, { filename, mimeType }) => {
     if (!ALLOWED_TYPES.includes(mimeType)) {
         file.resume()
-        reject(new AppError(`Type non autorisé : ${mimeType}`, 415))
+        reject(new AppError(`Type non autorisé : ${mimeType}`, 500))
         return
     }
 
@@ -89,7 +91,7 @@ busboy.on('file', (fieldName, file, { filename, mimeType }) => {
 
 ### Vérification du poids du fichier (erreur 400)
 
-On renvoie une erreur **400** et non 500 : côté front, une erreur 400 affiche une popover pour alerter que le fichier est trop volumineux — une 500 serait traitée comme un bug serveur.
+On renvoie une erreur **400** : le poids n'est pas contrôlé côté front (l'utilisateur peut soumettre un fichier trop gros, c'est probable), et une 400 déclenche une popover d'alerte côté front. Une 500 serait traitée comme un bug serveur.
 
 ```js
 const limitMo = 1
@@ -105,12 +107,14 @@ file.on('limit', () => {
 })
 ```
 
-### Contrôle un seul fichier autorisé (erreur 422)
+### Contrôle un seul fichier autorisé (erreur 500)
+
+Fichier unique ou multiple est fixé **explicitement côté front** (attribut `multiple` ou non) : l'erreur est improbable → 500.
 
 ```js
 busboy.on('file', (fieldName, file, { filename, mimeType }) => {
     if (uploadedFile !== null) {
-        validationError = new AppError('Un seul fichier autorisé', 422)
+        validationError = new AppError('Un seul fichier autorisé', 500)
         file.resume()
         return
     }
