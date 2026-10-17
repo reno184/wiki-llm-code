@@ -17,6 +17,16 @@ Ce wiki est écrit **pour vous**. Vous devez le lire comme un standard à appliq
 - **Exception unique** : un commentaire uniquement quand le code ne peut pas s'expliquer par lui-même — piège non devinable (ex. `stream.resume()` pour drainer un stream rejeté), workaround externe, décision contre-intuitive. Rien d'autre.
 - Les commentaires **dans les fiches du wiki** (explications pédagogiques) restent : la règle porte sur le **code généré dans les projets**, pas sur la documentation du wiki.
 
+### Règle 1 — Route d'upload = middleware `uploadValidator` systématique
+
+**Dès que vous identifiez qu'une route reçoit un upload de fichier (multipart/form-data, busboy, input file), vous devez :**
+
+1. **Le signaler à l'utilisateur** (ex. "c'est une route d'upload — j'ajoute le middleware `uploadValidator`, voir la fiche backend/upload-file-busboy.md") ;
+2. **Brancher le middleware dans la chaîne** : `router.post(path, uploadValidator, handler)` — jamais de parsing busboy sans validation du Content-Type en amont ;
+3. Si le middleware n'existe pas encore dans le projet, **proposer de le créer** avec le pattern de la fiche (rejet du header absent / non-multipart avant tout parsing).
+
+La validation du Content-Type en entrée de chaîne fait partie du standard upload, au même titre que `req.pipe(busboy)` ou le drain des streams — une route d'upload sans `uploadValidator` est une déviation à signaler.
+
 ### Autres règles globales
 
 - **Une seule version vivante par besoin** (ex. un seul pattern de pagination). Les anciennes versions partent dans `_archive/` avec la mention "remplacé par X".
