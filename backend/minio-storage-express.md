@@ -99,6 +99,7 @@ const pdfUrl = await uploadToMinio(BUCKET_NAME, pdfKey, fileData.buffer, fileDat
 - Import dynamique dans le hook : évite les **dépendances circulaires** (modèle ↔ config minio).
 - `removeObjects` pour un lot de clés, `removeObject` pour un seul objet.
 - `throw err` : l'échec de suppression MinIO bloque le delete (le doc n'est pas supprimé silencieusement en laissant des fichiers orphelins).
+- ⚠️ Ce hook ne couvre que `doc.deleteOne()`. Si le projet supprime aussi via `Model.deleteMany()` ou `Model.findOneAndDelete()`, ajouter un hook **query** séparé (`pre('deleteMany')` / `pre('findOneAndDelete')`) : la query ne contient pas les clés → **rechercher les documents d'abord** (`this.find()` / `this.model.findOne()`), collecter les clés, puis supprimer les objets MinIO avant d'exécuter la suppression.
 
 ```js
 // Hook déclenché par doc.deleteOne() — supprime le PDF et TOUTES ses images dans MinIO
