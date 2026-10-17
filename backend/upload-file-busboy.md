@@ -1,5 +1,7 @@
 # Upload de fichier — backend (Express + busboy, streaming multipart)
 
+> Miroir local de [backend/upload-file-busboy.md](https://github.com/reno184/wiki-llm-code/blob/main/backend/upload-file-busboy.md) — source de vérité : repo GitHub wiki-llm-code.
+
 Stack: Node 20+ / Express (ESM) / busboy.
 Usage: recevoir un upload multipart/form-data dans une route Express, valider le Content-Type via middleware `uploadValidator` dans le dossier `/middlewares`. Le **stockage** du fichier n'est pas le sujet de cette fiche : il est délégué — voir la fiche Strategy [../patterns/upload-strategy.md](../patterns/upload-strategy.md) pour les drivers interchangeables. Fiche back du trio upload fullstack (voir [../front/upload-file.md](../front/upload-file.md)).
 
@@ -161,6 +163,85 @@ busboy.on('finish', () => {
     resolve(uploadedFile)
 })
 ```
+
+### Optionnel — extraire des métadonnées du nom de fichier (patterns regex)
+
+Très optionnel : contrôler le nom du ou des fichiers uploadés et en extraire des infos (une date, un numéro de page, le nom de la feuille d'un Excel...). Pratique pour trier/classer les uploads sans demander de champs supplémentaires au front.
+
+Principe : un dictionnaire de patterns — chaque entrée a sa regex, un exemple, et une fonction `extractMetadata` qui transforme les groupes de capture en métadonnées exploitables.
+
+```js
+// utils/filenamePatterns.js
+export const FILENAME_PATTERNS = {
+    DATE_PREFIX: {
+        pattern: /^(\d{4}-\d{2}-\d{2})_[\w-]+$/i,
+        example: '2026-06-12_vocabulary.csv',
+        extractMetadata: (match) => {
+            return {
+                uploadDate: match[1]
+            }
+        }
+    },
+    PAGE_NUMBER: {
+        pattern: /_page_(\d+)(?:\.\w+)?$/i,
+        example: 'document_page_42.pdf',
+        extractMetadata: (match) => {
+            return {
+                page: parseInt(match[1], 10)
+            }
+        }
+    },
+    SHEET_NAME: {
+        pattern: /^([\w-]+)_([\w-]+)$/i,
+        example: 'vocabulary_Sheet1.xlsx',
+        extractMetadata: (match) => {
+            return {
+                fileName: match[1],
+                sheetName: match[2]
+            }
+        }
+    }
+}
+```
+
+Utilisation sur le fichier reçu dans la route busboy :
+
+```js
+const extractFilenameMetadata = (filename) => {
+    for (const [key, def] of Object.entries(FILENAME_PATTERNS)) {
+        const match = filename.match(def.pattern)
+
+        if (match) {
+            return { pattern: key, metadata: def.extractMetadata(match) }
+        }
+    }
+
+    return null
+}
+
+const metadata = extractFilenameMetadata(fileData.filename)
+
+if (!metadata) {
+    throw new AppError(`Nom de fichier non reconnu. Exemple attendu : ${FILENAME_PATTERNS.SHEET_NAME.example}`, 400)
+}
+
+const { sheetName } = metadata.metadata
+```
+
+Exemples de noms reconnus :
+
+| Fichier uploadé | Pattern détecté | Métadonnées extraites |
+|---|---|---|
+| `2026-06-12_vocabulary.csv` | DATE_PREFIX | `{ uploadDate: '2026-06-12' }` |
+| `document_page_42.pdf` | PAGE_NUMBER | `{ page: 42 }` |
+| `vocabulary_Sheet1.xlsx` | SHEET_NAME | `{ fileName: 'vocabulary', sheetName: 'Sheet1' }` |
+
+Notes :
+
+- Un nom qui ne matche **aucun** pattern = erreur 400 (l'utilisateur a nommé son fichier n'importe comment, erreur probable) — à la porte d'entrée, sinon les métadonnées sont `undefined` en aval.
+- L'ordre du dictionnaire compte : `Object.entries` teste dans l'ordre d'écriture, le premier match gagne. `DATE_PREFIX` avant `SHEET_NAME`, sinon `2026-06-12_vocabulary` serait interprété comme `fileName: '2026', sheetName: '06-12'`.
+- Ajouter un nouveau format = une entrée dans `FILENAME_PATTERNS`, rien d'autre.
+- Côté front, **communiquer le format attendu** (placeholder de l'input, message d'aide) : l'API et l'utilisateur doivent parler le même langage de nommage.
 
 ## Notes
 
