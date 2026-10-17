@@ -11,6 +11,7 @@ Point d'entrée pour un LLM : charger INDEX.md, puis seulement les fiches utiles
 | [infra/gcp-secrets.md](infra/gcp-secrets.md) | GCP Secret Manager + Cloud Functions | Créer et monter un secret (dotenv en local, `secrets:` en prod) | vivant |
 | [infra/gcp-cloud-functions-checklist.md](infra/gcp-cloud-functions-checklist.md) | GCP Cloud Functions | Checklist création : permissions allUsers, région, secrets, test | vivant |
 | [infra/docker-minio-compose.md](infra/docker-minio-compose.md) | Docker Compose + MinIO | Service MinIO en compose : ports 9000/9001, UI navigateur, volume externe (external: true), hostname = nom du service, .env | vivant |
+| [infra/docker-secrets-env.md](infra/docker-secrets-env.md) | Docker / Compose / Node | Secrets et .env : périmètre d'exposition (inspect, layers image), checklist .dockerignore/secrets compose/user MinIO dédié | vivant |
 | [patterns/recaptcha-choix-offre.md](patterns/recaptcha-choix-offre.md) | — | Décision : reCAPTCHA v3 classique vs Enterprise/Fraud Defense | vivant |
 | [stacks.md](stacks.md) | — | Stack de référence + stacks abandonnées | vivant |
 | [_archive/recaptcha-v2-v3.md](_archive/recaptcha-v2-v3.md) | Vue 3 générique | Ancienne fiche générique remplacée par le découpage par concern | obsolete |
