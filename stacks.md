@@ -4,13 +4,14 @@
 
 - **Back** : Node.js + Express
 - **Templating** : Pug (syntaxe Pug pour les vues)
+- **Modules** : CommonJS — `require()`, **pas de `"type": "module"`** (exception à la règle ESM du wiki, voir nodejs-express-env.md)
 - **Architecture front** : site **multipage** (pas de SPA)
 - **Animations** : JavaScript **View Transitions API** — transitions/animations entre les pages
 - **Anti-bot** : reCAPTCHA v3 (voir les fiches reCAPTCHA du wiki)
 - **Nom de domaine** : Infomaniak
 - **Hosting** : Firebase Hosting
 - **Backend serverless** : Firebase Cloud Functions
-- **Secrets** : dotenv en local, secrets montés en prod (voir [gcp-secrets.md](infra/gcp-secrets.md))
+- **Secrets** : dotenv en local, secrets montés en prod (voir gcp-secrets.md)
 
 ## Framework front : Vue.js uniquement
 
