@@ -1,7 +1,7 @@
 ---
 name: libraries
 layer: reference
-version: 1
+version: 2
 ---
 
 # Index des librairies : qui fait quoi
@@ -26,11 +26,16 @@ Sous le capot : moteur OCR **Tesseract** (à installer séparément).
 
 ---
 
-## pymupdf4llm — PDF → Markdown
+## PyMuPDF vs PyMuPDF4LLM — extraction vs Markdown
 
-Conversion de PDF vers Markdown optimisé pour LLM (structure, tableaux, headers).
+Deux librairies liées mais distinctes :
 
-**Node.js / Python : ❌ Python uniquement** (basé sur PyMuPDF). Pas de port Node de qualité équivalente → candidat micro-service Python.
+- **PyMuPDF** : moteur **bas niveau** qui extrait des éléments bruts — texte filaire, coordonnées cartésiennes (x, y), images, ou du HTML générique peu structuré.
+- **PyMuPDF4LLM** : **s'appuie sur PyMuPDF** pour analyser l'agencement visuel (mise en page, détection des titres, tableaux, listes) et reconstituer automatiquement le document en syntaxe Markdown (titres `#`, tableaux `| --- |`, paragraphes).
+
+→ Pour la chaîne pdf-to-md, **toujours PyMuPDF4LLM** : le Markdown structuré est l'entrée requise par le use case anonymisation. PyMuPDF seul servirait si on voulait un accès fin (positions, images extraites).
+
+**Node.js / Python : ❌ Python uniquement** (les deux, PyMuPDF comme PyMuPDF4LLM). Pas de port Node de qualité équivalente → candidats micro-service Python.
 
 ---
 
