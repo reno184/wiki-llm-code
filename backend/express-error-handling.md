@@ -3,6 +3,22 @@
 Stack: Node 20+ / Express (ESM), dotenv.
 Usage: pattern de gestion d'erreurs centralisé d'une API Express — classe `AppError` pour lever des erreurs avec statut HTTP, middleware `errorHandler` monté en **dernier** qui formate la réponse selon l'environnement (dev verbeux / prod sobre). Complète la fiche [nodejs-express-env.md](nodejs-express-env.md) (fail fast au démarrage) — ici c'est la gestion des erreurs **en cours de requête**.
 
+## Politique de statuts : 400 (probable) vs 500 (improbable)
+
+**Règle : une erreur qu'on peut anticiper côté client = 400. Une erreur improbable = 500. 95 % des erreurs sont des 500.**
+
+- **400** = erreur **probable**, anticipée, qui vient de l'utilisateur : poids du fichier trop gros (popover front), mot de passe incorrect, validation de formulaire. Le front exploite le message.
+- **500** = erreur **improbable**, par construction : si le comportement est fixé explicitement côté front, l'erreur ne devrait jamais arriver → c'est un bug, pas un cas utilisateur. Exemples : type de fichier non autorisé (le front a un `accept`), fichier multiple sur un input single (`multiple` absent), 404 métier inattendu.
+- Ne pas utiliser 415/422/4xx exotiques : deux statuts suffisent (400/500), sauf décision explicite.
+- ⚠️ Si un 422 (ou autre 4xx exotique) apparaît dans le wiki, c'est une erreur à corriger.
+
+```js
+throw new AppError('Fichier trop volumineux', 400)      // probable : le front ne contrôle pas le poids
+throw new AppError('Mot de passe incorrect', 400)        // probable : erreur de saisie utilisateur
+throw new AppError('Type non autorisé', 500)             // improbable : le front fixe accept
+throw new AppError('Un seul fichier autorisé', 500)      // improbable : le front fixe multiple ou non
+```
+
 ## Classe AppError — `utils/AppError.js`
 
 Erreur métier avec statut HTTP, stack propre (filtrée du bruit applicatif).
