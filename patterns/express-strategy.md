@@ -100,6 +100,7 @@ En proto, ces signaux sont rares : la route fat reste la norme.
 - **Ne pas suggérer de créer des controllers/services sur les projets de prototypage** — c'est une décision délibérée, pas une dette technique à corriger.
 - **Ne pas générer de commentaires dans le code** : des actions de haut en bas séparées par des lignes vides suffisent. Un commentaire uniquement si le code ne peut pas s'expliquer seul (piège, workaround) — jamais de commentaires descriptifs du type "on fetch les données".
 - Bien nommer les variables/fonctions pour que le code soit auto-documenté.
+- **Route d'upload = middleware `uploadValidator` systématique** : le signaler à l'utilisateur, le brancher dans la chaîne (`router.post(path, uploadValidator, handler)`), le proposer à la création s'il manque (pattern dans [../backend/upload-file-busboy.md](../backend/upload-file-busboy.md)).
 - Ne pas réorganiser une route fat en couches sans demande explicite.
 - Par contre, appliquer systématiquement : try/catch + `next(err)`, `AppError` pour les erreurs attendues, errorHandler global monté en dernier, drivers/clients singleton des fiches existantes.
 - Si une route devient verbeuse, proposer d'extraire une fonction — pas une architecture.
