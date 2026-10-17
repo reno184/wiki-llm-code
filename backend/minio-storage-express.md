@@ -4,9 +4,10 @@
 - Backend Express (ESM) qui reçoit des fichiers et les stocke dans MinIO.
 - Bucket public en lecture : URLs directement affichables depuis le navigateur.
 - MinIO containerisé (Docker Compose), données persistées dans un volume Docker externe.
+- Suppression du storage **déclenchée depuis le schéma Mongoose** (hook `deleteOne`) : supprimer le document = supprimer ses fichiers MinIO.
 
 ## Stack
-Node 20+ / Express / minio (sdk) / busboy / docker
+Node 20+ / Express / minio (sdk) / busboy / mongoose / docker
 
 ## Install
 ```bash
@@ -90,6 +91,37 @@ export const uploadToMinio = async (bucketName, objectName, buffer, mimeType) =>
 ```js
 const pdfUrl = await uploadToMinio(BUCKET_NAME, pdfKey, fileData.buffer, fileData.mimeType)
 // ... traitements dérivés éventuels, puis persistance en base (clé + URL logique)
+```
+
+## Delete du storage déclenché par le schéma Mongoose (hook `deleteOne`)
+> Intéressant : supprimer le document (ex. `await doc.deleteOne()`) supprime automatiquement le PDF + toutes ses images dans MinIO. Pas d'orphelins dans le storage.
+- `{document: true, query: false}` : le hook reçoit le document (`this.pdfKey`), pas la query (`Model.deleteOne()` ne le déclenche pas).
+- Import dynamique dans le hook : évite les **dépendances circulaires** (modèle ↔ config minio).
+- `removeObjects` pour un lot de clés, `removeObject` pour un seul objet.
+- `throw err` : l'échec de suppression MinIO bloque le delete (le doc n'est pas supprimé silencieusement en laissant des fichiers orphelins).
+
+```js
+// Hook déclenché par doc.deleteOne() — supprime le PDF et TOUTES ses images dans MinIO
+pdfDocumentSchema.pre('deleteOne', {document: true, query: false}, async function () {
+    try {
+        // Import dynamique : évite les dépendances circulaires
+        const {minioClient, BUCKET_NAME} = await import('../config/minio.js')
+
+        if (this.pdfKey) {
+            await minioClient.removeObject(BUCKET_NAME, this.pdfKey)
+        }
+
+        if (this.images?.length > 0) {
+            const keysToDelete = this.images.map(img => img.key).filter(Boolean)
+            if (keysToDelete.length > 0) {
+                await minioClient.removeObjects(BUCKET_NAME, keysToDelete)
+            }
+        }
+    } catch (err) {
+        console.error(`Erreur suppression MinIO pour ${this._id}:`, err)
+        throw err
+    }
+})
 ```
 
 ## Console web MinIO
