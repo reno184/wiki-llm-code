@@ -1,7 +1,7 @@
 # Upload de fichier — front (input type file + FormData + fetch)
 
 Stack: JS natif (ou Vue 3), fetch, FormData.
-Usage: sélectionner un fichier côté navigateur, le valider, l'envoyer au backend via multipart/form-data. Fiche front du trio upload fullstack (voir [../backend/upload-file-busboy.md](../backend/upload-file-busboy.md) et [../patterns/upload-strategy.md](../patterns/upload-strategy.md)).
+Usage: sélectionner un fichier côté navigateur, le valider, l'envoyer au backend via multipart/form-data. Fiche front du trio upload fullstack (voir [upload-file-busboy.md](upload-file-busboy.md) et [upload-strategy.md](upload-strategy.md)).
 
 ## Formulaire — HTML
 
@@ -64,6 +64,50 @@ function showError(msg) {
   errEl.classList.remove('hidden')
 }
 ```
+
+## Vue 3 + DaisyUI — pattern input file
+
+```html
+<div class="form-control">
+    <input type="file" class="file-input file-input-primary w-full" accept=".pdf,application/pdf" @change="handleChange">
+</div>
+```
+
+```js
+const handleChange = (event) => {
+    const files = event.target.files
+    if (!files || files.length === 0) return
+
+    const formData = new FormData()
+    formData.append('file', files[0])
+    bodyData.value = formData
+}
+```
+
+- `event.target.files` = `FileList`, même sans `multiple` — **le comptage n'est jamais garanti côté serveur**, d'où la validation back.
+- `accept=".pdf,application/pdf"` : double notation (extension + MIME) pour couvrir tous les OS/navigateurs.
+
+### Contrat single/multiple — l'attribut `multiple` décide
+
+**Sans `multiple` sur l'input, c'est un upload single file — côté front ET côté back.**
+
+- **Sans `multiple`** : le sélecteur OS n'autorise qu'un fichier, `files` contient au plus 1 élément → on `append` `files[0]` seul.
+- **Avec `multiple`** : boucler sur la `FileList` :
+
+```js
+for (const file of files) {
+    formData.append('file', file)
+}
+```
+
+Ce choix est **structurant pour toute la chaîne** (politique 400/500, voir la fiche busboy) :
+
+| Input front | Back attendu | Erreur "fichier multiple sur route single" |
+|---|---|---|
+| sans `multiple` | un seul fichier | improbable → **500** |
+| avec `multiple` | N fichiers (`Promise.all`) | — |
+
+Le back contrôle `uploadedFile !== null` → 500 (fiche busboy) **parce que** le front fixe explicitement single ou multiple. Modifier l'attribut d'un côté sans l'autre = incohérence de contrat.
 
 ## Notes
 
