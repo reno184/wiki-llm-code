@@ -1,7 +1,7 @@
 ---
 name: libraries
 layer: reference
-version: 2
+version: 3
 ---
 
 # Index des librairies : qui fait quoi
@@ -36,6 +36,44 @@ Deux librairies liées mais distinctes :
 → Pour la chaîne pdf-to-md, **toujours PyMuPDF4LLM** : le Markdown structuré est l'entrée requise par le use case anonymisation. PyMuPDF seul servirait si on voulait un accès fin (positions, images extraites).
 
 **Node.js / Python : ❌ Python uniquement** (les deux, PyMuPDF comme PyMuPDF4LLM). Pas de port Node de qualité équivalente → candidats micro-service Python.
+
+---
+
+## markdownlint — lint et correction Markdown
+
+Détecte et corrige les problèmes structurels d'un Markdown : MD001 (sauts de niveau de titres), MD025 (H1 multiples), MD026 (ponctuation en fin de titre), longueur de lignes, listes incohérentes… `--fix` corrige automatiquement ce qui est mécanique.
+
+→ Passe 1 du use case [correction-syntax-markdown](use-cases/correction-syntax-markdown/README.md). **Déterministe** : jamais de reformulation du texte, reproductible.
+
+**Node.js / Python : ✅ Node.js principalement** (markdownlint-cli2 / markdownlint-cli en npm). Bindings Python existent (markdownlint) mais l'écosystème est npm → intégrer dans l'API Node.
+
+---
+
+## mdformat — normalisation Markdown
+
+Reformate le Markdown de façon cohérente : espaces, wrapping, listes, tableaux. Ne touche pas aux niveaux de titres (c'est le rôle de markdownlint).
+
+→ Passe 2 (optionnelle) du use case correction-syntax-markdown.
+
+**Node.js / Python : ❌ Python uniquement** → candidat micro-service Python, ou remplacé par **Prettier** (voir ci-dessous) si Node-only suffisant.
+
+---
+
+## Prettier — formatage Markdown
+
+Formate aussi le Markdown (`npx prettier --write doc.md`) : mise en page, wrapping, tableaux. Alternative Node à mdformat. **Ne détecte pas les sauts de niveau de titres** : complément de markdownlint, pas un remplaçant.
+
+**Node.js / Python : ✅ Node.js** (npm). Côté Node, préférer markdownlint + Prettier plutôt que mdformat.
+
+---
+
+## Ollama — LLM local (via llama.cpp)
+
+Runtime de modèles locaux (`llama3.1`, `mistral`, `qwen2.5`…). API HTTP locale + CLI `ollama run`. Dans la chaîne : revue **sémantique** des niveaux de titres (un titre logiquement H2 resté H3), passe 3 optionnelle du use case correction-syntax-markdown.
+
+⚠️ Un petit modèle local (7–8B) peut reformuler ou halluciner → sortie toujours relue, jamais en passe automatique silencieuse.
+
+**Node.js / Python : ✅ les deux** — appel HTTP vers l'API locale Ollama depuis l'API Node, bindings Python existants.
 
 ---
 
