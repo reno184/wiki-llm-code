@@ -13,7 +13,7 @@ Usage: trace de décision — bibliothèque testée, non retenue pour l'instant,
 
 - **Réussite** : export visuellement parfait d'une fiche de paie.
 - **Échec** : les bordures des tableaux limitent la sélection — pas de sélection fluide des zones (ex. les congés payés). Le rendu est beau, mais l'exploitation est rigide.
-- **Piste non explorée** : un retravailillage (post-processing du HTML généré, ajustement des bordures/tableaux) pourrait débloquer la sélection — à retester si besoin réel.
+- **Piste non explorée — mais limitée par la cause racine** : un retravailillage (post-processing du HTML généré) pourrait débloquer la sélection, MAIS le positionnement absolu est l'architecture même de l'outil : les chevauchements et la sélection rigide ne sont pas des bugs accidentels. Un retravailillage n'atteindra probablement jamais la fluidité recherchée.
 
 ### Test 2 — contrat PDF
 
@@ -25,7 +25,9 @@ Usage: trace de décision — bibliothèque testée, non retenue pour l'instant,
 - Une **demande client réelle** de conversion PDF → HTML sur des documents du même type (fiches de paie, contrats) — c'est le déclencheur principal.
 - Ou l'apparition d'une alternative qui résout le problème de sélection dans les tableaux / le chevauchement de lignes.
 
-Si réveil : repartir des deux essais ci-dessus comme baseline, cibler d'abord le chevauchement de lignes (le plus bloquant : aucun paramètre ne l'a corrigé).
+**Architecture du coupable** : binaire C++ basé sur une ancienne version de Poppler, maintenance upstream quasi arrêtée. Dépendances obsolètes, déploiement douloureux sur Docker/macOS/Windows — même une demande client devrait d'abord évaluer le coût de déploiement avant le rendu. "Pixel perfect" = positionnement absolu des éléments : c'est ce qui produit les échecs observés.
+
+Si réveil : évaluer d'abord un outil d'une **autre famille** (extraction de structure sémantique plutôt que reproduction visuelle) — repartir des deux essais comme baseline, cibler d'abord le chevauchement de lignes (le plus bloquant : aucun paramètre ne l'a corrigé).
 
 ## Anti-patterns
 
