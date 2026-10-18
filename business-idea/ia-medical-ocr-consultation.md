@@ -21,7 +21,7 @@ Un **médecin scanne un compte rendu de consultation** (papier ou PDF). Une **IA
 
 ## Ne pas faire
 
-- Ne pas envoyer des données de santé vers une API cloud tierce — l'idée meurt si le local n'est pas respecté.
+- Ne pas envoyer des données de santé vers une API cloud tierce - RGPD — l'idée meurt si le local n'est pas respecté.
 
 ## État
 
