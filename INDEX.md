@@ -7,7 +7,7 @@ Un profil = une vue sur le wiki, pas un rangement. Une fiche peut apparaître da
 - **SPA + API** (Vue 3 front, API Express séparée) :
   backend/nodejs-express-env.md, backend/cors.md, backend/express-error-handling.md, backend/upload-file-busboy.md, patterns/upload-strategy.md, front/vuejs-router-menu.md, front/vuejs-useapi.md, front/upload-file.md, front/daisyui-components.md, backend/minio-storage-express.md, infra/docker-minio-compose.md
 - **Python + Docker** (labo d'entraînement : manipulation images PNG/PDF, OCR, conversion Markdown, création de PDF — pas d'interface ni d'API) :
-  infra/python-docker-labo.md (labo Docker plutôt que venv), infra/dockerfile-python.md (Dockerfile + compose script), libraries.md, infra/docker-secrets-env.md, use-cases/pdf-to-md/README.md, use-cases/correction-syntax-markdown/README.md, use-cases/anonymisation/README.md, proto-pdf-to-md.md, stacks.md
+  infra/python-docker-labo.md (labo Docker plutôt que venv), infra/dockerfile-python.md (Dockerfile + compose script), libraries.md, infra/python-ocrmypdf.md (gonflement taille après OCR), infra/docker-secrets-env.md, use-cases/pdf-to-md/README.md, use-cases/correction-syntax-markdown/README.md, use-cases/anonymisation/README.md, proto-pdf-to-md.md, stacks.md
 - **IDE / outillage** (transversal, chargé à la demande) :
   ide/* (chargées par le dev, pas par les profils projet)
 
@@ -41,6 +41,7 @@ Point d'entrée pour un LLM : charger INDEX.md, puis seulement les fiches utiles
 | [infra/python-docker-labo.md](infra/python-docker-labo.md) | Python + Docker (macOS) | Labo d entraînement Python : Docker privilégié vs venv (dépendances binaires natives tesseract/poppler isolées, reproductibilité, images parallèles par domaine, docker commit snapshot) | vivant |
 | [infra/dockerfile-python.md](infra/dockerfile-python.md) | Python 3.x + Docker | Image Python script/pipeline : base slim, layers requirements→code (cache), --no-cache-dir, USER non-root, .dockerignore, compose env_file + volume, pas de ports | vivant |
 | [infra/docker-secrets-env.md](infra/docker-secrets-env.md) | Docker / Compose / Node | Secrets et .env : périmètre d'exposition (inspect, layers image), checklist .dockerignore/secrets compose/user MinIO dédié | vivant |
+| [infra/python-ocrmypdf.md](infra/python-ocrmypdf.md) | Python + ocrmypdf (PDF/A) | Gonflement de taille après OCR (force_ocr, re-rasteurisation, PDF/A, polices embarquées) et leviers de réduction (redo_ocr/skip-text, jbig2enc, pngquant) | vivant |
 | [patterns/express-strategy.md](patterns/express-strategy.md) | Node/Express (protos) | Style délibéré proto : toute la logique dans la route (pas de controller/service), try/catch + next(err) systématique, AppError pour erreurs attendues, signaux d'extraction | vivant |
 | [patterns/recaptcha-choix-offre.md](patterns/recaptcha-choix-offre.md) | — | Décision : reCAPTCHA v3 classique vs Enterprise/Fraud Defense | vivant |
 | [patterns/upload-strategy.md](patterns/upload-strategy.md) | Strategy pattern (Node) | Drivers de stockage interchangeables : contrat `put`/`delete`, drivers minio/local, factory `UPLOAD_DRIVER` par env, Open/Closed | vivant |
