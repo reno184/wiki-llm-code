@@ -11,6 +11,7 @@ Usage: décisions de configuration des options d'assistance IA de l'IDE — que 
 | Suggest converting pasted code to the language of the target file | ✅ cocher | Convertit le code collé vers le langage du fichier (ex. Python → TypeScript). Rien d'automatique : simple suggestion refusable à chaque collage. Utile en fullstack (snippets doc/web). |
 | Generate a title for the shelved changelist | ➖ indifférent | Ne concerne que les shelved changelists. Sans effet si on n'utilise pas cette feature. |
 | Enable Insights — Generates brief explanations for complex or unclear code | ❌ ne pas cocher (sauf legacy inconnue) | Explications inline non demandées : polluent le scroll et redondantes avec "Explain" à la demande. Seul cas : reprise de codebase legacy inconnue, au niveau Project, à décocher ensuite. |
+| Diff View Insights — Summarizes changed code and explains why | ❌ ne pas cocher (défendable en revue de gros diffs) | Résumés auto dans chaque diff = bruit sur la revue manuelle ligne à ligne ; "Explain diff" à la demande suffit. Peut redevenir utile en revue de PR gros diffs (legacy, grosse équipe), au niveau Project. |
 | GitHub Plugin: Generate a summary upon opening a Pull Request | ❌ ne pas cocher | Consomme des crédits à chaque ouverture de PR, même inutile. En contexte client freelance, la description de PR se rédige soi-même (ou à la demande via menu contextuel) — une description auto non relue fait bâclé. |
 
 ## Règles dérivées
