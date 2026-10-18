@@ -27,6 +27,17 @@ Ce wiki est écrit **pour vous**. Vous devez le lire comme un standard à appliq
 
 La validation du Content-Type en entrée de chaîne fait partie du standard upload, au même titre que `req.pipe(busboy)` ou le drain des streams — une route d'upload sans `uploadValidator` est une déviation à signaler.
 
+### Règle 2 — Les fiches sont la NORME pour toute suggestion d'amélioration
+
+**Ce wiki est la référence, pas une source d'inspiration parmi d'autres.** Il s'applique à la génération de code ET à la critique/suggestion d'amélioration :
+
+1. **AVANT toute suggestion d'amélioration** : vérifier si une fiche du wiki couvre le sujet (via INDEX.md). Si oui, la charger et la prendre comme baseline.
+2. Si une fiche couvre le sujet, **proposer uniquement des deltas vs cette baseline** — critiquer À PARTIR de la fiche, jamais à côté avec une structure générique.
+3. **Ne jamais proposer une structure alternative qui contredit une fiche du wiki**, qu'elle soit chargée ou non. Si une fiche paraît obsolète ou incorrecte, **le signaler explicitement** au lieu de la contourner en silence.
+4. Sur un sujet **non couvert** par le wiki, la suggestion est libre, mais marquée **"hors wiki"** (nouveauté, pas norme). Un "hors wiki" répété sur un même sujet est le signal qu'une fiche doit être créée.
+
+Pourquoi : wiki et connaissances du modèle sont fusionnés dans le contexte. Sans cette règle, l'agent critique selon son entraînement générique et propose des structures "propres" standard qui contredisent les patterns validés. Voir `ide/wiki-scaling-index.md` (section Génération vs suggestions).
+
 ### Autres règles globales
 
 - **Une seule version vivante par besoin** (ex. un seul pattern de pagination). Les anciennes versions partent dans `_archive/` avec la mention "remplacé par X".
