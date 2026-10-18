@@ -9,7 +9,7 @@ Un **médecin scanne un compte rendu de consultation** (papier ou PDF). Une **IA
 ## Pourquoi c'est pertinent
 
 - **Confidentialité** : données de santé = le point bloquant du cloud. Une IA locale (rien ne sort de la machine) lève l'objection RGPD/HDS d'un coup — c'est l'argument de vente n°1 face aux API propriétaires.
-- **Faisabilité prouvée en local** : OCR d'un PNG avec Ollama + frob/qwen3.5-instruct:9b testé et concluant, voir [use-cases/ocr-llm/README.md](../use-cases/ocr-llm/README.md).
+- **Faisabilité prouvée en local** : test direct sur une fausse note manuscrite médicale (générée par IA, PNG) avec Ollama + frob/qwen3.5-instruct:9b → **parfait, réussite absolue**. Le cas d'usage exact de l'idée est déjà validé techniquement, voir [use-cases/ocr-llm/README.md](../use-cases/ocr-llm/README.md).
 - **Valeur** : le médecin ne veut pas du texte brut, il veut les champs structurés — c'est de l'extraction guidée par prompt, pas du simple OCR.
 
 ## Points à valider avant d'aller plus loin
@@ -25,4 +25,4 @@ Un **médecin scanne un compte rendu de consultation** (papier ou PDF). Une **IA
 
 ## État
 
-**vivant (idée non exploitée)** — test technique validé côté OCR, pas de prospect identifié.
+**vivant (idée non exploitée)** — test technique validé côté OCR sur note manuscrite médicale (réussite absolue), pas de prospect identifié.

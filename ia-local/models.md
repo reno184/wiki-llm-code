@@ -5,7 +5,7 @@ Usage: inventaire des modèles Ollama installés et validés. Une seule version 
 ## Modèle vision de référence : frob/qwen3.5-instruct:9b
 
 - **Besoin couvert** : OCR / extraction d'informations depuis une image (PNG capture d'écran, scan, photo).
-- **Testé** : OCR d'une fiche de lecture Harry Potter (PNG) → résultat convenable, voir [use-cases/ocr-llm/README.md](../use-cases/ocr-llm/README.md).
+- **Testé** : OCR d'une fiche de lecture Harry Potter (PNG) → résultat convenable ; fausse note manuscrite médicale (PNG généré par IA) → **parfait, réussite absolue**. Voir [use-cases/ocr-llm/README.md](../use-cases/ocr-llm/README.md).
 - **Taille** : ~9B paramètres — tourne sur machine locale via CLI desktop Ollama.
 
 ## Règles
@@ -15,4 +15,4 @@ Usage: inventaire des modèles Ollama installés et validés. Une seule version 
 
 ## État
 
-**vivant** — frob/qwen3.5-instruct:9b validé pour l'OCR vision.
+**vivant** — frob/qwen3.5-instruct:9b validé pour l'OCR vision (imprimé convenable, manuscrit parfait).
