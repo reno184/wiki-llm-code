@@ -1,7 +1,7 @@
 ---
 name: libraries
 layer: reference
-version: 4
+version: 5
 ---
 
 # Index des librairies : qui fait quoi
@@ -39,19 +39,11 @@ Deux librairies liées mais distinctes :
 
 ---
 
-## mdformat — normalisation Markdown
-
-Reformate le Markdown de façon cohérente : espaces, wrapping, listes, tableaux. Ne touche pas aux niveaux de titres.
-
-→ Passe 1 du use case correction-syntax-markdown.
-
-**Node.js / Python : ❌ Python uniquement** → candidat micro-service Python, ou remplacé par **Prettier** (voir ci-dessous) si Node-only suffisant.
-
----
-
 ## Prettier — formatage Markdown
 
-Formate aussi le Markdown (`npx prettier --write doc.md`) : mise en page, wrapping, tableaux. Alternative Node à mdformat. **Ne détecte pas les sauts de niveau de titres** : la détection des niveaux relève de la passe IA locale (Ollama), relue.
+Formate le Markdown (`npx prettier --write doc.md`) : mise en page, espaces, wrapping, listes, tableaux. Ne reformule pas le texte.
+
+→ Passe 1 du use case correction-syntax-markdown : la seule passe déterministe de mise en forme. **Ne détecte pas les sauts de niveau de titres** : la hiérarchie des titres relève de la passe IA locale (Ollama), relue.
 
 **Node.js / Python : ✅ Node.js** (npm).
 
@@ -59,7 +51,7 @@ Formate aussi le Markdown (`npx prettier --write doc.md`) : mise en page, wrappi
 
 ## Ollama — LLM local (via llama.cpp)
 
-Runtime de modèles locaux (`llama3.1`, `mistral`, `qwen2.5`…). API HTTP locale + CLI `ollama run`. Dans la chaîne : revue **sémantique** des niveaux de titres (un titre logiquement H2 resté H3), passe 2 optionnelle du use case correction-syntax-markdown.
+Runtime de modèles locaux (`llama3.1`, `mistral`, `qwen2.5`…). API HTTP locale + CLI `ollama run`. Dans la chaîne : revue **sémantique** des niveaux de titres (un titre logiquement H2 resté H3, sauts de niveau, H1 multiples), passe 2 optionnelle du use case correction-syntax-markdown.
 
 ⚠️ Un petit modèle local (7–8B) peut reformuler ou halluciner → sortie toujours relue, jamais en passe automatique silencieuse.
 
