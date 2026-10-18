@@ -48,7 +48,7 @@ export const useApi = createFetch({
                     window.dispatchEvent(new CustomEvent('show-snackbar', {
                         detail: { message: data.message || 'Erreur dans la requête', type: 'error' }
                     }))
-                } else if (status >= 500) {
+                } else {
                     try {
                         const serverStack = await response.clone().text()
                         const error = new Error(`Server Error (${status})`)
