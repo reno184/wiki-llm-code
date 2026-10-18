@@ -8,6 +8,9 @@ Un profil = une vue sur le wiki, pas un rangement. Une fiche peut apparaître da
   backend/nodejs-express-env.md, backend/cors.md, backend/express-error-handling.md, backend/upload-file-busboy.md, patterns/upload-strategy.md, front/vuejs-router-menu.md, front/vuejs-useapi.md, front/upload-file.md, front/daisyui-components.md, backend/minio-storage-express.md, infra/docker-minio-compose.md
 - **Script / pipeline Python** :
   use-cases/pdf-to-md/README.md, use-cases/correction-syntax-markdown/README.md, use-cases/anonymisation/README.md, proto-pdf-to-md.md, libraries.md, infra/gcp-cloud-functions-checklist.md, infra/gcp-secrets.md
+- **Python + Docker** (scripts/pipelines Python conteneurisés, pas d'interface ni d'API) :
+  libraries.md, use-cases/pdf-to-md/README.md, use-cases/correction-syntax-markdown/README.md, use-cases/anonymisation/README.md, proto-pdf-to-md.md, infra/docker-secrets-env.md, infra/docker-minio-compose.md (compose type), stacks.md
+  → fiches dockerfile/compose dédiées : à créer au premier projet réel (config image Python : image slim, venv, utilisateur non-root, .dockerignore ; compose : build, volumes, .env)
 - **IDE / outillage** (transversal, chargé à la demande) :
   ide/* (chargées par le dev, pas par les profils projet)
 
