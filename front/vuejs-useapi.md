@@ -80,10 +80,13 @@ const { data, isFetching, execute } = useApi('/api/studyMaterial/list').get().js
 
 - **GET** : aliaser `isFetching` en `loading` — `const { data, isFetching: loading, execute } = ...`
 - **POST/PUT/DELETE (submit)** : aliaser en `pending` — `const { isFetching: pending, execute } = ...`
+- **Deux `useApi` dans un même composant** : préfixer les alias par la ressource — `isFetching: userLoading`, `isFetching: orderListLoading`. Jamais deux états de chargement avec le même nom.
 
 ```js
 const { data, isFetching: loading, execute } = useApi('/api/list').get().json()
 const { isFetching: pending, execute: submit } = useApi('/api/newNovel').post(bodyData.value).json()
+const { data: user, isFetching: userLoading } = useApi('/api/user').get().json()
+const { data: orderList, isFetching: orderListLoading } = useApi('/api/orders').get().json()
 ```
 - `.get().json()`, `.post(body)`, `.put(body)` : chaînage VueUse.
 
