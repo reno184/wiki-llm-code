@@ -87,11 +87,16 @@ Chaînage de prompts, loaders, modèles. Utilisé dans l'API Node (anonymisation
 
 ## pdf2htmlEX — PDF → HTML (archivé)
 
-Reproduit un PDF en HTML avec des blocs en position absolue, fidélité visuelle ~95 %.
+Binaire C++ qui convertit des PDF en documents HTML en cherchant la reproduction pixel-perfect de la mise en page : mêmes polices, mêmes espacements, positionnement absolu des éléments. Exécutable depuis un backend Node.js, Python ou tout environnement supportant les appels système — l'interface paraît simple, c'est le piège.
 
-⚠️ **Archivé pour problèmes de rendu** : lignes chevauchées incurables par paramétrage, bordures de tableaux bloquant la sélection. Trace de décision et conditions de réveil : [_archive/pdf2htmlex-standby.md](../_archive/pdf2htmlex-standby.md).
+⚠️ **Archivé** — désavantages en chaîne complète :
 
-**Node.js / Python : ❌ outil C++ autonome** (CLI/binaire), pas une librairie Python à proprement parler.
+- **Positionnement absolu = cause racine des échecs** : les lignes chevauchées et la sélection bloquée dans les tableaux ne sont pas des bugs accidentels, c'est l'architecture même de l'outil. Un retravailillage du HTML généré ne donnera probablement jamais une sélection fluide.
+- **Fidélité ~95 %** : lignes chevauchées incurables par paramétrage (test sur contrat), bordures de tableaux bloquant la sélection (test sur fiche de paie).
+- **Dépendances obsolètes** : basé sur une ancienne version de Poppler, maintenance upstream quasi arrêtée, images Docker communautaires cassées ou datées.
+- **Déploiement horrible** : binaire C++ à embarquer (pas de pip install), douloureux sur Docker, macOS et Windows.
+
+"Interactif" au sens marketing (hover, zoom) — mais pas l'interactivité d'exploitation (sélection, copie de zones). Stand-by : réveil uniquement sur demande client réelle, idéalement avec un outil d'une autre famille (extraction de structure plutôt que reproduction visuelle). Trace : [_archive/pdf2htmlex-standby.md](../_archive/pdf2htmlex-standby.md).
 
 ---
 
