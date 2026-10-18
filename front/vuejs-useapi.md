@@ -75,6 +75,16 @@ const { data, isFetching, execute } = useApi('/api/studyMaterial/list').get().js
 `error` n'est pas déstructuré dans les composants : toutes les erreurs sont déjà gérées par `useApi` via les CustomEvents (snackbar 400, page 500).
 
 - `useApi(url)` retourne un objet réactif VueUse : `data`, `isFetching`, `execute` — pas besoin de réécrire des refs loading/error.
+
+### Convention de nommage de l'état de chargement
+
+- **GET** : aliaser `isFetching` en `loading` — `const { data, isFetching: loading, execute } = ...`
+- **POST/PUT/DELETE (submit)** : aliaser en `pending` — `const { isFetching: pending, execute } = ...`
+
+```js
+const { data, isFetching: loading, execute } = useApi('/api/list').get().json()
+const { isFetching: pending, execute: submit } = useApi('/api/newNovel').post(bodyData.value).json()
+```
 - `.get().json()`, `.post(body)`, `.put(body)` : chaînage VueUse.
 
 ## POST JSON / POST FormData (upload)
