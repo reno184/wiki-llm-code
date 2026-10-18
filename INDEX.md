@@ -1,9 +1,25 @@
+## Profils projet (l'agent charge le profil, puis uniquement les fiches listées)
+
+Un profil = une vue sur le wiki, pas un rangement. Une fiche peut apparaître dans plusieurs profils (elle reste UNE seule fiche). Le project rules de chaque projet désigne son profil.
+
+- **Site vitrine** (Node/Express + Pug multipage, reCAPTCHA) :
+  front/recaptcha-invisible-v3.md, backend/recaptcha-siteverify.md, backend/nodejs-express-env.md, patterns/express-strategy.md, front/daisyui-components.md, stacks.md, ide/webstorm-http-upload.md (tests)
+- **SPA + API** (Vue 3 front, API Express séparée) :
+  backend/nodejs-express-env.md, backend/cors.md, backend/express-error-handling.md, backend/upload-file-busboy.md, patterns/upload-strategy.md, front/vuejs-router-menu.md, front/vuejs-useapi.md, front/upload-file.md, front/daisyui-components.md, backend/minio-storage-express.md, infra/docker-minio-compose.md
+- **Script / pipeline Python** :
+  use-cases/pdf-to-md/README.md, use-cases/correction-syntax-markdown/README.md, use-cases/anonymisation/README.md, proto-pdf-to-md.md, libraries.md, infra/gcp-cloud-functions-checklist.md, infra/gcp-secrets.md
+- **IDE / outillage** (transversal, chargé à la demande) :
+  ide/* (chargées par le dev, pas par les profils projet)
+
+---
+
 # INDEX — wiki-llm-code
 
 Point d'entrée pour un LLM : charger INDEX.md, puis seulement les fiches utiles à la tâche.
 
 | Fiche | Stack | Usage | État |
 |---|---|---|---|
+| [backend/cors.md](backend/cors.md) | Node/Express + cors | CORS : cross-origin API (origin via env, headers custom, jamais * avec credentials) vs same-origin Pug = pas de cors du tout | vivant |
 | [backend/nodejs-express-env.md](backend/nodejs-express-env.md) | Node/Express ESM + dotenv | Règle 0 ESM : `type: module` dans package.json, import/export + extensions .js, __dirname via import.meta.url ; dotenv en 1re ligne, .env non commité, express.json(), fail fast | vivant |
 | [backend/express-error-handling.md](backend/express-error-handling.md) | Node/Express (ESM) | Erreurs API : classe `AppError` (statut + stack propre), middleware `errorHandler` monté en DERNIER (4 args obligatoires), 400 JSON / dev verbeux filtré / prod sobre sans fuite | vivant |
 | [backend/minio-storage-express.md](backend/minio-storage-express.md) | Node/Express + minio sdk + busboy | Stockage S3 MinIO : client singleton, init bucket idempotent + policy publique, upload Buffer, pattern route upload | vivant |
