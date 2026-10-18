@@ -9,8 +9,7 @@ Un profil = une vue sur le wiki, pas un rangement. Une fiche peut apparaître da
 - **Script / pipeline Python** :
   use-cases/pdf-to-md/README.md, use-cases/correction-syntax-markdown/README.md, use-cases/anonymisation/README.md, proto-pdf-to-md.md, libraries.md, infra/gcp-cloud-functions-checklist.md, infra/gcp-secrets.md
 - **Python + Docker** (scripts/pipelines Python conteneurisés, pas d'interface ni d'API) :
-  libraries.md, use-cases/pdf-to-md/README.md, use-cases/correction-syntax-markdown/README.md, use-cases/anonymisation/README.md, proto-pdf-to-md.md, infra/docker-secrets-env.md, infra/docker-minio-compose.md (compose type), stacks.md
-  → fiches dockerfile/compose dédiées : à créer au premier projet réel (config image Python : image slim, venv, utilisateur non-root, .dockerignore ; compose : build, volumes, .env)
+  libraries.md, infra/dockerfile-python.md (Dockerfile + compose script), infra/docker-secrets-env.md, use-cases/pdf-to-md/README.md, use-cases/correction-syntax-markdown/README.md, use-cases/anonymisation/README.md, proto-pdf-to-md.md, stacks.md
 - **IDE / outillage** (transversal, chargé à la demande) :
   ide/* (chargées par le dev, pas par les profils projet)
 
@@ -41,6 +40,7 @@ Point d'entrée pour un LLM : charger INDEX.md, puis seulement les fiches utiles
 | [infra/gcp-secrets.md](infra/gcp-secrets.md) | GCP Secret Manager + Cloud Functions | Créer et monter un secret (dotenv en local, `secrets:` en prod) | vivant |
 | [infra/gcp-cloud-functions-checklist.md](infra/gcp-cloud-functions-checklist.md) | GCP Cloud Functions | Checklist création : permissions allUsers, région, secrets, test | vivant |
 | [infra/docker-minio-compose.md](infra/docker-minio-compose.md) | Docker Compose + MinIO | Service MinIO en compose : ports 9000/9001, UI navigateur, volume externe (external: true), hostname = nom du service, .env | vivant |
+| [infra/dockerfile-python.md](infra/dockerfile-python.md) | Python 3.x + Docker | Image Python script/pipeline : base slim, layers requirements→code (cache), --no-cache-dir, USER non-root, .dockerignore, compose env_file + volume, pas de ports | vivant |
 | [infra/docker-secrets-env.md](infra/docker-secrets-env.md) | Docker / Compose / Node | Secrets et .env : périmètre d'exposition (inspect, layers image), checklist .dockerignore/secrets compose/user MinIO dédié | vivant |
 | [patterns/express-strategy.md](patterns/express-strategy.md) | Node/Express (protos) | Style délibéré proto : toute la logique dans la route (pas de controller/service), try/catch + next(err) systématique, AppError pour erreurs attendues, signaux d'extraction | vivant |
 | [patterns/recaptcha-choix-offre.md](patterns/recaptcha-choix-offre.md) | — | Décision : reCAPTCHA v3 classique vs Enterprise/Fraud Defense | vivant |
