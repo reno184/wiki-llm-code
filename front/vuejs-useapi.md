@@ -102,6 +102,7 @@ La gestion d'erreur est **globale, dans le wrapper** — les composants n'ont pa
 
 - **Ne pas réécrire un composable fetch maison** tant que VueUse fournit `createFetch` : la librairie gère l'abort, les refs réactives, le chaînage — le wrapper ne fait que configurer (baseUrl, erreurs, FormData).
 - `baseUrl` : à passer par env en prod (ex. `import.meta.env.VITE_API_URL`), pas en dur.
+- **Le `delete` du Content-Type dans `beforeFetch` est le piège n°1 du wrapper** : `createFetch` pose `Content-Type: application/json` par défaut sur chaque requête — un FormData doit au contraire laisser le navigateur générer son boundary multipart. Sans ce delete, l'upload casse (le backend rejette ou parse mal le multipart). Ce code est **l'exception Règle 0** : mérite un commentaire à lui tout seul, et les agents doivent poser le commentaire figé au point d'appel côté composant (voir [express-strategy.md](express-strategy.md), garde 2).
 - Un nouvel événement d'erreur = un nouveau `CustomEvent` dans le wrapper + un écouteur au niveau App : jamais de gestion d'erreur dans les composants.
 - Le `AbortError` est exclu : VueUse annule les requêtes auUnmount par défaut — ce n'est pas une vraie erreur.
 - Liens : [vuejs-router-menu.md](vuejs-router-menu.md) pour la page 500 dans le router, [daisyui-components.md](daisyui-components.md) pour la snackbar/alert.
