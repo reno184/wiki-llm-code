@@ -15,7 +15,6 @@ Aide-mémoire rapide des librairies de la chaîne documentaire. Colonne clé : *
 **Superpose le texte reconnu directement sur les images du PDF original** (layer texte invisible), rendant le texte sélectionnable sans toucher au rendu visuel.
 
 Fonctionnalités :
-- **pdf2htmlEX** — reproduit un PDF en HTML avec des blocs en position absolue, fidélité visuelle ~95 %. ⚠️ **Archivé** : problèmes de rendu (lignes chevauchées incurables, bordures tableaux bloquant la sélection) — voir [_archive/pdf2htmlex-standby.md](../_archive/pdf2htmlex-standby.md).
 - **Redressement automatique (deskew)** : remet droit un document scanné de travers
 - **Nettoyage des imperfections (unpaper)** : supprime taches, bords noirs de scan, bruit de fond
 - **Correction d'orientation** : pivote automatiquement les pages à 90°/180°/270° si à l'envers
@@ -83,6 +82,20 @@ Runtime de modèles locaux (`llama3.1`, `mistral`, `qwen2.5`…). API HTTP local
 Chaînage de prompts, loaders, modèles. Utilisé dans l'API Node (anonymisation).
 
 **Node.js / Python : ✅ les deux** — équivalents (LangChain.js / LangChain Python). Rester côté Node OK.
+
+---
+
+
+
+---
+
+## pdf2htmlEX — PDF → HTML (archivé)
+
+Reproduit un PDF en HTML avec des blocs en position absolue, fidélité visuelle ~95 %.
+
+⚠️ **Archivé pour problèmes de rendu** : lignes chevauchées incurables par paramétrage, bordures de tableaux bloquant la sélection. Trace de décision et conditions de réveil : [_archive/pdf2htmlex-standby.md](../_archive/pdf2htmlex-standby.md).
+
+**Node.js / Python : ❌ outil C++ autonome** (CLI/binaire), pas une librairie Python à proprement parler.
 
 ---
 
