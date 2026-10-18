@@ -78,19 +78,30 @@ Wikis et connaissances du modèle sont **fusionnés** dans le contexte : pas de 
 - **Compétence fondamentale** (ex. corriger une syntaxe Pug) → le modèle gagne, pas besoin de fiche.
 - **Suggestions d'amélioration** → le modèle gagne PAR DÉFAUT : c'est le piège. Critiquant selon son entraînement, il propose des structures génériques ("propres") même si une fiche impose autre chose.
 
-### Parade : règle d'ancrage dans le project rules
+### Parade : règle d'ancrage dans le project rules (version validée)
 
 ```markdown
-- Les fiches du wiki (ex. layouts Pug) sont la NORME, pas une
-  suggestion. Toute suggestion d'amélioration doit partir de la
-  fiche comme baseline et ne proposer que des deltas vs cette
-  baseline. Ne jamais proposer une structure alternative générique
-  qui contredit une fiche chargée.
+- Les fiches du wiki sont la NORME, pas une suggestion.
+- AVANT toute suggestion d'amélioration : vérifier si une fiche du wiki
+  couvre le sujet (INDEX.md). Si oui, la charger et la prendre comme
+  baseline — proposer uniquement des deltas vs cette baseline.
+- Ne jamais proposer de structure alternative qui contredit une fiche
+  du wiki, qu'elle soit chargée ou non. Si une fiche paraît obsolète
+  ou incorrecte, le signaler explicitement au lieu de contourner.
+- Sur un sujet non couvert par le wiki, la suggestion est libre, mais
+  marquée comme "hors wiki" (nouveauté, pas norme).
 ```
 
-Deux ingrédients actifs : **"norme, pas suggestion"** (change le statut du wiki dans le raisonnement de l'agent) et **"deltas vs baseline"** (mode d'emploi concret : critiquer À PARTIR de la fiche, pas à côté).
+Pourquoi chaque ligne :
 
-Garde-fou : la règle n'interdit pas la critique sur ce que la fiche ne couvre pas — sinon l'agent devient muet sur les vrais problèmes. "Ne jamais contredire une fiche chargée" laisse la porte ouverte aux suggestions sur tout le reste.
+- **"NORME, pas une suggestion"** : change le statut du wiki dans le raisonnement de l'agent (baseline de jugement, pas contenu parmi d'autres).
+- **"AVANT toute suggestion : vérifier INDEX.md"** : corrige le vrai risque — proposer sans avoir chargé la fiche. Réutilise le workflow 2 étapes (INDEX puis fiche).
+- **Deltas vs baseline** : mode d'emploi concret — critiquer À PARTIR de la fiche, pas à côté.
+- **"contredit une fiche, chargée ou non"** (sans "complètement") : toute contradiction est interdite, pas seulement les grosses — le mot "complètement" créait une faille (contradictions partielles tolérées).
+- **Clause "sujet non couvert"** : l'agent reste utile sur les zones que le wiki ne couvre pas, tout en marquant le statut. Bonus : un "hors wiki" répété sur un même sujet = candidat fiche à créer.
+- **"signaler une fiche obsolète"** : évite le pire — que l'agent obéisse à une fiche devenue fausse sans le signaler.
+
+Garde-fou : la règle n'interdit pas la critique sur ce que le wiki ne couvre pas — la clause "hors wiki" garde la porte ouverte.
 
 ## Maintenance — signaux de remaniement (passe légère continue)
 
