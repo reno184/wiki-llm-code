@@ -6,10 +6,8 @@ Un profil = une vue sur le wiki, pas un rangement. Une fiche peut apparaître da
   front/recaptcha-invisible-v3.md, backend/recaptcha-siteverify.md, backend/nodejs-express-env.md, patterns/express-strategy.md, front/daisyui-components.md, stacks.md, ide/webstorm-http-upload.md (tests)
 - **SPA + API** (Vue 3 front, API Express séparée) :
   backend/nodejs-express-env.md, backend/cors.md, backend/express-error-handling.md, backend/upload-file-busboy.md, patterns/upload-strategy.md, front/vuejs-router-menu.md, front/vuejs-useapi.md, front/upload-file.md, front/daisyui-components.md, backend/minio-storage-express.md, infra/docker-minio-compose.md
-- **Script / pipeline Python** :
-  use-cases/pdf-to-md/README.md, use-cases/correction-syntax-markdown/README.md, use-cases/anonymisation/README.md, proto-pdf-to-md.md, libraries.md, infra/gcp-cloud-functions-checklist.md, infra/gcp-secrets.md
-- **Python + Docker** (scripts/pipelines Python conteneurisés, pas d'interface ni d'API) :
-  libraries.md, infra/dockerfile-python.md (Dockerfile + compose script), infra/docker-secrets-env.md, use-cases/pdf-to-md/README.md, use-cases/correction-syntax-markdown/README.md, use-cases/anonymisation/README.md, proto-pdf-to-md.md, stacks.md
+- **Python + Docker** (scripts/pipelines Python, conteneurisés ou pas, pas d'interface ni d'API) :
+  libraries.md, infra/dockerfile-python.md (Dockerfile + compose script), infra/docker-secrets-env.md, use-cases/pdf-to-md/README.md, use-cases/correction-syntax-markdown/README.md, use-cases/anonymisation/README.md, proto-pdf-to-md.md, infra/gcp-cloud-functions-checklist.md, infra/gcp-secrets.md, stacks.md
 - **IDE / outillage** (transversal, chargé à la demande) :
   ide/* (chargées par le dev, pas par les profils projet)
 
