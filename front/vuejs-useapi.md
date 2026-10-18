@@ -69,10 +69,12 @@ export const useApi = createFetch({
 ## Utilisation dans un composant
 
 ```js
-const { data, error, isFetching, execute } = useApi('/api/studyMaterial/list').get().json()
+const { data, isFetching, execute } = useApi('/api/studyMaterial/list').get().json()
 ```
 
-- `useApi(url)` retourne un objet réactif VueUse : `data`, `error`, `isFetching`, `execute` — pas besoin de réécrire des refs loading/error.
+**Règle : les composants ne déstructurent jamais `error`.** Toutes les erreurs sont gérées globalement par `useApi` via les CustomEvents (snackbar 400, page 500) — déstructurer `error` c'est rouvrir une porte vers des gestions locales contradictoires. Toujours `const { data, isFetching, execute } = ...`, jamais `{ data, error, ... }`.
+
+- `useApi(url)` retourne un objet réactif VueUse : `data`, `isFetching`, `execute` — pas besoin de réécrire des refs loading/error.
 - `.get().json()`, `.post(body)`, `.put(body)` : chaînage VueUse.
 
 ## POST JSON / POST FormData (upload)
@@ -96,7 +98,7 @@ La gestion d'erreur est **globale, dans le wrapper** — les composants n'ont pa
 
 - **`dispatchHttpError`** : concatène la stack front (appelant) et la stack serveur (`error.serverStack` — le texte du errorHandler dev) dans un seul bloc, puis émet `redirect-error-500-page`. Le composant racine écoute ce CustomEvent et redirige vers la page 500 en affichant la stack en dev.
 - **`response.clone()`** : obligatoire avant `.json()`/`.text()` — le body ne se lit qu'une fois, le clone laisse le ctx intact pour VueUse.
-- Les composants consomment `error` (réactif) pour les états locaux, mais **l'affichage des erreurs passe par les CustomEvents** : snackbar (400) et page 500 (5xx) sont gérés une seule fois au niveau App, pas dupliqués par composant.
+- **Les composants ne gèrent pas `error`** : jamais déstructuré, jamais affiché localement. Toute erreur passe par les CustomEvents du wrapper — snackbar (400) et page 500 (5xx) sont gérés une seule fois au niveau App, jamais dupliqués par composant.
 
 ## Notes
 
