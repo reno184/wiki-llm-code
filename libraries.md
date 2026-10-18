@@ -15,6 +15,7 @@ Aide-mémoire rapide des librairies de la chaîne documentaire. Colonne clé : *
 **Superpose le texte reconnu directement sur les images du PDF original** (layer texte invisible), rendant le texte sélectionnable sans toucher au rendu visuel.
 
 Fonctionnalités :
+- **pdf2htmlEX** — reproduit un PDF en HTML avec des blocs en position absolue, fidélité visuelle ~95 %. ⚠️ **Archivé** : problèmes de rendu (lignes chevauchées incurables, bordures tableaux bloquant la sélection) — voir [_archive/pdf2htmlex-standby.md](../_archive/pdf2htmlex-standby.md).
 - **Redressement automatique (deskew)** : remet droit un document scanné de travers
 - **Nettoyage des imperfections (unpaper)** : supprime taches, bords noirs de scan, bruit de fond
 - **Correction d'orientation** : pivote automatiquement les pages à 90°/180°/270° si à l'envers
