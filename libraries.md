@@ -1,7 +1,7 @@
 ---
 name: libraries
 layer: reference
-version: 3
+version: 4
 ---
 
 # Index des librairies : qui fait quoi
@@ -39,21 +39,11 @@ Deux librairies liées mais distinctes :
 
 ---
 
-## markdownlint — lint et correction Markdown
-
-Détecte et corrige les problèmes structurels d'un Markdown : MD001 (sauts de niveau de titres), MD025 (H1 multiples), MD026 (ponctuation en fin de titre), longueur de lignes, listes incohérentes… `--fix` corrige automatiquement ce qui est mécanique.
-
-→ Passe 1 du use case [correction-syntax-markdown](use-cases/correction-syntax-markdown/README.md). **Déterministe** : jamais de reformulation du texte, reproductible.
-
-**Node.js / Python : ✅ Node.js principalement** (markdownlint-cli2 / markdownlint-cli en npm). Bindings Python existent (markdownlint) mais l'écosystème est npm → intégrer dans l'API Node.
-
----
-
 ## mdformat — normalisation Markdown
 
-Reformate le Markdown de façon cohérente : espaces, wrapping, listes, tableaux. Ne touche pas aux niveaux de titres (c'est le rôle de markdownlint).
+Reformate le Markdown de façon cohérente : espaces, wrapping, listes, tableaux. Ne touche pas aux niveaux de titres.
 
-→ Passe 2 (optionnelle) du use case correction-syntax-markdown.
+→ Passe 1 du use case correction-syntax-markdown.
 
 **Node.js / Python : ❌ Python uniquement** → candidat micro-service Python, ou remplacé par **Prettier** (voir ci-dessous) si Node-only suffisant.
 
@@ -61,15 +51,15 @@ Reformate le Markdown de façon cohérente : espaces, wrapping, listes, tableaux
 
 ## Prettier — formatage Markdown
 
-Formate aussi le Markdown (`npx prettier --write doc.md`) : mise en page, wrapping, tableaux. Alternative Node à mdformat. **Ne détecte pas les sauts de niveau de titres** : complément de markdownlint, pas un remplaçant.
+Formate aussi le Markdown (`npx prettier --write doc.md`) : mise en page, wrapping, tableaux. Alternative Node à mdformat. **Ne détecte pas les sauts de niveau de titres** : la détection des niveaux relève de la passe IA locale (Ollama), relue.
 
-**Node.js / Python : ✅ Node.js** (npm). Côté Node, préférer markdownlint + Prettier plutôt que mdformat.
+**Node.js / Python : ✅ Node.js** (npm).
 
 ---
 
 ## Ollama — LLM local (via llama.cpp)
 
-Runtime de modèles locaux (`llama3.1`, `mistral`, `qwen2.5`…). API HTTP locale + CLI `ollama run`. Dans la chaîne : revue **sémantique** des niveaux de titres (un titre logiquement H2 resté H3), passe 3 optionnelle du use case correction-syntax-markdown.
+Runtime de modèles locaux (`llama3.1`, `mistral`, `qwen2.5`…). API HTTP locale + CLI `ollama run`. Dans la chaîne : revue **sémantique** des niveaux de titres (un titre logiquement H2 resté H3), passe 2 optionnelle du use case correction-syntax-markdown.
 
 ⚠️ Un petit modèle local (7–8B) peut reformuler ou halluciner → sortie toujours relue, jamais en passe automatique silencieuse.
 
