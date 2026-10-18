@@ -1,6 +1,6 @@
 ---
 use-case: pdf-to-md
-version: 1
+version: 2
 ---
 
 # Use case : PDF → Markdown (pdf-to-md)
@@ -19,7 +19,7 @@ ocrmypdf                  ← 1. prétraitement (voir ocrmypdf.md : les 2 rôles
 PyMuPDF4LLM (pymupdf4llm) ← 2. conversion → Markdown
    │
    ▼
-Markdown structuré → use-cases/correction-syntax-markdown/ (contrôle qualité titres)
+Markdown structuré → use-cases/correction-syntax-markdown/ (contrôle qualité)
    │
    ▼
 Markdown validé → use-cases/anonymisation/
@@ -39,4 +39,4 @@ OCRmyPDF joue **2 rôles** dans la chaîne :
 - [pymupdf4llm.md](pymupdf4llm.md) — conversion Markdown via PyMuPDF4LLM
 
 ## Règle de synchronisation
-La sortie de ce pipeline (Markdown) passe par le use case [correction-syntax-markdown](../correction-syntax-markdown/README.md) (contrôle qualité des titres, markdownlint --fix obligatoire) avant d'être l'entrée **exclusive** du use case anonymisation : format d'entrée = `text/markdown`, pas de PDF direct.
+La sortie de ce pipeline (Markdown) passe par le use case [correction-syntax-markdown](../correction-syntax-markdown/README.md) (contrôle qualité : Prettier + revue IA locale relue) avant d'être l'entrée **exclusive** du use case anonymisation : format d'entrée = `text/markdown`, pas de PDF direct.
