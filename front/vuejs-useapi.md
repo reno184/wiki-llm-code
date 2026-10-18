@@ -1,121 +1,111 @@
-# Composable useAPI — appels fetch réutilisables (Vue 3)
+# Composable useApi — wrapper createFetch de VueUse (Vue 3)
 
-Stack: Vue 3 Composition API, fetch natif (pas d'axios).
-Usage: pattern de composable pour tous les appels API d'un projet Vue — encapsuler fetch dans un `useAPI` réutilisable, avec gestion des états `loading`/`error` et branchement sur la popover d'erreur du errorHandler (fiche [../backend/express-error-handling.md](../backend/express-error-handling.md) : 400 = erreur probable affichée, 500 = bug serveur).
+Stack: Vue 3 Composition API, @vueuse/core (`createFetch`), fetch natif (pas d'axios).
+Usage: `useApi` n'est **pas** un composable maison — c'est le decorator de la librairie VueUse : `createFetch` fabrique un wrapper de fetch préconfiguré (baseUrl, headers, gestion d'erreurs globale). Tous les composants appellent `useApi(url)` au lieu de `fetch`. Branchement direct sur la politique d'erreurs back ([../backend/express-error-handling.md](../backend/express-error-handling.md)) : 400 JSON = snackbar, 500 texte = page d'erreur.
 
-## Pourquoi un composable useAPI
+```bash
+npm install @vueuse/core
+```
 
-Sans composable, chaque appel réécrit fetch + try/catch + états loading/error. Avec un `useAPI`, la logique réseau est écrite une fois et les composants consomment `useAPI()`.
-
-Rappel : un composable = une fonction `use...()` qui expose des refs. Ne pas transformer ça en couche service/api complexe — le composable reste simple, de haut en bas, pas de commentaires (Règle 0 du wiki).
-
-## Pattern minimal — `composables/useAPI.js`
+## Le wrapper — `composables/useApi.js`
 
 ```js
-import { ref } from 'vue'
+import { createFetch } from '@vueuse/core'
 
-export function useAPI() {
-    const data = ref(null)
-    const loading = ref(false)
-    const error = ref(null)
+function dispatchHttpError(error) {
+    if (error.name !== 'AbortError') {
+        const fullStack = [
+            '=== APPELANT (REFERER) ===',
+            error.stack,
+            error.serverStack || ''
+        ].join('\n')
 
-    const request = async (url, options = {}) => {
-        loading.value = true
-        error.value = null
+        const errorEvent = new CustomEvent('redirect-error-500-page', { detail: { stack: fullStack } })
 
-        try {
-            const rep = await fetch(url, options)
+        window.dispatchEvent(errorEvent)
 
-            if (!rep.ok) {
-                const body = await rep.json().catch(() => null)
-                error.value = body?.message ?? `Erreur ${rep.status}`
-                return null
+        throw error
+    }
+}
+
+export const useApi = createFetch({
+    baseUrl: 'http://localhost:3000',
+    options: {
+        async beforeFetch({ options }) {
+            if (options.body instanceof FormData) {
+                delete options.headers['Content-Type']
+            }
+            return { options }
+        },
+        async onFetchError(ctx) {
+            const response = ctx.response
+
+            if (response) {
+                const status = response.status
+
+                if (status === 400) {
+                    const data = await response.clone().json()
+                    window.dispatchEvent(new CustomEvent('show-snackbar', {
+                        detail: { message: data.message || 'Erreur dans la requête', type: 'error' }
+                    }))
+                } else if (status >= 500) {
+                    try {
+                        const serverStack = await response.clone().text()
+                        const error = new Error(`Server Error (${status})`)
+                        error.serverStack = serverStack
+                        dispatchHttpError(error)
+                    } catch (e) {
+                        dispatchHttpError(e)
+                    }
+                }
             }
 
-            data.value = await rep.json()
-            return data.value
-        } catch (err) {
-            error.value = 'Erreur réseau'
-            return null
-        } finally {
-            loading.value = false
+            return ctx
         }
     }
-
-    return { data, loading, error, request }
-}
+})
 ```
 
 ## Utilisation dans un composant
 
-```vue
-<script setup>
-import { useAPI } from '@/composables/useAPI'
-
-const { data, loading, error, request } = useAPI()
-
-const loadMaterials = () => request('/api/studyMaterial/list')
-</script>
-
-<template>
-    <div v-if="loading">Chargement...</div>
-    <div v-else-if="error" class="alert alert-error">{{ error }}</div>
-    <div v-else>...</div>
-</template>
+```js
+const { data, error, isFetching, execute } = useApi('/api/studyMaterial/list').get().json()
 ```
 
-- `alert alert-error` : composant DaisyUI (voir [daisyui-components.md](daisyui-components.md)).
-- Les états (`loading`, `error`) sont des refs réactives, directement utilisables dans le template.
+- `useApi(url)` retourne un objet réactif VueUse : `data`, `error`, `isFetching`, `execute` — pas besoin de réécrire des refs loading/error.
+- `.get().json()`, `.post(body)`, `.put(body)` : chaînage VueUse.
 
-## Appels spécifiques
-
-### POST JSON
+## POST JSON / POST FormData (upload)
 
 ```js
-await request('/api/material', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ title, author })
-})
+await useApi('/api/material/newNovel').post(bodyData.value).json()
 ```
 
-### POST FormData (upload)
+- `beforeFetch` retire le `Content-Type` si le body est un FormData : le navigateur pose lui-même le boundary multipart (voir [upload-file.md](upload-file.md)). C'est le piège documenté côté front, il est neutralisé **une fois pour toutes dans le wrapper**.
 
-```js
-await request('/api/studyMaterial/newNovel', {
-    method: 'POST',
-    body: formData
-})
-```
+## Architecture des erreurs — le cœur du pattern
 
-⚠️ **Pas de header Content-Type avec FormData** (voir [upload-file.md](upload-file.md)) — le navigateur pose le boundary multipart. Le composable n'ajoute aucun header par défaut, c'est à l'appelant de définir les options.
+La gestion d'erreur est **globale, dans le wrapper** — les composants n'ont pas de try/catch à écrire. Le format de réponse fait le tri :
 
-### GET avec query params
+| Statut back | Format (errorHandler) | Action front |
+|---|---|---|
+| 400 | JSON `{ code, message }` | `show-snackbar` CustomEvent → message métier en snackbar (ex. "Fichier trop volumineux") |
+| 500 dev | texte (stack formatée) | `redirect-error-500-page` CustomEvent avec la stack serveur concaténée à la stack appelante → page d'erreur |
+| 500 prod | `Internal Server Error` | même événement — page d'erreur générique |
+| AbortError | — | ignoré volontairement (annulation volontaire de requête, VueUse/timeout) |
 
-```js
-const params = new URLSearchParams({ search, page })
-await request(`/api/material?${params}`)
-```
-
-## Branchement sur la politique d'erreurs du back
-
-Le errorHandler back renvoie `{ code, message }` en JSON sur les 400 (voir [../backend/express-error-handling.md](../backend/express-error-handling.md)) :
-
-- **400** → `error.value = body.message` — une erreur probable, on affiche le message serveur directement dans la popover/alert (ex. "Fichier trop volumineux").
-- **500** → le back renvoie `Internal Server Error` en texte brut (pas de JSON en prod) — `body?.message` est `undefined`, on affiche le fallback générique. C'est un bug serveur, pas un message utilisateur.
-- **Réseau (serveur down, offline)** → catch : `error.value = 'Erreur réseau'`.
-
-Le front n'a donc **pas besoin de connaître le code HTTP** : le format de réponse fait le tri (JSON parsable = erreur exploitable, texte brut = erreur générique).
+- **`dispatchHttpError`** : concatène la stack front (appelant) et la stack serveur (`error.serverStack` — le texte du errorHandler dev) dans un seul bloc, puis émet `redirect-error-500-page`. Le composant racine écoute ce CustomEvent et redirige vers la page 500 en affichant la stack en dev.
+- **`response.clone()`** : obligatoire avant `.json()`/`.text()` — le body ne se lit qu'une fois, le clone laisse le ctx intact pour VueUse.
+- Les composants consomment `error` (réactif) pour les états locaux, mais **l'affichage des erreurs passe par les CustomEvents** : snackbar (400) et page 500 (5xx) sont gérés une seule fois au niveau App, pas dupliqués par composant.
 
 ## Notes
 
-- **Un seul useAPI par projet** — pas un composable par endpoint. Les options (method, headers, body) suffisent à couvrir tous les cas.
-- Le composable n'ajoute **aucun header par défaut** (pas de Content-Type automatique, pas d'Authorization) — chaque appel définit ses options explicitement.
-- Si auth JWT : ajouter le token dans les options à l'appelant (`headers: { Authorization: \`Bearer ${token}\` }`) ou via un intercepteur maison dans `request` — selon les besoins du projet, pas de sur-ingénierie par défaut (style proto, voir [../patterns/express-strategy.md](../patterns/express-strategy.md)).
-- `await rep.json().catch(() => null)` : le back en prod ne renvoie pas toujours du JSON (500 = texte brut), le catch protège le parse.
-- Pas d'axios : fetch natif suffit, une dépendance de moins.
-- Éviter la dérive "usine à gaz" : pas de retry, pas de cache, pas de type generique — le composable reste ~30 lignes.
+- **Ne pas réécrire un composable fetch maison** tant que VueUse fournit `createFetch` : la librairie gère l'abort, les refs réactives, le chaînage — le wrapper ne fait que configurer (baseUrl, erreurs, FormData).
+- `baseUrl` : à passer par env en prod (ex. `import.meta.env.VITE_API_URL`), pas en dur.
+- Un nouvel événement d'erreur = un nouveau `CustomEvent` dans le wrapper + un écouteur au niveau App : jamais de gestion d'erreur dans les composants.
+- Le `AbortError` est exclu : VueUse annule les requêtes auUnmount par défaut — ce n'est pas une vraie erreur.
+- Liens : [vuejs-router-menu.md](vuejs-router-menu.md) pour la page 500 dans le router, [daisyui-components.md](daisyui-components.md) pour la snackbar/alert.
 
 ## État
 
-**vivant** — pattern front standard pour tous les appels API, aligné avec la politique d'erreurs 400/500 du errorHandler back.
+**vivant** — wrapper createFetch VueUse standard des projets Vue 3, aligné avec le errorHandler back (400 JSON / 500 texte) et le trio upload.
