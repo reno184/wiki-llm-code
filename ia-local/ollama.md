@@ -25,10 +25,15 @@ Pour la vision : champ `images` avec le contenu du fichier en base64.
 
 → Voir [models.md](models.md) — modèle vision de référence : frob/qwen3.5-instruct:9b.
 
+## Limites constatées (leçon clé)
+
+- **Prompt avec un document long en entier = échec** : test réel (contrat 7 pages, markdown complet) avec qwen3.5:9b — correct au début, puis paragraphes perdus et sortie tronquée après ~4 pages. Toujours découper (chunks par sections/pages), jamais tout le document en un prompt. Voir [use-cases/reformat-markdown/README.md](../use-cases/reformat-markdown/README.md).
+
 ## Liens
 
 - Use case OCR : [use-cases/ocr-llm/README.md](../use-cases/ocr-llm/README.md)
 - Revue sémantique Markdown : [use-cases/correction-syntax-markdown/README.md](../use-cases/correction-syntax-markdown/README.md)
+- Reformatage sémantique (chunking obligatoire) : [use-cases/reformat-markdown/README.md](../use-cases/reformat-markdown/README.md)
 - Entrée libraries.md : Node.js / Python ✅ les deux (API HTTP locale)
 
 ## État
