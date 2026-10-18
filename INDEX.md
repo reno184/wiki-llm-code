@@ -7,7 +7,7 @@ Un profil = une vue sur le wiki, pas un rangement. Une fiche peut apparaître da
 - **SPA + API** (Vue 3 front, API Express séparée) :
   backend/nodejs-express-env.md, backend/cors.md, backend/express-error-handling.md, backend/upload-file-busboy.md, patterns/upload-strategy.md, front/vuejs-router-menu.md, front/vuejs-useapi.md, front/upload-file.md, front/daisyui-components.md, backend/minio-storage-express.md, infra/docker-minio-compose.md
 - **Python + Docker** (labo d'entraînement : manipulation images PNG/PDF, OCR, conversion Markdown, création de PDF — pas d'interface ni d'API) :
-  infra/python-docker-labo.md (labo Docker plutôt que venv), infra/dockerfile-python.md (Dockerfile + compose script), libraries.md, infra/python-ocrmypdf.md (gonflement taille après OCR), infra/docker-secrets-env.md, use-cases/pdf-to-md/README.md, use-cases/correction-syntax-markdown/README.md, use-cases/anonymisation/README.md, proto-pdf-to-md.md, stacks.md
+  infra/python-docker-labo.md (labo Docker plutôt que venv), infra/dockerfile-python.md (Dockerfile + compose script), libraries.md, infra/python-ocrmypdf.md (gonflement taille après OCR), infra/docker-secrets-env.md, use-cases/pdf-to-md/README.md, use-cases/correction-syntax-markdown/README.md, use-cases/anonymisation/README.md, use-cases/ocr-llm/README.md, proto-pdf-to-md.md, stacks.md
 - **IDE / outillage** (transversal, chargé à la demande) :
   ide/* (chargées par le dev, pas par les profils projet)
 
@@ -46,6 +46,10 @@ Point d'entrée pour un LLM : charger INDEX.md, puis seulement les fiches utiles
 | [patterns/recaptcha-choix-offre.md](patterns/recaptcha-choix-offre.md) | — | Décision : reCAPTCHA v3 classique vs Enterprise/Fraud Defense | vivant |
 | [patterns/upload-strategy.md](patterns/upload-strategy.md) | Strategy pattern (Node) | Drivers de stockage interchangeables : contrat `put`/`delete`, drivers minio/local, factory `UPLOAD_DRIVER` par env, Open/Closed | vivant |
 | [stacks.md](stacks.md) | — | Stack de référence + stacks abandonnées | vivant |
+| [ia-local/ollama.md](ia-local/ollama.md) | Ollama (CLI desktop, API locale 11434) | LLM local : CLI desktop, API HTTP locale, curl generate + images base64 pour la vision ; rien ne sort de la machine (données sensibles OK) | vivant |
+| [ia-local/models.md](ia-local/models.md) | Ollama — modèles | Modèle vision de référence frob/qwen3.5-instruct:9b (OCR/extraction depuis image, ~9B, validé octobre 2026) | vivant |
+| [use-cases/ocr-llm/README.md](use-cases/ocr-llm/README.md) | Ollama + frob/qwen3.5-instruct:9b | OCR via LLM vision local : prompt testé, leçon découpage des zones denses, hiérarchie vs PyMuPDF/OCRmyPDF — rappel futur : pour une note manuscrite → ollama/qwen, pas un outil Python | vivant |
+| [business-idea/ia-medical-ocr-consultation.md](business-idea/ia-medical-ocr-consultation.md) | Idée business | Médecin scanne un compte rendu → IA locale extrait les infos structurées (argument : confidentialité santé, rien dans le cloud) | vivant (idée non exploitée) |
 | [_archive/recaptcha-v2-v3.md](_archive/recaptcha-v2-v3.md) | Vue 3 générique | Ancienne fiche générique remplacée par le découpage par concern | obsolete |
 
 <!-- Ajouter chaque nouvelle fiche ici : une ligne, stack, usage, état -->
