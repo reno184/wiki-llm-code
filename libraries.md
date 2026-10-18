@@ -85,10 +85,6 @@ Chaînage de prompts, loaders, modèles. Utilisé dans l'API Node (anonymisation
 
 ---
 
-
-
----
-
 ## pdf2htmlEX — PDF → HTML (archivé)
 
 Reproduit un PDF en HTML avec des blocs en position absolue, fidélité visuelle ~95 %.
