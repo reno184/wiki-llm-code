@@ -72,7 +72,7 @@ export const useApi = createFetch({
 const { data, isFetching, execute } = useApi('/api/studyMaterial/list').get().json()
 ```
 
-**Règle : les composants ne déstructurent jamais `error`.** Toutes les erreurs sont gérées globalement par `useApi` via les CustomEvents (snackbar 400, page 500) — déstructurer `error` c'est rouvrir une porte vers des gestions locales contradictoires. Toujours `const { data, isFetching, execute } = ...`, jamais `{ data, error, ... }`.
+`error` n'est pas déstructuré dans les composants : toutes les erreurs sont déjà gérées par `useApi` via les CustomEvents (snackbar 400, page 500).
 
 - `useApi(url)` retourne un objet réactif VueUse : `data`, `isFetching`, `execute` — pas besoin de réécrire des refs loading/error.
 - `.get().json()`, `.post(body)`, `.put(body)` : chaînage VueUse.
@@ -98,7 +98,7 @@ La gestion d'erreur est **globale, dans le wrapper** — les composants n'ont pa
 
 - **`dispatchHttpError`** : concatène la stack front (appelant) et la stack serveur (`error.serverStack` — le texte du errorHandler dev) dans un seul bloc, puis émet `redirect-error-500-page`. Le composant racine écoute ce CustomEvent et redirige vers la page 500 en affichant la stack en dev.
 - **`response.clone()`** : obligatoire avant `.json()`/`.text()` — le body ne se lit qu'une fois, le clone laisse le ctx intact pour VueUse.
-- **Les composants ne gèrent pas `error`** : jamais déstructuré, jamais affiché localement. Toute erreur passe par les CustomEvents du wrapper — snackbar (400) et page 500 (5xx) sont gérés une seule fois au niveau App, jamais dupliqués par composant.
+- Les erreurs sont gérées uniquement par les CustomEvents du wrapper : snackbar (400) et page 500 (5xx) sont gérés une seule fois au niveau App.
 
 ## Notes
 
