@@ -70,6 +70,28 @@ Pourquoi répertoires plutôt que tags :
 
 
 
+## Génération vs suggestions — le wiki n'est pas prioritaire par magie
+
+Wikis et connaissances du modèle sont **fusionnés** dans le contexte : pas de séquence "wiki d'abord, modèle ensuite". C'est le contenu le plus spécifique et le plus proche de la tâche qui domine l'attention :
+
+- **Génération** (ex. écrire un layout Pug) → le wiki gagne : les layouts exacts battent le Pug générique du modèle.
+- **Compétence fondamentale** (ex. corriger une syntaxe Pug) → le modèle gagne, pas besoin de fiche.
+- **Suggestions d'amélioration** → le modèle gagne PAR DÉFAUT : c'est le piège. Critiquant selon son entraînement, il propose des structures génériques ("propres") même si une fiche impose autre chose.
+
+### Parade : règle d'ancrage dans le project rules
+
+```markdown
+- Les fiches du wiki (ex. layouts Pug) sont la NORME, pas une
+  suggestion. Toute suggestion d'amélioration doit partir de la
+  fiche comme baseline et ne proposer que des deltas vs cette
+  baseline. Ne jamais proposer une structure alternative générique
+  qui contredit une fiche chargée.
+```
+
+Deux ingrédients actifs : **"norme, pas suggestion"** (change le statut du wiki dans le raisonnement de l'agent) et **"deltas vs baseline"** (mode d'emploi concret : critiquer À PARTIR de la fiche, pas à côté).
+
+Garde-fou : la règle n'interdit pas la critique sur ce que la fiche ne couvre pas — sinon l'agent devient muet sur les vrais problèmes. "Ne jamais contredire une fiche chargée" laisse la porte ouverte aux suggestions sur tout le reste.
+
 ## Maintenance — signaux de remaniement (passe légère continue)
 
 Remaniement au fil de l'eau, jamais en grand chantier. À chaque fois qu'on touche une fiche, 30 secondes de vérification (règle boy scout). Signaux :
