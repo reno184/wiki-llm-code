@@ -124,4 +124,4 @@ const handleSubmit = async (e) => {
 
 ## État
 
-**en construction** — pattern posé avec le mécanisme de formulaire en cours ; consolidation avec le code réel validé (notamment multi-étapes et le rendu du bloc CSS avec Tailwind).
+**vivant** — mécanique de formulaire standard des projets Vue 3, validée en réel. Multi-étapes (`button.next`) : le CSS le couvre déjà, à consolider le jour venu si besoin.
