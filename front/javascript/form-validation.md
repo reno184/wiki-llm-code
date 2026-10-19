@@ -42,14 +42,16 @@ form:invalid input[type="submit"], form:invalid button[type="submit"], form:inva
 ```
 
 ```js
-const { isFetching: pending, execute } = useApi('/api/contact').post(body).json()
+const bodyData = ref(null)
+
+const { isFetching: pending, execute } = useApi('/api/contact', { immediate: false }).post(bodyData).json()
 
 const handleSubmit = async (e) => {
     const isValid = e.target.checkValidity()
     const formData = new FormData(e.target)
 
     if (isValid) {
-        const body = {
+        bodyData.value = {
             text: formData.get('text'),
         }
 
@@ -61,14 +63,14 @@ const handleSubmit = async (e) => {
 
 - `e.target` = le `<form>` : `checkValidity()` et `new FormData(e.target)` travaillent directement sur le DOM — zéro état réactif à maintenir pour les champs.
 - `checkValidity()` dans le handler est une **garde défensive** : sans `novalidate`, le navigateur bloque l'invalidité avant l'événement, donc `isValid` est en pratique toujours `true` — mais la garde rend le handler autonome et lisible (le `if` fait foi : rien ne part si invalide).
-- `formData.get(name)` : un champ par clé `name` — le body est un objet JS explicite (pas le FormData brut) pour un POST JSON.
+- `formData.get(name)` : un champ par clé `name` — le body est un objet JS explicite (pas le FormData brut) pour un POST JSON, posé dans `bodyData.value` juste avant `execute()`.
 - `await execute()` : on attend la fin de la requête avant le `reset()` — le FormData est déjà lu avant l'appel, le reset ne peut pas casser la requête.
 - `e.target.reset()` : vide les champs, le CSS `form:invalid` reprend (bouton inactif), l'utilisateur repart d'un formulaire propre.
 - Le CSS de main.css rend le bouton inactif tant que `form:invalid` ; `pending` reste utilisable pour un spinner/loader séparé si besoin.
 
-## Variante useApi — `immediate: false` + `bodyData` en ref
+## Variante useApi — réponse consommée : `.text()` + `data`
 
-Pour un appel qui ne part **qu'au submit** (pas au montage du composant) : `{ immediate: false }` désactive l'exécution automatique de VueUse, le body est un `ref` posé dans le handler juste avant `execute()`.
+Même mécanique que le pattern de base (`immediate: false` + `bodyData` ref), pour un appel dont la **réponse est consommée par le composant** et qui répond en texte brut.
 
 ```js
 const bodyData = ref(null)
