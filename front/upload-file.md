@@ -65,27 +65,47 @@ function showError(msg) {
 }
 ```
 
-## Vue 3 + DaisyUI — pattern input file
+## Vue 3 + DaisyUI + useApi — pattern complet (formulaire d'upload)
 
 ```html
-<div class="form-control">
-    <input type="file" class="file-input file-input-primary w-full" accept=".pdf,application/pdf" @change="handleChange">
-</div>
+<form ref="formRef" novalidate @submit.prevent="onSubmit">
+    <input type="file" class="file-input file-input-primary w-full" accept=".pdf,application/pdf" required @change="handleChange">
+    <button type="submit" class="btn btn-primary" :disabled="pending">Envoyer</button>
+</form>
 ```
 
 ```js
+import { ref, shallowRef } from 'vue'
+
+const formRef = ref(null)
+const formData = shallowRef(null)
+
 const handleChange = (event) => {
     const files = event.target.files
     if (!files || files.length === 0) return
 
-    const formData = new FormData()
-    formData.append('file', files[0])
-    bodyData.value = formData
+    const data = new FormData()
+    data.append('file', files[0])
+    formData.value = data
+}
+
+const { isFetching: pending, execute } = useApi('/api/upload').post(formData).json()
+
+function onSubmit() {
+    if (!formRef.value.checkValidity()) {
+        formRef.value.reportValidity()
+        return
+    }
+    execute()
 }
 ```
 
 - `event.target.files` = `FileList`, même sans `multiple` — **le comptage n'est jamais garanti côté serveur**, d'où la validation back.
 - `accept=".pdf,application/pdf"` : double notation (extension + MIME) pour couvrir tous les OS/navigateurs.
+- `.post(formData)` : le ref est résolu par VueUse **au moment de l'`execute()`** — le FormData posé dans `handleChange` part avec la requête. `shallowRef` : le contenu d'un FormData n'a pas à être réactif profond.
+- `required` sur l'input file participe à `checkValidity()` — la mécanique complète du formulaire (novalidate, erreurs au submit, styling DaisyUI) est dans [javascript/form-validation.md](javascript/form-validation.md).
+- Le `beforeFetch` du wrapper retire le Content-Type sur FormData ([vuejs-useapi.md](vuejs-useapi.md)) — le pattern `fetch` nu du haut de fiche reste réservé au JS natif hors Vue.
+- 400 "Fichier trop volumineux" du back → snackbar via le wrapper, zéro try/catch dans le composant.
 
 ### Contrat single/multiple — l'attribut `multiple` décide
 
@@ -120,4 +140,4 @@ Le back contrôle `uploadedFile !== null` → 500 (fiche busboy) **parce que** l
 
 ## État
 
-**vivant** — pattern d'entrée d'un upload fullstack, aligné avec la fiche busboy (mêmes limites MAX_SIZE / ALLOWED_TYPES).
+**vivant** — pattern d'entrée d'un upload fullstack, aligné avec la fiche busboy (mêmes limites MAX_SIZE / ALLOWED_TYPES) ; soumission Vue 3 = `useApi` (fini le fetch nu dans les composants Vue).
