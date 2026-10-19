@@ -2,7 +2,7 @@
 
 ## Contexte d'usage
 - Backend Express (ESM) qui persiste dans MongoDB (containerisé Docker Compose).
-- Fichier `db.js` **à la racine du backend** (pas dans `config/`), importé dans `index.js` et appelé dans `startServer()` **avant** `app.listen()`.
+- Fichier `config/db.js` (dossier `config/`, aux côtés de `config/minio.js`), importé dans `index.js` et appelé dans `startServer()` **avant** `app.listen()`.
 
 ## Stack
 Node 20+ / Express (ESM) / mongoose / docker
@@ -12,11 +12,11 @@ Node 20+ / Express (ESM) / mongoose / docker
 npm install mongoose
 ```
 
-## db.js (racine du backend)
+## config/db.js
 > Pas de catch qui avale l'erreur : si `mongoose.connect` throw, l'erreur remonte au `startServer()` de `index.js` qui fait `process.exit(1)` (fail fast, même contrat que `initBucket` dans minio-storage-express). Un serveur démarré sans base ne doit jamais accepter de requêtes.
 
 ```js
-// db.js
+// config/db.js
 import mongoose from 'mongoose'
 
 export async function connectDB() {
