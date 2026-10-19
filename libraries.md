@@ -1,7 +1,7 @@
 ---
 name: libraries
 layer: reference
-version: 7
+version: 8
 ---
 
 # Index des librairies : qui fait quoi
@@ -10,32 +10,18 @@ Aide-mémoire rapide des librairies de la chaîne documentaire. Colonne clé : *
 
 ---
 
-## ocrmypdf — OCR et prétraitement PDF
-
-**Superpose le texte reconnu directement sur les images du PDF original** (layer texte invisible), rendant le texte sélectionnable sans toucher au rendu visuel.
-
-Fonctionnalités :
-- **Redressement automatique (deskew)** : remet droit un document scanné de travers
-- **Nettoyage des imperfections (unpaper)** : supprime taches, bords noirs de scan, bruit de fond
-- **Correction d'orientation** : pivote automatiquement les pages à 90°/180°/270° si à l'envers
-- **Compression** : via **pngquant** et **Ghostscript**, réduit considérablement le poids du PDF généré sans perte visible de qualité
-
-Sous le capot : moteur OCR **Tesseract** (à installer séparément) — usage autonome de Tesseract archivé, il ne vit qu'en interne d'ocrmypdf (trace : _archive/tesseract-docling-standby.md).
-
-**Node.js / Python : ❌ Python uniquement** (package Python + CLI). Pas d'équivalent direct appelable depuis Node → candidat micro-service Python. Depuis Node, seul contournement : shell out sur le CLI.
-
----
-
-## PyMuPDF vs PyMuPDF4LLM — extraction vs Markdown
+## PyMuPDF vs PyMuPDF4LLM — extraction vs Markdown (chaîne retenue, 100% PyMuPDF)
 
 Deux librairies liées mais distinctes :
 
-- **PyMuPDF** : moteur **bas niveau** qui extrait des éléments bruts — texte filaire, coordonnées cartésiennes (x, y), images, ou du HTML générique peu structuré. Fiche dédiée : [infra/pymupdf.md](infra/pymupdf.md) — c'est le socle de la chaîne retenue pour l'extraction ciblée (contrats, fiches de paie) : ciblage humain via interface Vue.js + clip/search_for/find_tables + human-in-the-loop.
+- **PyMuPDF** : moteur **bas niveau** qui extrait des éléments bruts — texte filaire, coordonnées cartésiennes (x, y), images, ou du HTML générique peu structuré. Fiche dédiée : [infra/pymupdf.md](infra/pymupdf.md) — c'est le socle de TOUTE la chaîne retenue : extraction ciblée (contrats, fiches de paie : ciblage humain via interface Vue.js + clip/search_for/find_tables + human-in-the-loop), rendu d'affichage (get_pixmap → WebP), manipulation PDF.
 - **PyMuPDF4LLM** : **s'appuie sur PyMuPDF** pour analyser l'agencement visuel (mise en page, détection des titres, tableaux, listes) et reconstituer automatiquement le document en syntaxe Markdown (titres `#`, tableaux `| --- |`, paragraphes).
 
-→ Pour la chaîne pdf-to-md, **toujours PyMuPDF4LLM** : le Markdown structuré est l'entrée requise par le use case anonymisation. PyMuPDF seul sert pour l'accès fin (positions, extraction ciblée, images extraites) — désormais l'usage principal pour les documents d'entreprise (ciblage humain).
+→ Pour la chaîne pdf-to-md : **toujours PyMuPDF4LLM** (le Markdown structuré est l'entrée requise par l'anonymisation) ; PyMuPDF seul pour l'accès fin (positions, extraction ciblée, images extraites).
 
-**Node.js / Python : ❌ Python uniquement** (les deux, PyMuPDF comme PyMuPDF4LLM). Pas de port Node de qualité équivalente → candidats micro-service Python.
+**Décision (oct. 2026) : la chaîne est 100% PyMuPDF sur PDF natifs** — plus aucune OCR dans le pipeline (ocrmypdf archivé). PyMuPDF n'OCRise pas les PDF image → un scanné est **hors périmètre** (cohérent avec la décision produit : pas de contrats scannés).
+
+**Node.js / Python : ❌ Python uniquement** (les deux). Pas de port Node de qualité équivalente → candidats micro-service Python.
 
 ---
 
@@ -67,9 +53,17 @@ Chaînage de prompts, loaders, modèles. Utilisé dans l'API Node (anonymisation
 
 ---
 
+## OCRmyPDF — OCR et prétraitement PDF (archivé)
+
+Superposait le texte reconnu (layer invisible) sur les images d'un PDF scanné — deskew, nettoyage (unpaper), orientation, compression (pngquant, Ghostscript). Sous le capot : Tesseract.
+
+⚠️ **Archivé (oct. 2026)** — la chaîne retenue est **100% PyMuPDF sur PDF natifs**, et le périmètre produit exclut les scannés (pas de contrats scannés côté avocat) → plus besoin de layer OCR amont. Leçons conservées : trace [_archive/python-ocrmypdf.md](../_archive/python-ocrmypdf.md) (gonflement de taille : skip-text > redo_ocr > jamais force_ocr par défaut). **Réveil si** un besoin réel de scannés apparaît : PyMuPDF n'a pas de moteur OCR intégré, c'est OCRmyPDF (ou équivalent) qu'il faudra réintroduire.
+
+---
+
 ## Tesseract OCR & Docling — extraction automatique (archivés)
 
-- **Tesseract (usage autonome)** : moteur OCR bas niveau, résultats décevants sur les documents cibles (contrats, fiches de paie). Ne vit qu'en interne d'ocrmypdf.
+- **Tesseract (usage autonome)** : moteur OCR bas niveau, résultats décevants sur les documents cibles (contrats, fiches de paie).
 - **Docling** : conversion automatique document → structure, même famille que les approches "tout automatique" écartées — la fiabilité vient du ciblage humain, pas de la devinette automatique.
 
 ⚠️ **Archivés** — chaîne retenue à la place : **PyMuPDF + ciblage humain via interface Vue.js + human-in-the-loop** (fiche infra/pymupdf.md). Pas de process 100% automatique visé pour contrats/fiches de paie. Trace : [_archive/tesseract-docling-standby.md](../_archive/tesseract-docling-standby.md).
