@@ -2,6 +2,12 @@
 
 Un profil = une vue sur le wiki, pas un rangement. Une fiche peut apparaître dans plusieurs profils (elle reste UNE seule fiche). Le project rules de chaque projet désigne son profil.
 
+**Garde-fou de routage (tout agent doit le respecter)** :
+- Le profil se lit dans le project rules du projet, il ne se déduit JAMAIS d'un mot-clé de la tâche (« docker », « storage », « upload », « minio »…). Une app Node/Express qui tourne sous Docker reste une stack JavaScript.
+- Demande MinIO / stockage S3 dans une stack Node/Express → fiches `backend/minio-storage-express.md` + `infra/docker-minio-compose.md`, client = sdk npm `minio` (`npm install minio`).
+- Les fiches `infra/dockerfile-python.md`, `infra/python-docker-labo.md`, `infra/pymupdf.md` ne se chargent QUE si le profil désigné est « Python + Docker ». Interdit d'installer une librairie Python (ex. minio-py) ou de proposer un conteneur Python dans une stack Node/Express.
+- En cas de doute sur le profil : STOP, demander à Renaud (Règle 3).
+
 - **Site vitrine** (Node/Express + Pug multipage, reCAPTCHA) :
   front/ux-motion-adoption.md (conviction transversale), front/recaptcha-invisible-v3.md, backend/recaptcha-siteverify.md, backend/nodejs-express-env.md, patterns/express-strategy.md, front/daisyui-components.md, stacks.md, ide/webstorm-http-upload.md (tests)
 - **SPA + API** (Vue 3 front, API Express séparée) :
