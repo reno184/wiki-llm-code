@@ -6,6 +6,7 @@
 - Bucket public en lecture : URLs directement affichables depuis le navigateur.
 - MinIO containerisé (Docker Compose), données persistées dans un volume Docker externe.
 - Suppression du storage **déclenchée depuis le schéma Mongoose** (hook `deleteOne`) : supprimer le document = supprimer ses fichiers MinIO.
+- **Règle clé/URL : on stocke la CLÉ MinIO, jamais l'URL complète** (`pdfUrl` interdit). L'URL publique est dérivée au moment de servir : `${MINIO_PUBLIC_URL}/${BUCKET_NAME}/${key}`. Changer de bucket/domaine/policy = un changement de config, pas une migration de base. Une URL signée ne se stocke jamais (elle expire).
 
 ## Stack
 Node 20+ / Express / minio (sdk) / busboy / mongoose / docker
@@ -77,21 +78,43 @@ const startServer = async () => {
 }
 ```
 
-## Manager upload (retourne l'URL logique `<bucket>/<objectName>`)
+## Manager upload (retourne l'objectName = la clé stockée en base)
 ```js
 export const uploadToMinio = async (bucketName, objectName, buffer, mimeType) => {
     await minioClient.putObject(bucketName, objectName, buffer, buffer.length, {
         'Content-Type': mimeType,
     })
-    return `${bucketName}/${objectName}`
+    return objectName
 }
+```
+
+## URL publique dérivée (au moment de servir le document)
+```js
+export const buildPublicUrl = (bucketName, key) =>
+    `${process.env.MINIO_PUBLIC_URL}/${bucketName}/${key}`
+```
+
+## Schéma Mongoose (pattern clé uniquement)
+> Jamais de champ `pdfUrl` / `images[].src` : l'URL est reconstruite par `buildPublicUrl` dans la route/le serializer. Les clés sont `required` (une image sans clé ne sert à rien — le hook ne devrait jamais avoir à filtrer des clés falsy).
+
+```js
+const pdfDocumentSchema = new mongoose.Schema({
+    originalName: {type: String, required: true},
+    pdfKey: {type: String, required: true},
+    images: [{
+        page: {type: Number, required: true},
+        key: {type: String, required: true},
+    }],
+}, {
+    timestamps: true
+})
 ```
 
 ## Appel dans une route (pattern)
 > Rester simple, pas de fallback en cas d'échec d'écriture : l'erreur remonte au `next(err)` global.
 ```js
 const pdfUrl = await uploadToMinio(BUCKET_NAME, pdfKey, fileData.buffer, fileData.mimeType)
-// ... traitements dérivés éventuels, puis persistance en base (clé + URL logique)
+// ... traitements dérivés éventuels, puis persistance en base (clé uniquement)
 ```
 
 ## Delete du storage déclenché par le schéma Mongoose (hook `deleteOne`)
