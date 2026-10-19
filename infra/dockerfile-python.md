@@ -35,14 +35,24 @@ Points critiques :
 
 ```
 .git
-.venv
 __pycache__
 *.pyc
+.venv
 .env
 data/
+*.pdf
+*.md
 ```
 
-.env jamais dans le contexte de build. data/ et volumes lourds ne doivent pas entrer dans l'image.
+**Pourquoi c'est critique (agent-first)** : `COPY . .` envoie **tout le contexte de build** au démon Docker avant même la première instruction. Sans .dockerignore :
+
+- **Le build gonfle** : chaque `docker build` upload le contexte entier — PDF de test de 30 Mo, venv, cache Git → builds lents et image lourde.
+- **Le cache pip est cassé plus souvent** : tout fichier non ignoré qui change invalide le layer `COPY . .` → re-copie systématique.
+- **Des fichiers dangereux entrent dans l'image** : `.env` (secrets), `.git` (tout l'historique du projet), documents clients (`*.pdf`) — l'image est ensuite inspectable (`docker save` / layers), rien n'est vraiment « caché » dedans.
+- `.venv` copié depuis l'hôte = incompatible de toute façon (paths absolus, binaires de la machine).
+- `*.md` : la doc n'a rien à faire dans une image d'exécution.
+
+Règle pour l'agent : **le .dockerignore se crée en même temps que le Dockerfile, jamais après coup** — un build sans .dockerignore est un build fautif, même s'il réussit.
 
 ## Compose type (script)
 
@@ -66,7 +76,8 @@ services:
 - `pip install` en une seule étape avec COPY . . : cache cassé à chaque changement de code.
 - Installer en root puis `USER` en fin de Dockerfile sans chown : fichiers illisibles pour l'utilisateur applicatif.
 - venv copié depuis la machine hôte (incompatible, paths absolus) : installer dans l'image.
+- **Dockerfile sans .dockerignore** : contexte de build gonflé, secrets/historique Git dans l'image, cache invalidé.
 
 ## État
 
-**vivant** — pattern validé 2026-10, à instancier au premier projet réel.
+**vivant** — pattern validé 2026-10, à instancier au premier projet réel ; section .dockerignore renforcée (agent-first, oct. 2026).
