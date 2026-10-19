@@ -32,6 +32,40 @@ with open("doc.md", "w", encoding="utf-8") as f:
 - `ocr_language` : OCR multi-langues pour les documents multilingues (voir ci-dessous)
 - extraction des tables, headers : à documenter si utilisés
 
+## Chunking par page (page_chunks)
+
+Snippet validé : conversion en chunks par page, un fichier Markdown par chunk.
+
+```python
+import pathlib
+import pymupdf4llm
+
+current_dir = pathlib.Path(__file__).parent
+source_pdf = current_dir / "document-source.pdf"
+
+if not source_pdf.exists():
+    print(f"Erreur : le fichier {source_pdf} est introuvable.")
+else:
+    chunks = pymupdf4llm.to_markdown(
+        str(source_pdf),
+        header=False,
+        footer=False,
+        page_chunks=True,
+        write_images=False,
+        show_process=True
+    )
+    for i, chunk in enumerate(chunks, start=1):
+        output_md = current_dir / f"document-dest_chunk_{i}.md"
+        output_md.write_text(chunk["text"], encoding="utf-8")
+        print(f"Chunk {i} enregistré : {output_md}")
+```
+
+- `page_chunks=True` → `to_markdown` renvoie une **liste de dicts** (clé `"text"`) au lieu d'une string unique.
+- `header=False` / `footer=False` : ignore les en-têtes/pieds de page répetés (pagination, logos).
+- `write_images=False` : pas d'extraction d'images.
+- `show_process=True` : log de progression.
+- Fail early : contrôle `source_pdf.exists()` avant la conversion.
+
 ## Traduction / documents multilingues (ocr_language)
 
 `to_markdown` accepte un paramètre `ocr_language` (codes Tesseract) pour OCRiser un document multilingue :
