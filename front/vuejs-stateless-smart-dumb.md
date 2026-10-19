@@ -19,19 +19,20 @@ Usage: **règle d'architecture front pour tout agent IA** — les composants son
 ## Convention de nommage des props — valeurs vs callbacks
 
 ```js
-const { onRefetch, onClose, origin } = defineProps({
+const { onRefresh, onClose, origin } = defineProps({
     origin: Object,
     materialTypeData: Array,
-    onRefetch: Function,
+    onRefresh: Function,
     onClose: Function
 })
 ```
 
-- **Préfixe `on` = callback function** demandée par l'enfant au parent : `onRefetch` demande au parent de rafraîchir la liste, `onClose` demande au parent de fermer (ex. la modal qui contient l'enfant). L'enfant appelle, le parent décide.
+- **Préfixe `on` = callback function** demandée par l'enfant au parent : `onRefresh` demande au parent de rafraîchir la liste (le mot canonique est **refresh** — jamais `refetch`, qui avait été utilisé par erreur dans les premières versions de cette fiche), `onClose` demande au parent de fermer (ex. la modal qui contient l'enfant). L'enfant appelle, le parent décide.
 - **Sans préfixe `on` = valeur descendante** du parent vers l'enfant (données à afficher) : `origin`, `materialTypeData`.
 - **Pas de `required: true`** : déclaration `type` seul, pour un code plus lisible — les props non passées sont `undefined` et les dumbs gèrent ce cas.
 - `defineProps` **déstructuré** : les props s'utilisent comme des variables locales dans le template et le script.
-- **Préfixe `handle` = fonction qui s'exécute dans le composant même** : quand une prop callback `on` pointe vers une fonction du parent, celle-ci se nomme `handleX` — ex. l'enfant reçoit `onRefetch` et le parent passe `onRefetch="handleRefresh"`. `on` = le nom côté enfant (ce qu'on demande), `handle` = le nom côté parent (ce que le composant exécute lui-même).
+- **Passer une callback = binding dynamique obligatoire** : `:` devant la prop, sinon la valeur passée est la chaîne de caractères, pas la fonction — `<ChildComponent :onRefresh="executeGetList" />`, jamais `onRefresh="executeGetList"`.
+- **Préfixe `handle` = fonction qui s'exécute dans le composant même** : quand une prop callback `on` pointe vers une fonction du parent, celle-ci se nomme `handleX` — ex. l'enfant reçoit `onRefresh` et le parent passe `onRefresh="handleRefresh"`. `on` = le nom côté enfant (ce qu'on demande), `handle` = le nom côté parent (ce que le composant exécute lui-même).
 - **`handle` gère plusieurs actions** : le `handleX` est là dès qu'il y a de l'orchestration (reset, plusieurs appels, logique locale) — ex. `handleRefresh` qui reset un filtre puis relance le GET.
 - **Shortcut autorisé si appel direct d'un `execute` de useApi** : quand le parent n'a rien à faire d'autre que déclencher la requête, pas de wrapper `handle` — on passe directement l'`execute` aliasé :
 
@@ -40,10 +41,10 @@ const { execute: executeGetList } = useApi('/api/items').get().json()
 ```
 
 ```html
-<ChildComponent onRefetch="executeGetList" />
+<ChildComponent :onRefresh="executeGetList" />
 ```
 
-  `onRefetch="executeGetList"` remplace `onRefetch="handleRefresh"` + `function handleRefresh() { executeGetList() }`. Le raccourci est légitime seulement si l'exécution est **strictement l'appel useApi, sans action autour** ; la moindre action supplémentaire = retour au `handle`.
+  `:onRefresh="executeGetList"` remplace `:onRefresh="handleRefresh"` + `function handleRefresh() { executeGetList() }`. Le raccourci est légitime seulement si l'exécution est **strictement l'appel useApi, sans action autour** ; la moindre action supplémentaire = retour au `handle`.
 
 ## Pattern type — bouton d'ajout + liste (3 composants)
 
@@ -74,7 +75,7 @@ Structure des 3 composants :
 ## Notes
 
 - Structure de référence : `views/XxxPage.vue` (page routée, assemble les smart/dumb) → `components/` (smart enfants + dumbs). Voir [vuejs-router-menu.md](../vuejs-router-menu.md) pour le router.
-- `onRefetch` (dumb → parent) est la version callback du `getList` explicite du smart : le dumb n'appelle jamais `useApi` lui-même, il remonte la demande.
+- `onRefresh` (dumb → parent) est la version callback du `getList` explicite du smart : le dumb n'appelle jamais `useApi` lui-même, il remonte la demande.
 - Fiche **en construction** : les détails seront complétés par la suite (découpage exact, cas du refresh après POST, exemples de dumbs types).
 - Le refresh par re-GET après POST (plutôt qu'une mise à jour locale optimiste de `list`) est le choix par défaut de simplicité — à confirmer/compléter.
 - Liens : [vuejs-useapi.md](../vuejs-useapi.md) (wrapper, erreurs, conventions isFetching), [javascript/form-validation.md](javascript/form-validation.md) (submit + immediate false), [daisyui-components.md](../daisyui-components.md).
