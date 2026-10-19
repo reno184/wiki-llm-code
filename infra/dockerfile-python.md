@@ -3,18 +3,31 @@
 Stack: Python 3.x, Docker, usage script/pipeline conteneurisé (pas de serveur web, pas d'API).
 Usage: image Python minimaliste et sûre pour lancer des scripts/pipelines en conteneur ; cohérente avec la fiche infra/docker-secrets-env.md (secrets jamais dans l'image).
 
+## Règle : requirements.txt vs apt-get
+
+> **requirements.txt = ce que ton code importe ; apt-get = ce que les packages de requirements.txt appellent ou compilent en sous-main.**
+
+- `pip install ocrmypdf` → au runtime il appelle `tesseract`, `ghostscript`, `pngquant` (binaires système, pas Python) → **apt-get**.
+- `pip install` d'un package avec extension C → compile avec `g++` et les headers `-dev` (leptonica, tesseract) → **apt-get** (build-time).
+- Symptôme « command not found » ou « gcc failed » au runtime/install → dépendance système manquante → **apt-get, pas pip**.
+
+Chronologie du Dockerfile : **apt-get AVANT pip** (pip a besoin du compilateur et des headers pendant l'installation), **pip AVANT le code** (cache des layers).
+
 ## Pattern type
 
 ```dockerfile
 FROM python:3.12-slim
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ghostscript tesseract-ocr tesseract-ocr-fra pngquant \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
 RUN addgroup --system app && adduser --system --ingroup app app
 
 COPY requirements.txt .
-RUN pip install --no-cache-dir --prefix=/install -r requirements.txt \
-    && rm -f /requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY --chown=app:app . .
 
@@ -26,9 +39,11 @@ CMD ["python", "main.py"]
 Points critiques :
 
 - **Base slim** (pas alpine par défaut : wheels souvent absents sur musl, build plus lent ; slim = bon compromis standard).
+- **apt-get : `--no-install-recommends` + purge des lists** (`rm -rf /var/lib/apt/lists/*`) → image légère.
 - **requirements.txt copié seul, installé, PUIS copie du code** : le layer pip est mis en cache tant que requirements ne change pas (le changement de code ne re-télécharge pas les deps).
 - **`--no-cache-dir`** : pas de cache pip dans l'image.
 - **Utilisateur non-root** (USER app) : jamais de process root dans un conteneur Python.
+- Outils de compilation (g++, headers -dev) gardés dans l'image = acceptable en labo ; en production → multi-stage build (étape build avec compilateur, étape runtime sans).
 - **Pas de secrets dans le build** : jamais `ARG`/`ENV` avec un secret (visible via `docker inspect` et les layers, voir docker-secrets-env.md). Les secrets passent par .env/compose `secrets:` ou variables runtime.
 
 ## .dockerignore (minimum)
@@ -77,7 +92,8 @@ services:
 - Installer en root puis `USER` en fin de Dockerfile sans chown : fichiers illisibles pour l'utilisateur applicatif.
 - venv copié depuis la machine hôte (incompatible, paths absolus) : installer dans l'image.
 - **Dockerfile sans .dockerignore** : contexte de build gonflé, secrets/historique Git dans l'image, cache invalidé.
+- **apt-get après pip ou mélangé au code** : casserait la chrono et le cache (compilateur requis PENDANT pip install).
 
 ## État
 
-**vivant** — pattern validé 2026-10, à instancier au premier projet réel ; section .dockerignore renforcée (agent-first, oct. 2026).
+**vivant** — pattern validé 2026-10 ; sections requirements vs apt-get et .dockerignore renforcées (agent-first, oct. 2026).
