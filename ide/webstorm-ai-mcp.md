@@ -77,6 +77,77 @@ Points critiques :
 
 **3. Vérifier** : serveur `github` connecté dans l'UI MCP avec ses outils listés, et `git status` ne montre plus le fichier.
 
+
+### 2c. Rules projet — `.aiassistant/rules/` (à la racine du projet)
+
+Trois fichiers de rules à créer dans chaque nouveau projet :
+
+**1. `agent-code-first.md`** — routage wiki (le chargement du profil) :
+
+```markdown
+- Connecte-toi au serveur MCP GitHub (déjà configuré dans ce projet).
+- Charge README.md (règles globales) puis INDEX.md du repo
+  reno184/wiki-llm-code.
+- Dans INDEX.md : cherche le profil indiqué dans le prompt actuel ;
+  si introuvable, arrête immédiatement et pose-moi la question.
+- Ne regarde que les fiches liées au profil.
+- Ne jamais proposer de structure alternative qui contredit une
+  fiche du wiki.
+```
+
+**2. `agent-code-readable.md`** — style de code prototype (avec `apply: always` en frontmatter) :
+
+```markdown
+---
+apply: always
+---
+
+- Mode par défaut : prototype en développement personnel. Écrire le
+  code pour ÊTRE LU, pas pour être blindé.
+- Pas de programmation défensive : les paramètres reçus sont censés
+  être corrects, la base de données est censée renvoyer le record
+  attendu. Pas de if de contrôle sur chaque entrée, pas de
+  vérification redondante de ce que le contexte garantit déjà.
+- Pas de gestion d'erreur cosmétique : pas de throw new Exception /
+  try-catch systématique. Intercepter une erreur uniquement si on
+  sait quoi en faire (retry, message utile, fallback réel) — sinon
+  laisser remonter.
+- La lisibilité prime : fonctions lisibles de haut en bas, une
+  action par étape, lignes vides entre blocs. Je veux comprendre une
+  fonction en une lecture verticale, sans sauter de bloc en bloc.
+- La répétition est tolérée : répéter 3 lignes deux fois va mieux
+  qu'une abstraction prématurée. Pas de fonction utilitaire, pas de
+  couche, pas de hook générique tant que le besoin n'est pas répété
+  et stabilisé. Le refactoring viendra quand le code sera vivant,
+  pas avant.
+- Zéro commentaire dans le code généré. Le nommage auto-documentant,
+  la lecture haut en bas et les lignes vides entre blocs font la
+  lisibilité — jamais de commentaire qui répète le code.
+- Deux exceptions uniquement :
+    1. Un workaround non devinable (piège, décision contre-intuitive).
+    2. L'appel à une méthode de bibliothèque tierce dont le comportement
+       n'est pas devinable depuis le nom — notamment en Python où une
+       librairie peut modifier un objet en place, consommer un stream ou
+       exiger un appel précis sans que la signature le montre.
+```
+
+**3. `chat-github-mcp.md`** — version chat pur (routage wiki SANS regarder le projet local — pour les questions "documentation/consultation") :
+
+```markdown
+- Connecte-toi au serveur MCP GitHub (déjà configuré dans ce projet).
+- Charge README.md (règles globales) puis INDEX.md du repo
+  reno184/wiki-llm-code.
+- Dans INDEX.md : cherche le profil indiqué dans le prompt actuel ;
+  si introuvable, arrête immédiatement et pose-moi la question.
+- Tu ne regardes aucun fichier dans le répertoire de travail pour
+  constituer ta réponse.
+```
+
+Pourquoi 2 fichiers de routage :
+
+- `agent-code-first.md` = pour **coder** (le contexte projet local est utile : il lit le code existant).
+- `chat-github-mcp.md` = pour **consulter** (interdit le réflexe local — le test 2026-10 a montré que Gemini Flash tombe dans requirements.txt si on ne l'interdit pas explicitement).
+
 ### 3. Vérification
 
 Le serveur `github` doit apparaître connecté avec ses outils listés (`get_file_contents`…).
