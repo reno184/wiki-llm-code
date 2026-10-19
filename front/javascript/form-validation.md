@@ -66,6 +66,35 @@ const handleSubmit = async (e) => {
 - `e.target.reset()` : vide les champs, le CSS `form:invalid` reprend (bouton inactif), l'utilisateur repart d'un formulaire propre.
 - Le CSS de main.css rend le bouton inactif tant que `form:invalid` ; `pending` reste utilisable pour un spinner/loader séparé si besoin.
 
+## Variante useApi — `immediate: false` + `bodyData` en ref
+
+Pour un appel qui ne part **qu'au submit** (pas au montage du composant) : `{ immediate: false }` désactive l'exécution automatique de VueUse, le body est un `ref` posé dans le handler juste avant `execute()`.
+
+```js
+const bodyData = ref(null)
+
+const { isFetching, data, execute } = useApi('/prompt/translate', { immediate: false }).post(bodyData).text()
+
+const handleSubmit = async (e) => {
+    const isValid = e.target.checkValidity()
+    const formData = new FormData(e.target)
+
+    if (isValid) {
+        bodyData.value = {
+            text: formData.get('text'),
+        }
+
+        await execute()
+        e.target.reset()
+    }
+}
+```
+
+- `immediate: false` : sans lui, VueUse exécute la requête dès la création du composable — avec `bodyData` à `null`, ça part une première fois pour rien. Obligatoire pour tout appel déclenché par submit.
+- `bodyData.value = {...}` **avant** `execute()` : le ref est résolu par VueUse au moment de l'exécution — c'est le body posé dans le handler qui part, pas `null`.
+- `data` déstructuré ici : la réponse est **consommée par le composant** (ex. affichage du texte traduit) — contrairement au pattern de base où seul `execute` compte. `isFetching` pour l'état de chargement local.
+- `.text()` au lieu de `.json()` : quand l'API répond en **texte brut** (pas de JSON) — même wrapper `useApi`, même politique d'erreurs, seul le parseur change.
+
 ## Cas particulier : input file (pont avec upload-file.md)
 
 - Pas de v-model sur un input file — pas non plus besoin du pattern `handleChange` : `new FormData(e.target)` au submit embarque directement le `File` (voir [upload-file.md](../upload-file.md)).
@@ -85,6 +114,7 @@ const handleSubmit = async (e) => {
 
 ## Notes
 
+- `{ immediate: false }` est le défaut mental pour tout `useApi` piloté par un submit : l'appel qui part au montage est l'exception (chargement de données), pas l'inverse.
 - Le serveur revalide toujours (le front est contournable) — ses 400 JSON arrivent en snackbar via le wrapper.
 - `form:invalid` s'applique aussi aux formulaires multi-étapes si chaque étape est un `<form>` séparé ; `button.next` est couvert par le CSS (blocage de l'étape tant que ses champs sont invalides).
 - Le clic sur un bouton visuellement inactif ne passe pas (`pointer-events: none`) : pas de gestionnaire à écrire pour ce cas.
