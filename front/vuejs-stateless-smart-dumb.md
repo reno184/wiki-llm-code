@@ -10,6 +10,12 @@ Usage: **règle d'architecture front pour tout agent IA** — les composants son
 - **Props drilling assumé** : les données descendent par props du smart vers les dumbs — c'est le mécanisme voulu, pas un anti-pattern à "corriger" avec un store.
 - **Callbacks en paramètres** : les remontées d'action passent par des fonctions passées en props au dumb (ex. `@add`), jamais par un accès direct à l'état du parent.
 
+## Rangement et nommage — composants vs views
+
+- **Composants réutilisables (dumb et smart enfants) : toujours dans `src/components/`** — jamais dans `src/views/`.
+- **`src/views/` = uniquement les pages routées, suffixées `Page`** : `ConvertWebpPage.vue`, `OcrExtractPage.vue`, etc. Une vue non suffixée `Page` n'existe pas.
+- **Toutes les vues sont appelées par `router/index.js`** : une vue existe ⇔ elle a sa route. Pas de vue orpheline, pas de composant importé comme une vue.
+
 ## Pattern type — bouton d'ajout + liste (3 composants)
 
 Le parent smart porte la liste + **2 `useApi`** : le GET (immediate `true`, chargé au montage du parent) et le POST (immediate `false`, déclenché par l'ajout). Après un POST réussi, le smart rappelle le GET pour rafraîchir la liste.
@@ -38,6 +44,7 @@ Structure des 3 composants :
 
 ## Notes
 
+- Structure de référence : `views/XxxPage.vue` (page routée, assemble les smart/dumb) → `components/` (smart enfants + dumbs). Voir [vuejs-router-menu.md](../vuejs-router-menu.md) pour le router.
 - Fiche **en construction** : les détails seront complétés par la suite (découpage exact, cas du refresh après POST, exemples de dumbs types).
 - Le refresh par re-GET après POST (plutôt qu'une mise à jour locale optimiste de `list`) est le choix par défaut de simplicité — à confirmer/compléter.
 - Liens : [vuejs-useapi.md](../vuejs-useapi.md) (wrapper, erreurs, conventions isFetching), [javascript/form-validation.md](javascript/form-validation.md) (submit + immediate false), [daisyui-components.md](../daisyui-components.md).
