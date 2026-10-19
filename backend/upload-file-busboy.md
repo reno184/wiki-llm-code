@@ -1,7 +1,5 @@
 # Upload de fichier — backend (Express + busboy, streaming multipart)
 
-> Miroir local de [backend/upload-file-busboy.md](https://github.com/reno184/wiki-llm-code/blob/main/backend/upload-file-busboy.md) — source de vérité : repo GitHub wiki-llm-code.
-
 Stack: Node 20+ / Express (ESM) / busboy.
 Usage: recevoir un upload multipart/form-data dans une route Express, valider le Content-Type via middleware `uploadValidator` dans le dossier `/middlewares`. Le **stockage** du fichier n'est pas le sujet de cette fiche : il est délégué — voir la fiche Strategy [../patterns/upload-strategy.md](../patterns/upload-strategy.md) pour les drivers interchangeables. Fiche back du trio upload fullstack (voir [../front/upload-file.md](../front/upload-file.md)).
 
