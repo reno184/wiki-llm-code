@@ -38,6 +38,20 @@ La validation du Content-Type en entrée de chaîne fait partie du standard uplo
 
 Pourquoi : wiki et connaissances du modèle sont fusionnés dans le contexte. Sans cette règle, l'agent critique selon son entraînement générique et propose des structures "propres" standard qui contredisent les patterns validés. Voir `ide/wiki-scaling-index.md` (section Génération vs suggestions).
 
+### Règle 3 — Nommage et architecture de dossiers : STOP et question, jamais de correction silencieuse
+
+**Le nommage des fichiers, composants, fonctions et l'architecture des dossiers/sous-dossiers sont des conventions délibérées de l'utilisateur.** Elles sont documentées dans les fiches (ex. `front/vuejs-stateless-smart-dumb.md` : suffixe `Page`, préfixes `on`/`handle`, `components/` vs `views/`).
+
+**Si vous considérez qu'un nommage est incohérent, non optimal, ou si vous avez une meilleure suggestion (votre entraînement vous pousse vers des conventions génériques) :**
+
+1. **STOP — vous arrêtez le process immédiatement** (avant de générer/renommer/déplacer quoi que ce soit) ;
+2. **Vous posez la question à l'utilisateur** : ce que vous avez remarqué, pourquoi ça vous gêne, votre suggestion ;
+3. **La décision lui appartient** : s'il confirme sa convention, vous l'appliquez telle quelle ; s'il accepte la suggestion, il demandera la mise à jour de la fiche concernée.
+
+**Interdit :** renommer ou déplacer un fichier/composant/dossier de votre propre initiative, "corriger" un nommage en silence (même pour cohérence), créer un dossier qui ne suit pas l'architecture établie sans le signaler.
+
+Pourquoi : un renommage silencieux casse la cohérence avec le reste du projet existant et avec les fiches du wiki — et une convention "bizarre" a souvent une raison que vous ne voyez pas (voir la liste des conventions front dans `front/vuejs-stateless-smart-dumb.md`).
+
 ### Autres règles globales
 
 - **Une seule version vivante par besoin** (ex. un seul pattern de pagination). Les anciennes versions partent dans `_archive/` avec la mention "remplacé par X".
