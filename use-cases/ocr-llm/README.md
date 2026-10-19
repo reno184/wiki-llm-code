@@ -29,20 +29,24 @@ Sur une image très compliquée (mise en page dense, note manuscrite), les outil
 - **PyMuPDF / PyMuPDF4LLM** : conçus pour le texte filaire des PDF, pas la compréhension d'une image complexe. → nul sur scan dense ou manuscrit.
 - **OCRmyPDF / Tesseract** : reconnaissance caractère par caractère, échoue sur manuscrit et mise en page serrée.
 
-→ **Hiérarchie de décision (version vivante)** :
+→ **Hiérarchie de décision (version vivante)** — le critère décisif est la **longueur/densité** du document :
 
-1. PDF texte natif → PyMuPDF4LLM (chaîne pdf-to-md).
+1. PDF texte natif → PyMuPDF4LLM (chaîne pdf-to-md) ou PyMuPDF ciblé (extraction de zones, fiche infra/pymupdf.md).
 2. Scan propre / texte imprimé → OCRmyPDF puis PyMuPDF4LLM.
-3. **Image complexe, scan dense ou manuscrit → LLM vision local (Ollama / qwen)**.
+3. **Image complexe, scan dense ou manuscrit → LLM vision local (Ollama / qwen)** — sans hésiter si le document est **court** (1-2 pages) : c'est la zone de validité prouvée du modèle (2 tests réussis).
+4. **Document long/dense multi-pages → pas de LLM vision en pipeline automatique** : échec constaté au-delà de ~4 pages (leçon contrat). Passer par PyMuPDF ciblé + human-in-the-loop.
+
+**Le critère est la longueur/densité, pas « IA locale oui/non »** : le LLM vision local est validé et rentable pour l'extraction courte, disqualifié pour la transformation de documents longs.
 
 ## Rappel futur
 
-**Dans 1 an, si je cherche un bon outil d'OCR (ex. note manuscrite) : la réponse est ollama/qwen vision local, pas un outil Python classique.** Cette fiche est le point d'entrée.
+**Dans 1 an, si je cherche un bon outil d'OCR (ex. note manuscrite ou document court) : la réponse est ollama/qwen vision local, pas un outil Python classique.** Cette fiche est le point d'entrée.
 
-## Idée business associée
+## Idées business associées
 
-→ [business-idea/ia-medical-ocr-consultation.md](../../business-idea/ia-medical-ocr-consultation.md) : extraction d'infos depuis compte rendu médical scanné via IA locale.
+- [business-idea/ia-medical-ocr-consultation.md](../../business-idea/ia-medical-ocr-consultation.md) : extraction de bilans/notes dactylographiées 1-2 pages via IA locale — **le LLM vision y est le moteur principal** (full Node.js : Express + LangChain + Ollama chez le client).
+- [business-idea/ia-legaltech-contrat.md](../../business-idea/ia-legaltech-contrat.md) : le LLM vision n'y sert que pour les notes manuscrites ponctuelles (le cas principal = PyMuPDF ciblé + human-in-the-loop).
 
 ## État
 
-**vivant** — 2 tests réels validés octobre 2026 : Harry Potter (convenable, contournement découpage) et note manuscrite médicale (parfait).
+**vivant** — 2 tests réels validés octobre 2026 : Harry Potter (convenable, contournement découpage) et note manuscrite médicale (parfait). Périmètre de validité précisé : court = validé, long = échec.

@@ -1,11 +1,14 @@
 ---
 use-case: pdf-to-md
-version: 2
+version: 3
 ---
 
 # Use case : PDF → Markdown (pdf-to-md)
 
-Convertit des PDF (scannés ou natifs) en Markdown exploitables par le use case [anonymisation](../anonymisation/README.md).
+Convertit des PDF (scannés ou natifs) en Markdown. **Deux finalités distinctes (oct. 2026)** :
+
+1. **Labo / back-office** : produire un **brouillon Markdown** pour relecture humaine — plus une promesse de livrable 100% automatique.
+2. **Chaîne anonymisation** : la sortie (après contrôle qualité) reste l'entrée **exclusive** du use case [anonymisation](../anonymisation/README.md).
 
 ## Chaîne de traitement
 
@@ -22,7 +25,7 @@ PyMuPDF4LLM (pymupdf4llm) ← 2. conversion → Markdown
 Markdown structuré → use-cases/correction-syntax-markdown/ (contrôle qualité)
    │
    ▼
-Markdown validé → use-cases/anonymisation/
+Markdown validé → relecture humaine (brouillon) OU use-cases/anonymisation/
 ```
 
 ## Pourquoi OCRmyPDF systématiquement avant PyMuPDF4LLM
@@ -34,9 +37,14 @@ OCRmyPDF joue **2 rôles** dans la chaîne :
 
 → Toujours passer par OCRmyPDF, même si le PDF paraît « textuel » : le coût est faible et ça garantit un layer texte propre pour PyMuPDF4LLM.
 
+## Extraction ciblée (alternative complémentaire)
+
+Pour l'exploitation de contrats/fiches de paie (produit avocat), la conversion intégrale n'est **pas** la seule voie : **PyMuPDF en extraction ciblée** (zones sélectionnées dans une interface Vue.js, clip + search_for + find_tables) + human-in-the-loop est la chaîne retenue — voir [infra/pymupdf.md](../infra/pymupdf.md) et [business-idea/ia-legaltech-contrat.md](../business-idea/ia-legaltech-contrat.md). La chaîne ci-dessus (conversion intégrale) produit alors un **brouillon** à relire, pas un livrable automatique.
+
 ## Fiches liées
 - [ocrmypdf.md](ocrmypdf.md) — commandes OCRmyPDF (2 use cases : layer texte invisible + optimisation)
 - [pymupdf4llm.md](pymupdf4llm.md) — conversion Markdown via PyMuPDF4LLM
+- [../infra/pymupdf.md](../infra/pymupdf.md) — extraction ciblée PyMuPDF (alternative pour l'exploitation de zones)
 
 ## Règle de synchronisation
 La sortie de ce pipeline (Markdown) passe par le use case [correction-syntax-markdown](../correction-syntax-markdown/README.md) (contrôle qualité : Prettier + revue IA locale relue) avant d'être l'entrée **exclusive** du use case anonymisation : format d'entrée = `text/markdown`, pas de PDF direct.
