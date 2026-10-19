@@ -31,6 +31,7 @@ const { onRefetch, onClose, origin } = defineProps({
 - **Sans préfixe `on` = valeur descendante** du parent vers l'enfant (données à afficher) : `origin`, `materialTypeData`.
 - **Pas de `required: true`** : déclaration `type` seul, pour un code plus lisible — les props non passées sont `undefined` et les dumbs gèrent ce cas.
 - `defineProps` **déstructuré** : les props s'utilisent comme des variables locales dans le template et le script.
+- **Préfixe `handle` = fonction qui s'exécute dans le composant même** : quand une prop callback `on` pointe vers une fonction du parent, celle-ci se nomme `handleX` — ex. l'enfant reçoit `onRefetch` et le parent passe `onRefetch="handleRefresh"`. `on` = le nom côté enfant (ce qu'on demande), `handle` = le nom côté parent (ce que le composant exécute lui-même).
 
 ## Pattern type — bouton d'ajout + liste (3 composants)
 
