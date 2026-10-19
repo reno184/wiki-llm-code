@@ -32,6 +32,18 @@ const { onRefetch, onClose, origin } = defineProps({
 - **Pas de `required: true`** : déclaration `type` seul, pour un code plus lisible — les props non passées sont `undefined` et les dumbs gèrent ce cas.
 - `defineProps` **déstructuré** : les props s'utilisent comme des variables locales dans le template et le script.
 - **Préfixe `handle` = fonction qui s'exécute dans le composant même** : quand une prop callback `on` pointe vers une fonction du parent, celle-ci se nomme `handleX` — ex. l'enfant reçoit `onRefetch` et le parent passe `onRefetch="handleRefresh"`. `on` = le nom côté enfant (ce qu'on demande), `handle` = le nom côté parent (ce que le composant exécute lui-même).
+- **`handle` gère plusieurs actions** : le `handleX` est là dès qu'il y a de l'orchestration (reset, plusieurs appels, logique locale) — ex. `handleRefresh` qui reset un filtre puis relance le GET.
+- **Shortcut autorisé si appel direct d'un `execute` de useApi** : quand le parent n'a rien à faire d'autre que déclencher la requête, pas de wrapper `handle` — on passe directement l'`execute` aliasé :
+
+```js
+const { execute: executeGetList } = useApi('/api/items').get().json()
+```
+
+```html
+<ChildComponent onRefetch="executeGetList" />
+```
+
+  `onRefetch="executeGetList"` remplace `onRefetch="handleRefresh"` + `function handleRefresh() { executeGetList() }`. Le raccourci est légitime seulement si l'exécution est **strictement l'appel useApi, sans action autour** ; la moindre action supplémentaire = retour au `handle`.
 
 ## Pattern type — bouton d'ajout + liste (3 composants)
 
