@@ -68,38 +68,32 @@ function showError(msg) {
 ## Vue 3 + DaisyUI + useApi — pattern complet (formulaire d'upload)
 
 ```html
-<form @submit.prevent="onSubmit">
-    <input type="file" class="file-input file-input-primary w-full" accept=".pdf,application/pdf" required @change="handleChange">
+<form @submit.prevent="handleSubmit">
+    <input type="file" name="file" class="file-input file-input-primary w-full" accept=".pdf,application/pdf" required>
     <button type="submit" class="btn btn-primary">Envoyer</button>
 </form>
 ```
 
 ```js
-import { shallowRef } from 'vue'
-
-const formData = shallowRef(null)
-
-const handleChange = (event) => {
-    const files = event.target.files
-    if (!files || files.length === 0) return
-
-    const data = new FormData()
-    data.append('file', files[0])
-    formData.value = data
-}
-
 const { isFetching: pending, execute: submit } = useApi('/api/upload').post(formData).json()
 
-function onSubmit() {
-    submit()
+const handleSubmit = async (e) => {
+    const isValid = e.target.checkValidity()
+    const formData = new FormData(e.target)
+
+    if (isValid) {
+        await submit()
+        e.target.reset()
+    }
 }
 ```
 
 - `event.target.files` = `FileList`, même sans `multiple` — **le comptage n'est jamais garanti côté serveur**, d'où la validation back.
 - `accept=".pdf,application/pdf"` : double notation (extension + MIME) pour couvrir tous les OS/navigateurs.
-- `.post(formData)` : le ref est résolu par VueUse **au moment de l'`execute()`** — le FormData posé dans `handleChange` part avec la requête. `shallowRef` : le contenu d'un FormData n'a pas à être réactif profond.
-- `required` sur l'input file rend le formulaire `form:invalid` tant qu'aucun fichier n'est sélectionné : le bouton est rendu inactif par le **CSS obligatoire de main.css** et la soumission est bloquée nativement — la mécanique complète est dans [javascript/form-validation.md](javascript/form-validation.md). Pas de `:disabled`, pas de `novalidate`, pas de `checkValidity` dans le handler : `@submit` ne se déclenche que si le formulaire est valide.
-- Le `beforeFetch` du wrapper retire le Content-Type sur FormData ([vuejs-useapi.md](vuejs-useapi.md)) — le pattern `fetch` nu du haut de fiche reste réservé au JS natif hors Vue.
+- `new FormData(e.target)` au submit embarque directement le `File` (attribut `name` obligatoire sur l'input) — le pattern `handleChange` + `shallowRef` disparaît : pas de v-model, pas d'état réactif, le handler lit le DOM.
+- Ici le body posté EST le FormData (pas un objet JSON) : le `beforeFetch` du wrapper retire le Content-Type et le navigateur pose le boundary multipart ([vuejs-useapi.md](vuejs-useapi.md)) — le pattern `fetch` nu du haut de fiche reste réservé au JS natif hors Vue.
+- `required` sur l'input file rend le formulaire `form:invalid` tant qu'aucun fichier n'est sélectionné : le bouton est rendu inactif par le **CSS obligatoire de main.css** et la soumission est bloquée nativement — la mécanique complète est dans [javascript/form-validation.md](javascript/form-validation.md). Pas de `:disabled`, pas de `novalidate`.
+- `e.target.reset()` après `await submit()` : formulaire vidé, `form:invalid` reprend (bouton à nouveau inactif).
 - 400 "Fichier trop volumineux" du back → snackbar via le wrapper, zéro try/catch dans le composant.
 
 ### Contrat single/multiple — l'attribut `multiple` décide
