@@ -19,6 +19,11 @@ S'appuyait sur PyMuPDF pour analyser l'agencement visuel (titres, tableaux, list
 
 → Nuance pour un futur choix d'outil : le défaut de PyMuPDF4LLM est **qualitatif** (structure), pas **quantitatif** (complétude). Un LLM est exactement l'inverse (structure plausible, complétude non garantie sur longs docs).
 
+## Documentation officielle et exemples
+
+- **Documentation PyMuPDF / PyMuPDF4LLM** : [pymupdf.readthedocs.io](https://pymupdf.readthedocs.io/en/latest/) — la doc dédiée PyMuPDF4LLM (options `page_chunks`, `hdr_info`, `show_progress`, tables, images) y figure dans la section pymupdf4llm.
+- **Exemples officiels sur GitHub** : [PyMuPDF-Utilities](https://github.com/pymupdf/PyMuPDF-Utilities) — scripts de démonstration maintenus par l'équipe PyMuPDF (extraction texte/tableaux/rendus, notebooks).
+
 ## Décision
 
 **`pymupdf.get_text` uniquement** : extraction déterministe de zones ciblées (pdf-to-text, human-in-the-loop) — le LLM local ne participe plus à la transformation de documents longs.
