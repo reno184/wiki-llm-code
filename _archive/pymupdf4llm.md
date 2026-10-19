@@ -23,6 +23,7 @@ S'appuyait sur PyMuPDF pour analyser l'agencement visuel (titres, tableaux, list
 
 - **Documentation PyMuPDF / PyMuPDF4LLM** : [pymupdf.readthedocs.io](https://pymupdf.readthedocs.io/en/latest/) — la doc dédiée PyMuPDF4LLM (options `page_chunks`, `hdr_info`, `show_progress`, tables, images) y figure dans la section pymupdf4llm.
 - **Exemples officiels sur GitHub** : [PyMuPDF-Utilities](https://github.com/pymupdf/PyMuPDF-Utilities) — scripts de démonstration maintenus par l'équipe PyMuPDF (extraction texte/tableaux/rendus, notebooks).
+- **Vidéo (YouTube Short)** : [Extract Text from Scanned PDFs Using Python](https://youtu.be/kNPjJt0_2WQ) — OCR de PDF scannés avec PyMuPDF. ⚠️ Rappel wiki : les scannés sont hors périmètre de la chaîne actuelle (décision produit, voir [python-ocrmypdf.md](python-ocrmypdf.md)) ; PyMuPDF n'a pas de moteur OCR intégré (il délègue à Tesseract) — cette vidéo est pertinente uniquement si le besoin "scannés" se réveille.
 
 ## Décision
 
