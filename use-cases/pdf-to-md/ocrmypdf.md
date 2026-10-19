@@ -44,6 +44,31 @@ ocrmypdf -l fra --redo-ocr --optimize 1 input.pdf output.pdf
 **Variante si documents 100 % scannés** : `ocrmypdf -l fra --optimize 1 in.pdf out.pdf` (pas besoin de redo-ocr).
 **Variante si mélange inconnu** : `ocrmypdf -l fra --skip-text --optimize 1 in.pdf out.pdf`.
 
+## Appel Python (API ocrmypdf)
+
+```python
+from pathlib import Path
+import ocrmypdf
+
+current_dir = Path(__file__).parent
+input_pdf = current_dir / "document-source.pdf"
+output_pdf = current_dir / "document-dest.pdf"
+
+print("Lancement de l'OCR...")
+
+ocrmypdf.ocr(
+    input_file=input_pdf,
+    output_file=output_pdf,
+    language="fra",
+    force_ocr=True,
+    progress_bar=True
+)
+
+print("OCR terminé")
+```
+
+Mêmes options que la CLI (`language`, `force_ocr`, `skip_text`, `redo_ocr`, `optimize`...). `force_ocr` = même danger que `--force-ocr` (rastérise tout, détruit le texte natif) — voir le tableau ci-dessus.
+
 ## Passage des options
 
 CLI : `ocrmypdf [options] input.pdf output.pdf`. En Python, bibliothèque `ocrmypdf.api` ou `subprocess` avec les mêmes flags. Exécution : `pip install ocrmypdf` + moteur Tesseract installé au préalable.
