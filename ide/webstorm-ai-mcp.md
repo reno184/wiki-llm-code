@@ -41,8 +41,41 @@ Settings → Tools → **AI Assistant** → MCP → Add server :
 Points critiques :
 
 - **La clé du serveur ne doit pas être vide** (`"github":`, pas `"":`) sinon la config est ignorée/cassée.
-- **Project level plutôt que Global** : la config (fichier `.mcp.json` à la racine) est versionnée avec le projet, retrouvée sur toutes les machines. ⚠️ Si le token est écrit en dur dans `.mcp.json`, ajouter le fichier au `.gitignore` (ou laisser l'UI WebStorm le stocker hors repo).
+- **Project level plutôt que Global** : la config vit dans `.ai/mcp/mcp.json` (voir "Nouvelle initialisation projet" ci-dessous). ⚠️ Le token y est écrit en dur → le fichier est TOUJOURS dans le `.gitignore` (voir procédure).
 - Global se justifie uniquement si le même serveur doit servir tous les projets JetBrains sans reconfig.
+
+
+### 2b. Nouvelle initialisation projet (procédure systématique)
+
+À chaque nouveau projet dans WebStorm :
+
+**1. Ajouter le serveur via l'UI** (Settings → Tools → AI Assistant → MCP → Add server, Project level) OU créer directement le fichier `.ai/mcp/mcp.json` :
+
+```json
+{
+  "mcpServers": {
+    "github": {
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": {
+        "Authorization": "Bearer MON-TOKEN"
+      }
+    }
+  }
+}
+```
+
+⚠️ L'UI peut créer le fichier **vide** (voir fiches d'expérience) : si le fichier existe mais est vide, le remplir à la main avec le contenu ci-dessus. Clé `"github"` non vide, JSON valide.
+
+**2. Avant tout commit — vérifier le `.gitignore`** (le token est en dur dans le fichier) :
+
+```
+/.ai/mcp/mcp.json
+```
+
+- **Le slash initial est important** : il ancre le pattern à la racine du repo. `/.ai/mcp/mcp.json` ignore uniquement `<racine>/.ai/mcp/mcp.json` — sans le slash, git ignorerait aussi tout fichier de même nom dans un sous-répertoire (et surtout : un pattern non ancré reste ambigu).
+- Si le fichier a déjà été committé : `git rm --cached .ai/mcp/mcp.json` puis commit — et comme le token a peut-être été exposé dans l'historique, **révoquer le token** et en générer un nouveau (fine-grained, Contents Read-only, ≤ 90 jours).
+
+**3. Vérifier** : serveur `github` connecté dans l'UI MCP avec ses outils listés, et `git status` ne montre plus le fichier.
 
 ### 3. Vérification
 
