@@ -1,7 +1,7 @@
 # docker-minio-compose — MinIO en service Docker Compose
 
 ## Contexte d'usage
-- MinIO auto-hébergé comme stockage S3 partagé entre plusieurs services (Node, Python) d'une même stack compose.
+- MinIO auto-hébergé comme stockage S3. **Consommateur par défaut = API Node/Express** (voir `backend/minio-storage-express.md`). Les services Python ne concernent que le profil « Python + Docker » désigné par le project rules — le mot-clé « docker » ne déclenche jamais les fiches Python.
 - Console web d'admin sur :9001.
 
 ## Service MinIO
