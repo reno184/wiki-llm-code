@@ -1,6 +1,6 @@
 ---
 use-case: pdf-to-text
-version: 3
+version: 4
 ---
 
 # Use case : PDF → texte ciblé, semi-automatique (pdf-to-text)
@@ -17,8 +17,9 @@ Cible produit : avocats / cabinets M&A / DRH — contrats, fiches de paie. Voir 
 PDF source (natif — les scannés sont hors périmètre)
    │
    ▼
-Rendu d'affichage : pages → WebP (dpi150 navigation / dpi300 ciblage) + blurhash
-   │        → détail : [affichage-webp.md](affichage-webp.md)
+Rendu d'affichage : pages → WebP côté Node (pdftocairo + sharp) — dpi150 navigation / dpi300 ciblage + blurhash
+   │        → code : [../../backend/pdftocairo-sharp.md](../../backend/pdftocairo-sharp.md)
+   │        → décisions : [affichage-webp.md](affichage-webp.md)
    ▼
 Interface Vue.js : mode ciblage sur page figée, drag de zones sur l'image dpi300
    │        → décisions : [cartographie-rect-image.md](cartographie-rect-image.md)
@@ -39,8 +40,8 @@ Validation humaine (human-in-the-loop) → texte exploitable
 
 ## Décisions actées (oct. 2026)
 
-- Moteur : `get_text` seul, micro-service Python Docker (PyMuPDF) — unicité du moteur rendu + extraction.
-- Rendu d'affichage WebP : pyramide blurhash (base) / dpi150 (navigation) / dpi300 (surface de ciblage) — [affichage-webp.md](affichage-webp.md).
+- Extraction : `get_text` seul, micro-service Python Docker (PyMuPDF).
+- Rendu d'affichage WebP : **côté Node** — pdftocairo + sharp dans l'API ([backend/pdftocairo-sharp.md](../../backend/pdftocairo-sharp.md)) ; le chemin Python (get_pixmap → WebP) est écarté, PyMuPDF cantonné à l'extraction. Pyramide blurhash (base) / dpi150 (navigation) / dpi300 (surface de ciblage) — [affichage-webp.md](affichage-webp.md).
 - Ciblage : drag + poignées, échelle dynamique, Rects stockés en espace PDF normalisé, page figée (jamais pendant un motion), rotation hors périmètre — [cartographie-rect-image.md](cartographie-rect-image.md).
 - Composant front : trajectoire P1 100% VueUse → P2 composant Vue étanche → P3 D3 modulaire ; Web Component supprimé — [../../front/javascript/draw-rectangle.md](../../front/javascript/draw-rectangle.md).
 
@@ -61,6 +62,7 @@ Validation humaine (human-in-the-loop) → texte exploitable
 ## Fiches liées
 
 - [affichage-webp.md](affichage-webp.md) — couche d'affichage (WebP + blurhash)
+- [../../backend/pdftocairo-sharp.md](../../backend/pdftocairo-sharp.md) — code de rendu pdftocairo + sharp (Node)
 - [cartographie-rect-image.md](cartographie-rect-image.md) — décisions ciblage
 - [../../front/javascript/draw-rectangle.md](../../front/javascript/draw-rectangle.md), [../../front/javascript/event-delegation.md](../../front/javascript/event-delegation.md), [../../front/javascript/coord-scale-conversion.md](../../front/javascript/coord-scale-conversion.md) — fiches techniques chargées par les agents de coding
 - [../../infra/pymupdf.md](../../infra/pymupdf.md) — socle technique
@@ -69,4 +71,4 @@ Validation humaine (human-in-the-loop) → texte exploitable
 
 ## État
 
-**en construction** — architecture complète cadrée (affichage WebP + ciblage + micro-service get_text) ; prototype P1 (composant VueUse) à développer, questions API/stockage/multi-zones reportées.
+**en construction** — architecture complète cadrée (affichage WebP côté Node + ciblage + micro-service get_text) ; prototype P1 (composant VueUse) à développer, questions API/stockage/multi-zones reportées.

@@ -1,7 +1,7 @@
 ---
 name: libraries
 layer: reference
-version: 9
+version: 10
 ---
 
 # Index des librairies : qui fait quoi
@@ -10,7 +10,25 @@ Aide-mémoire rapide des librairies de la chaîne documentaire. Colonne clé : *
 
 ---
 
-## PyMuPDF — socle unique de toute la chaîne PDF (100% de la chaîne retenue)
+## pdftocairo (Poppler) — rendu de pages PDF → images
+
+Binaire natif du paquet `poppler-utils` (rendu Cairo, remplace pdftoppm : antialiasing et fidélité supérieurs). Rend les pages en PNG à un dpi donné (`-png -r 150`, `-f/-l` pour un intervalle de pages).
+
+**Rôle (oct. 2026)** : moteur de **rendu d'affichage** de la chaîne — pages → WebP pour l'interface. Code validé : [backend/pdftocairo-sharp.md](backend/pdftocairo-sharp.md). Dépendance Docker : `poppler-utils` (+ `poppler-data` si PDF CJK) dans l'image de l'API Node.
+
+**Node.js / Python : ✅ Node.js** — spawn direct depuis l'API ; les wrappers Python (pdf2image) ne font que lancer le même binaire.
+
+---
+
+## sharp — encodage d'images (WebP) côté Node
+
+Encodage/compression d'images natif (libvips prébuild, npm). Dans la chaîne : PNG pdftocairo → WebP (`sharp(png).webp({quality})`). 30-50% plus léger que PNG à qualité égale.
+
+**Node.js / Python : ✅ Node.js** (npm).
+
+---
+
+## PyMuPDF — extraction de texte ciblée (le rendu d'affichage lui est retiré)
 
 Moteur **bas niveau** qui extrait des éléments bruts — texte filaire, coordonnées cartésiennes (x, y), images. Fiche dédiée : [infra/pymupdf.md](infra/pymupdf.md).
 
@@ -18,9 +36,9 @@ Moteur **bas niveau** qui extrait des éléments bruts — texte filaire, coordo
 
 - La chaîne est **100% PyMuPDF sur PDF natifs**, et l'extraction est **`get_text` uniquement** (déterministe, ciblé, human-in-the-loop) — voir [use-cases/pdf-to-text/README.md](use-cases/pdf-to-text/README.md).
 - PyMuPDF n'OCRise pas les PDF image → un scanné est **hors périmètre** (décision produit : pas de contrats scannés).
-- Rendu d'affichage inclus : get_pixmap → WebP (voir use-cases/pdf-to-text/affichage-webp.md).
+- **Rendu d'affichage retiré (oct. 2026)** : get_pixmap → WebP pour l'affichage produit passe à pdftocairo + sharp côté Node (voir ci-dessus). get_pixmap garde uniquement son rôle de rendu de **zones vers LLM vision** (use case ocr-llm).
 
-**Node.js / Python : ❌ Python uniquement** → micro-service Python.
+**Node.js / Python : ❌ Python uniquement** → micro-service Python (extraction get_text).
 
 ---
 
