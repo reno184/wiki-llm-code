@@ -1,7 +1,7 @@
 ---
 name: libraries
 layer: reference
-version: 5
+version: 6
 ---
 
 # Index des librairies : qui fait quoi
@@ -20,7 +20,7 @@ Fonctionnalités :
 - **Correction d'orientation** : pivote automatiquement les pages à 90°/180°/270° si à l'envers
 - **Compression** : via **pngquant** et **Ghostscript**, réduit considérablement le poids du PDF généré sans perte visible de qualité
 
-Sous le capot : moteur OCR **Tesseract** (à installer séparément).
+Sous le capot : moteur OCR **Tesseract** (à installer séparément) — usage autonome de Tesseract archivé, il ne vit qu'en interne d'ocrmypdf (trace : _archive/tesseract-docling-standby.md).
 
 **Node.js / Python : ❌ Python uniquement** (package Python + CLI). Pas d'équivalent direct appelable depuis Node → candidat micro-service Python. Depuis Node, seul contournement : shell out sur le CLI.
 
@@ -30,10 +30,10 @@ Sous le capot : moteur OCR **Tesseract** (à installer séparément).
 
 Deux librairies liées mais distinctes :
 
-- **PyMuPDF** : moteur **bas niveau** qui extrait des éléments bruts — texte filaire, coordonnées cartésiennes (x, y), images, ou du HTML générique peu structuré.
+- **PyMuPDF** : moteur **bas niveau** qui extrait des éléments bruts — texte filaire, coordonnées cartésiennes (x, y), images, ou du HTML générique peu structuré. Fiche dédiée : [infra/pymupdf.md](infra/pymupdf.md) — c'est le socle de la chaîne retenue pour l'extraction ciblée (contrats, fiches de paie) : ciblage humain via interface Vue.js + clip/search_for/find_tables + human-in-the-loop.
 - **PyMuPDF4LLM** : **s'appuie sur PyMuPDF** pour analyser l'agencement visuel (mise en page, détection des titres, tableaux, listes) et reconstituer automatiquement le document en syntaxe Markdown (titres `#`, tableaux `| --- |`, paragraphes).
 
-→ Pour la chaîne pdf-to-md, **toujours PyMuPDF4LLM** : le Markdown structuré est l'entrée requise par le use case anonymisation. PyMuPDF seul servirait si on voulait un accès fin (positions, images extraites).
+→ Pour la chaîne pdf-to-md, **toujours PyMuPDF4LLM** : le Markdown structuré est l'entrée requise par le use case anonymisation. PyMuPDF seul sert pour l'accès fin (positions, extraction ciblée, images extraites) — désormais l'usage principal pour les documents d'entreprise (ciblage humain).
 
 **Node.js / Python : ❌ Python uniquement** (les deux, PyMuPDF comme PyMuPDF4LLM). Pas de port Node de qualité équivalente → candidats micro-service Python.
 
@@ -64,6 +64,15 @@ Runtime de modèles locaux (`llama3.1`, `mistral`, `qwen2.5`…). API HTTP local
 Chaînage de prompts, loaders, modèles. Utilisé dans l'API Node (anonymisation).
 
 **Node.js / Python : ✅ les deux** — équivalents (LangChain.js / LangChain Python). Rester côté Node OK.
+
+---
+
+## Tesseract OCR & Docling — extraction automatique (archivés)
+
+- **Tesseract (usage autonome)** : moteur OCR bas niveau, résultats décevants sur les documents cibles (contrats, fiches de paie). Ne vit qu'en interne d'ocrmypdf.
+- **Docling** : conversion automatique document → structure, même famille que les approches "tout automatique" écartées — la fiabilité vient du ciblage humain, pas de la devinette automatique.
+
+⚠️ **Archivés** — chaîne retenue à la place : **PyMuPDF + ciblage humain via interface Vue.js + human-in-the-loop** (fiche infra/pymupdf.md). Pas de process 100% automatique visé pour contrats/fiches de paie. Trace : [_archive/tesseract-docling-standby.md](../_archive/tesseract-docling-standby.md).
 
 ---
 
