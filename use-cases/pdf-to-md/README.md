@@ -1,6 +1,6 @@
 ---
 use-case: pdf-to-md
-version: 3
+version: 4
 ---
 
 # Use case : PDF → Markdown (pdf-to-md)
@@ -8,7 +8,7 @@ version: 3
 Convertit des PDF (scannés ou natifs) en Markdown. **Deux finalités distinctes (oct. 2026)** :
 
 1. **Labo / back-office** : produire un **brouillon Markdown** pour relecture humaine — plus une promesse de livrable 100% automatique.
-2. **Chaîne anonymisation** : la sortie (après contrôle qualité) reste l'entrée **exclusive** du use case [anonymisation](../anonymisation/README.md).
+2. **Chaîne anonymisation** : la sortie reste l'entrée **exclusive** du use case [anonymisation](../anonymisation/README.md).
 
 ## Chaîne de traitement
 
@@ -22,10 +22,7 @@ ocrmypdf                  ← 1. prétraitement (voir ocrmypdf.md : les 2 rôles
 PyMuPDF4LLM (pymupdf4llm) ← 2. conversion → Markdown
    │
    ▼
-Markdown structuré → use-cases/correction-syntax-markdown/ (contrôle qualité)
-   │
-   ▼
-Markdown validé → relecture humaine (brouillon) OU use-cases/anonymisation/
+Markdown structuré → relecture humaine (brouillon) OU use-cases/anonymisation/
 ```
 
 ## Pourquoi OCRmyPDF systématiquement avant PyMuPDF4LLM
@@ -47,4 +44,4 @@ Pour l'exploitation de contrats/fiches de paie (produit avocat), la conversion i
 - [../infra/pymupdf.md](../infra/pymupdf.md) — extraction ciblée PyMuPDF (alternative pour l'exploitation de zones)
 
 ## Règle de synchronisation
-La sortie de ce pipeline (Markdown) passe par le use case [correction-syntax-markdown](../correction-syntax-markdown/README.md) (contrôle qualité : Prettier + revue IA locale relue) avant d'être l'entrée **exclusive** du use case anonymisation : format d'entrée = `text/markdown`, pas de PDF direct.
+La sortie de ce pipeline (Markdown) est l'entrée **exclusive** du use case anonymisation : format d'entrée = `text/markdown`, pas de PDF direct. La passe de contrôle qualité (correction-syntax-markdown) est archivée — relecture humaine directe du brouillon (trace : [../_archive/correction-syntax-markdown-standby.md](../_archive/correction-syntax-markdown-standby.md)).

@@ -1,7 +1,7 @@
 ---
 name: libraries
 layer: reference
-version: 6
+version: 7
 ---
 
 # Index des librairies : qui fait quoi
@@ -43,7 +43,7 @@ Deux librairies liées mais distinctes :
 
 Formate le Markdown (`npx prettier --write doc.md`) : mise en page, espaces, wrapping, listes, tableaux. Ne reformule pas le texte.
 
-→ Passe 1 du use case correction-syntax-markdown : la seule passe déterministe de mise en forme. **Ne détecte pas les sauts de niveau de titres** : la hiérarchie des titres relève de la passe IA locale (Ollama), relue.
+→ Outil disponible, sans use case actif rattaché (le use case correction-syntax-markdown est archivé, trace : _archive/correction-syntax-markdown-standby.md). **Ne détecte pas les sauts de niveau de titres** : la hiérarchie des titres relève d'une revue IA locale (Ollama), relue.
 
 **Node.js / Python : ✅ Node.js** (npm).
 
@@ -51,7 +51,7 @@ Formate le Markdown (`npx prettier --write doc.md`) : mise en page, espaces, wra
 
 ## Ollama — LLM local (via llama.cpp)
 
-Runtime de modèles locaux (`llama3.1`, `mistral`, `qwen2.5`…). API HTTP locale + CLI `ollama run`. Dans la chaîne : revue **sémantique** des niveaux de titres (un titre logiquement H2 resté H3, sauts de niveau, H1 multiples), passe 2 optionnelle du use case correction-syntax-markdown.
+Runtime de modèles locaux (`llama3.1`, `mistral`, `qwen2.5`…). API HTTP locale + CLI `ollama run`. Dans la chaîne : revue **sémantique** des niveaux de titres (un titre logiquement H2 resté H3, sauts de niveau, H1 multiples) — disponible à la demande, sans use case actif rattaché.
 
 ⚠️ Un petit modèle local (7–8B) peut reformuler ou halluciner → sortie toujours relue, jamais en passe automatique silencieuse.
 
