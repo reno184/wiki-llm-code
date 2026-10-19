@@ -88,6 +88,10 @@ Trois fichiers de rules à créer dans chaque nouveau projet :
 - Connecte-toi au serveur MCP GitHub (déjà configuré dans ce projet).
 - Charge README.md (règles globales) puis INDEX.md du repo
   reno184/wiki-llm-code.
+- Si AUCUN profil n'est indiqué dans le prompt actuel, demande-moi
+  lequel je suis AVANT de charger le moindre fichier (économie de tokens :
+  pas de chargement inutile). Exemples : developpeur-javascript,
+  python-docker.
 - Dans INDEX.md : cherche le profil indiqué dans le prompt actuel ;
   si introuvable, arrête immédiatement et pose-moi la question.
 - Ne regarde que les fiches liées au profil.
@@ -137,11 +141,17 @@ apply: always
 - Connecte-toi au serveur MCP GitHub (déjà configuré dans ce projet).
 - Charge README.md (règles globales) puis INDEX.md du repo
   reno184/wiki-llm-code.
+- Si AUCUN profil n'est indiqué dans le prompt actuel, demande-moi
+  lequel je suis AVANT de charger le moindre fichier (économie de tokens :
+  pas de chargement inutile). Exemples : developpeur-javascript,
+  python-docker.
 - Dans INDEX.md : cherche le profil indiqué dans le prompt actuel ;
   si introuvable, arrête immédiatement et pose-moi la question.
 - Tu ne regardes aucun fichier dans le répertoire de travail pour
   constituer ta réponse.
 ```
+
+Pourquoi la ligne "demande le profil avant de charger" : si l'agent charge INDEX.md sans connaître le profil, il dépense des tokens à router dans le vide. Demander d'abord (ex. "developpeur-javascript") → l'agent charge INDEX, va direct à la section du profil, charge uniquement ses fiches. Le fail-fast existe déjà pour le profil introuvable ; celui-ci couvre le profil *absent du prompt* — les deux ensemble garantissent qu'on ne route jamais à l'aveugle.
 
 Pourquoi 2 fichiers de routage :
 
