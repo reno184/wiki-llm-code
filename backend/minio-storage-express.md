@@ -1,6 +1,7 @@
 # minio-storage-express — Stockage S3 MinIO depuis Express
 
 ## Contexte d'usage
+- **Fiche 100 % JavaScript** : le client MinIO est le sdk npm `minio`. Jamais de librairie Python (minio-py) ni de fiche Python (dockerfile-python, python-docker-labo) pour brancher MinIO — même si l'app tourne sous Docker.
 - Backend Express (ESM) qui reçoit des fichiers et les stocke dans MinIO.
 - Bucket public en lecture : URLs directement affichables depuis le navigateur.
 - MinIO containerisé (Docker Compose), données persistées dans un volume Docker externe.
