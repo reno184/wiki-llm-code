@@ -19,6 +19,11 @@ Usage: référence unique sur les modèles Ollama utilisés par Renaud (jamais c
 - `enable_thinking: false` (chat_template_kwargs) si le modèle think est actif
 - Gestion timeout / retry : à définir (squelette API : [../../use-cases/anonymisation/langchain-api.md](../../use-cases/anonymisation/langchain-api.md))
 
+## Modèles installés (`ollama list`, octobre 2026)
+
+- **frob/qwen3.5-instruct:9b** — modèle vision de référence (section ci-dessus). A remplacé `qwen3.5:9b` : la variante `instruct` est **instruction-tuned**, elle répond directement à l'instruction **sans bloq de raisonnement visible** (pas de `<think>` dans la sortie — pas de réflexion masquée, une réponse directe).
+- **nomic-embed-text:latest** — modèle d'embedding, **ne sert à rien** (pas de RAG) mais très léger → gardé.
+
 ## Choisir le bon modèle : connaître sa machine EN PRIORITÉ
 
 Avant tout choix de modèle local, connaître la **puissance de la machine** qui va le faire tourner (le modèle dépend du hardware, pas l'inverse).
