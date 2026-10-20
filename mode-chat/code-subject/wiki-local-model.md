@@ -28,6 +28,8 @@ Usage: référence unique sur les modèles Ollama utilisés par Renaud (jamais c
 
 Avant tout choix de modèle local, connaître la **puissance de la machine** qui va le faire tourner (le modèle dépend du hardware, pas l'inverse).
 
+**IMPORTANT — indiquer la langue cible dans le choix du modèle** : la langue influe à la fois sur la **taille** et la **performance** du modèle. Un modèle ~9B peut être excellent en anglais et nettement plus faible en français (jeu d'entraînement déséquilibré) : pour une autre langue que l'anglais, viser une taille supérieure ou vérifier que le modèle est explicitement multilingue. C'est un critère de choix au même rang que le hardware.
+
 **Technique de Renaud (la simple)** : coller sa config machine dans un prompt et demander à l'IA de recommander le modèle adapté — pas besoin d'outil dédié.
 
 - Outils si besoin : **llmfit** (installé sur le Mac de Renaud mais jugé trop complexe pour l'usage courant) et **canirun.ai** (https://www.canirun.ai).
