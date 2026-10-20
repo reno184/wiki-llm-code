@@ -7,14 +7,12 @@ version: 1
 # pdftocairo + sharp — rendu PDF → WebP côté Node
 
 Stack: Node.js (ESM) + binaire `pdftocairo` (Poppler, paquet `poppler-utils`) + sharp.
-Usage: convertir les pages d'un PDF en images WebP directement depuis l'API Node — couche d'affichage du use case [pdf-to-text/affichage-webp](../use-cases/pdf-to-text/affichage-webp.md). **Remplace pdftoppm** (pdftocairo = rendu Cairo, antialiasing et fidélité meilleurs) et **écarte la lib Python** (pdf2image n'est qu'un wrapper de Poppler ; PyMuPDF get_pixmap n'est plus chargé du rendu — PyMuPDF reste cantonné à l'extraction get_text, voir [libraries.md](../libraries.md)).
+Usage: convertir les pages d'un PDF en images WebP directement depuis l'API Node.
 
 ## Décision (oct. 2026)
 
 - Rendu d'affichage : **côté Node** (spawn pdftocairo + sharp), dans l'image Docker de l'API.
 - **Poppler vit uniquement DANS le conteneur** : `apt-get install` s'exécute au **build de l'image Docker** (ligne RUN du Dockerfile), sur la base Debian de `node:22-slim`. Rien à installer sur le poste client (ni Linux, ni Mac, ni Windows) — le poste n'a besoin que de Docker. Le binaire `pdftocairo` n'existe pas à l'extérieur de Docker.
-- Extraction : toujours le micro-service Python PyMuPDF get_text — l'unicité "un seul moteur rendu+extraction" est abandonnée, assumée : rendu Node, extraction Python.
-- Une lib Python n'apporte rien ici : le moteur de rendu serait le même binaire Poppler, avec un pont inter-langue en plus.
 
 ## Dockerfile (backend)
 
