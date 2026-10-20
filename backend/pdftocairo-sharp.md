@@ -12,6 +12,7 @@ Usage: convertir les pages d'un PDF en images WebP directement depuis l'API Node
 ## Décision (oct. 2026)
 
 - Rendu d'affichage : **côté Node** (spawn pdftocairo + sharp), dans l'image Docker de l'API.
+- **Poppler vit uniquement DANS le conteneur** : `apt-get install` s'exécute au **build de l'image Docker** (ligne RUN du Dockerfile), sur la base Debian de `node:22-slim`. Rien à installer sur le poste client (ni Linux, ni Mac, ni Windows) — le poste n'a besoin que de Docker. Le binaire `pdftocairo` n'existe pas à l'extérieur de Docker.
 - Extraction : toujours le micro-service Python PyMuPDF get_text — l'unicité "un seul moteur rendu+extraction" est abandonnée, assumée : rendu Node, extraction Python.
 - Une lib Python n'apporte rien ici : le moteur de rendu serait le même binaire Poppler, avec un pont inter-langue en plus.
 
@@ -33,6 +34,8 @@ CMD ["node", "src/server.js"]
 ```
 
 - `poppler-utils` fournit pdftocairo ; `poppler-data` = polices/encodages CJK (garder si PDF clients internationaux, sinon optionnel).
+- `apt-get` tourne dans le conteneur au build, pas sur le poste hôte ; `rm -rf /var/lib/apt/lists/*` évite de garder le cache apt dans l'image.
+- Vérifier une fois déployé : `docker exec <conteneur> pdftocairo -v` (doit afficher la version).
 - sharp embarque ses binaires libvips prébuilds — rien à installer pour lui.
 
 ## Code validé (ESM, Règle 0 : zéro commentaire)
