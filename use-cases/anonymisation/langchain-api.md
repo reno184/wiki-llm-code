@@ -25,9 +25,8 @@ const prompt = PromptTemplate.fromTemplate(promptText);
 ```
 
 ## Paramètres qwen3.5
-- temperature: 0, top_p: 1
-- `enable_thinking: false` (chat_template_kwargs) si le modèle think est actif
-- Gestion timeout / retry : à définir
+
+→ Référence unique : [../../mode-chat/code-subject/wiki-local-model.md](../../mode-chat/code-subject/wiki-local-model.md) (temperature 0, top_p 1, enable_thinking false).
 
 ## Notes
 - Jamais de copie du prompt dans le code : toujours chargé depuis le repo/fichier.
