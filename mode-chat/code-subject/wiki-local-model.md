@@ -49,6 +49,10 @@ GPU: Apple M4 (unified memory, 11.84 GB GPU-available of 16.00 GB shared, Metal)
 
 Lecture : Mac M4 16 Go, mémoire unifiée — ~11,84 Go adressables par le GPU (Metal). C'est ce plafond qui décide de la taille de modèle raisonnable (~9B type qwen3.5 tourne bien ; les très gros modèles sont hors de portée).
 
+**Que veut dire « 9b »** : 9 milliards de paramètres — c'est la **taille limite pour le Mac M4 16 Go de RAM GPU**. Au-delà, le modèle ne tient pas dans la mémoire unifiée adressable par le GPU (~11,84 Go : le modèle chargé + son contexte doivent y tenir).
+
+**Le nombre de cœurs** (M4 = 10 cœurs) compte surtout pour la vitesse de génération (tokens/s) et le pré-remplissage des prompts, mais ce n'est **pas** lui qui bloque : le vrai mur est la mémoire. Un modèle qui tient en RAM GPU tournera, plus ou moins vite selon les cœurs ; un modèle qui ne tient pas ne tourne pas du tout.
+
 ## Autres modèles locaux (mentionnés, non testés à fond)
 
 Runtime Ollama via llama.cpp : `llama3.1`, `mistral`, `qwen2.5`… (inventaire libraries.md). Un modèle non testé n'entre pas dans le détail de cette fiche.
