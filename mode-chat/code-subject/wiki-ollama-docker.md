@@ -30,8 +30,6 @@ Usage: le pattern du déploiement client — code API dans Docker (protégé), O
 
 - [ ] Ollama installé en natif et lancé sur l'hôte (port 11434 répond)
 - [ ] `OLLAMA_BASE_URL=http://host.docker.internal:11434` dans le compose
-- [ ] Le code lit l'URL depuis l'env, jamais en dur
-- [ ] Test : appel API depuis le conteneur → réponse du modèle
 
 ## État
 
