@@ -47,8 +47,30 @@ app.use('/api/contact', contactRouter)
 ```
 
 - `express.json()` doit être monté **avant** les routes qui lisent `req.body`.
-- Ne parse **que** les requêtes avec `Content-Type: application/json` (d'où l'obligation côté front d'envoyer ce header — voir recaptcha-invisible-v3.md).
+- Ne parse **que** les requêtes avec `Content-Type: application/json` (d'où l'obligation côté front d'envoyer ce header — voir mode-chat/code-subject/wiki-recaptcha.md).
 - Formulaires HTML natifs : `app.use(express.urlencoded({ extended: true }))`.
+
+## Côté front (Vite / Vue) : `import.meta.env`
+
+Le front n'a **ni dotenv ni `process.env`** : Vite expose les variables via `import.meta.env`, et **seules celles préfixées `VITE_`** sont injectées dans le bundle.
+
+```js
+// .env à la racine du front
+VITE_API_URL=http://localhost:3000
+VITE_RECAPTCHA_SITE_KEY=6L...
+```
+
+```js
+// utilisation dans un composant/script
+const apiUrl = import.meta.env.VITE_API_URL
+const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY
+```
+
+Règles :
+- **Jamais de secret dans le front** : tout ce qui est dans `VITE_*` est public (compilé dans le bundle, visible par quiconque ouvre la console réseau). Clé de site reCAPTCHA = OK (publique par conception) ; secret/mot de passe = back uniquement.
+- Types : `import.meta.env.MODE` (development/production), `import.meta.env.DEV` / `PROD` pour brancher des comportements.
+- En dev, Vite lit `.env`, `.env.development`, `.env.production` automatiquement.
+- Exemple complet d'utilisation front (reCAPTCHA + fetch avec `Content-Type: application/json`) : [../mode-chat/code-subject/wiki-recaptcha.md](../mode-chat/code-subject/wiki-recaptcha.md).
 
 ## État
 
