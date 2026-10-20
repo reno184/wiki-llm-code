@@ -5,16 +5,18 @@ Usage: le pattern du déploiement client — code API dans Docker (protégé), O
 ## docker-compose.yml
 
 ```yaml
-services:
-  app:
-    build: .
-    working_dir: /app
-    volumes:
-      - .:/app
-    tty: true
-    stdin_open: true
+ backend:
+    image: proto-pdf-html-backend:prod
+    restart: always
+    ports:
+      - "3000:3000"
     environment:
-      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      PORT: 3000
+      MONGO_URI: mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongodb:27017/${MONGO_DB}?authSource=admin
+      OLLAMA_BASE_URL: http://host.docker.internal:11434
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+    depends_on:
+      - mongodb
 ```
 
 ## Clé du pattern
