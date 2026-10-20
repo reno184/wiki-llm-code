@@ -12,3 +12,7 @@ Usage: snippets composants DaisyUI.
   loading
 </button>
 ```
+
+## loader traitement long (LangChain invoke)
+
+`<span class="loading loading-infinity loading-xl"></span>` — pour les requêtes vers les routes qui utilisent `invoke` LangChain (traitement long).
