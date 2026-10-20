@@ -13,3 +13,4 @@ Sujets de code rares (~1×/an ou moins) : snippet complet + checklist « ne rien
 | [wiki-ollama-install-windows.md](wiki-ollama-install-windows.md) | Installer Ollama sur PC client Windows : WSL2 intégré automatique, GPU NVIDIA = driver CUDA côté Windows, limite = VRAM dédiée (≠ Mac mémoire unifiée) | vivant |
 | [wiki-ollama-docker.md](wiki-ollama-docker.md) | Conteneur API → Ollama natif de l'hôte : compose avec `OLLAMA_BASE_URL=http://host.docker.internal:11434`, Ollama jamais dockerisé, URL par env | vivant |
 | [wiki-git.md](wiki-git.md) | Config Git machine : `pull.rebase true` (historique linéaire, rebase auto au pull), `rebase.autoStash true`, erreurs types (stash, conflit, abort), niveaux de config | vivant |
+| [wiki-variable-env.md](wiki-variable-env.md) | Variables d'environnement : backend dotenv (`process.env`, fail fast, `.env.example`) + front Vite (`import.meta.env`, préfixe `VITE_`, jamais de secret front) | vivant |
