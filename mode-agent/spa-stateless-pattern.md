@@ -9,4 +9,4 @@
 - Après une écriture réussie (post/delete), rafraîchir la liste du parent.
 - **Un composant = une responsabilité** : le parent porte les données de liste et le GET ; les enfants portent leur propre action d'écriture et l'affichage. Un enfant ne connaît pas la structure complète de l'API au-delà de sa propre route.
 - **Props drilling assumé** : les données de liste descendent par props du parent vers les enfants — c'est le mécanisme voulu, pas un anti-pattern à "corriger" avec un store.
-- ** callback function** : ne pas utiliser de `defineEmits(['onRefresh'])``, mais `defineProps` avec un callBack function en proprité `onRefrech: Function`
+- ** callback function** : ne pas utiliser de `defineEmits(['onRefresh'])`, mais `defineProps` avec un callBack function en proprité `onRefrech: Function`
