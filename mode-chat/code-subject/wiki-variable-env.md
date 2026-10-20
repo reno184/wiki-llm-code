@@ -75,7 +75,16 @@ export default defineConfig({
 })
 ```
 
-Ou pour injecter des `VITE_` selon l'environnement de launch :
+**Comment lire dans le front — les deux mécanismes ne se lisent PAS pareil** :
+
+| Variable définie | Lecture dans le code front |
+|---|---|
+| `VITE_` (script package.json ou fichier .env) | `import.meta.env.VITE_API_URL` |
+| `define` dans vite.config.js (`__API_URL__`) | `__API_URL__` **directement** (constante globale, sans `import.meta.env`) |
+
+`define` fait un remplacement à la compilation : chaque `__API_URL__` du code est substitué par sa valeur. Le nom doit être exotique (`__XXX__`) pour éviter toute collision avec un identifiant du code.
+
+Si besoin d'un pont entre les deux (lire les `VITE_` et les re-exposer en constantes) :
 
 ```js
 import { defineConfig, loadEnv } from 'vite'
@@ -89,6 +98,7 @@ export default defineConfig(({ mode }) => {
   }
 })
 ```
+→ à lire avec `__API_URL__` directement (pas `import.meta.env.__API_URL__`).
 
 ### Règles
 
