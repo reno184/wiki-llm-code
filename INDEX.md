@@ -31,7 +31,7 @@ Point d'entrée pour un LLM : charger INDEX.md, puis seulement les fiches utiles
 
 | Fiche | Usage | État |
 |---|---|---|
-| [mode-chat/wiki-recaptcha.md](mode-chat/wiki-recaptcha.md) | Anti-bot complet (~1×/an, copié/collé manuel) : décision d'offre (v3 classique vs Enterprise) + checklist ne rien oublier (secret GCP, front header `g-recaptcha-response`, back siteverify) + code front Pug/JS + code back Express/GCP | vivant |
+| [code-subject/INDEX.md](mode-chat/code-subject/INDEX.md) | INDEX des sujets de code rares (snippets + checklist copié/collé manuel) | vivant |
 
 | Fiche | Stack | Usage | État |
 |---|---|---|---|
