@@ -17,7 +17,7 @@ Réévaluer si trafic significatif / abuse avéré / analyses avancées. Alterna
 ## 2. Checklist complète — ne rien oublier
 
 - [ ] Clé de site (publique) : dans l'URL du script de chargement
-- [ ] Secret (privé) : `process.env.RECAPTCHA_LEGAL_COMPLIANCE` — dotenv en local, secret GCP monté en prod (voir [../../infra/gcp-secrets.md](../../infra/gcp-secrets.md))
+- [ ] Secret (privé) : `process.env.RECAPTCHA_LEGAL_COMPLIANCE` — dotenv en local, secret GCP monté en prod (voir [wiki-secret-gcp.md](wiki-secret-gcp.md))
 - [ ] Front : script reCAPTCHA chargé dans la page
 - [ ] Front : `grecaptcha.execute` **à la soumission** (token expire ~2 min, usage unique), pas au chargement
 - [ ] Front : token envoyé dans le **header** `g-recaptcha-response` (standard du wiki, pas le body JSON)
@@ -99,7 +99,7 @@ module.exports = router;
 
 Setup back :
 1. Installer dotenv et le charger au démarrage : `require("dotenv").config();`
-2. Créer le secret dans GCP et le monter (voir [../../infra/gcp-secrets.md](../../infra/gcp-secrets.md))
+2. Créer le secret dans GCP et le monter (voir [wiki-secret-gcp.md](wiki-secret-gcp.md))
 3. Déclarer le secret dans l'export de la Cloud Function :
 
 ```js

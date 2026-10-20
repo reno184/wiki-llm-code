@@ -5,3 +5,4 @@ Sujets de code rares (~1×/an ou moins) : snippet complet + checklist « ne rien
 | Fiche | Usage | État |
 |---|---|---|
 | [wiki-recaptcha.md](wiki-recaptcha.md) | Anti-bot complet : décision d'offre (v3 classique vs Enterprise) + checklist (secret GCP, front header `g-recaptcha-response`, back siteverify) + code front Pug/JS + code back Express/GCP | vivant |
+| [wiki-secret-gcp.md](wiki-secret-gcp.md) | Créer un secret GCP Secret Manager (menu Sécurité/secret manager/secret ou recherche « secret ») + clé identique au .env/.env.example + montage Cloud Function | vivant |
