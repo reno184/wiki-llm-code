@@ -3,7 +3,7 @@
 - Modal générique à slots : `#trigger` (bouton d'ouverture) + slot par défaut (contenu).
 - ⚠️ Si la modal est dans une liste : passer l'`index` en prop (l'`id` doit être unique).
 - Utilise l'API native `popover` de daisyUI : ouverture via `popovertarget="modal-{index}"`, fermeture via `popovertargetaction="hide"` sur le backdrop ou `hidePopover()` via le slot (`<slot :hide="handleClose">`).
-
+- Si dans le dossier /components tu ne vois pas de `DialogBase` créer le composant.
 ```html
 
 <template>
