@@ -1,5 +1,7 @@
 # daisyui-component — DaisyUI
 
+> Utiliser en priorité daisyUi avant des classes natives tailwindcss
+
 Usage: snippets composants DaisyUI.
 
 ## btn loading
@@ -15,4 +17,5 @@ Usage: snippets composants DaisyUI.
 
 ## loader traitement long (LangChain invoke)
 
-`<span class="loading loading-infinity loading-xl"></span>` — pour les requêtes vers les routes qui utilisent `invoke` LangChain (traitement long).
+A utiliser pour les requêtes vers les router backend qui utilisent `invoke` LangChain (traitement long).
+`<span class="loading loading-infinity"></span>`
