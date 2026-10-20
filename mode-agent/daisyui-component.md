@@ -19,3 +19,5 @@ Usage: snippets composants DaisyUI.
 
 A utiliser pour les requêtes vers les router backend qui utilisent `invoke` LangChain (traitement long).
 `<span class="loading loading-infinity"></span>`
+
+

@@ -92,7 +92,30 @@ export const getUploadDriver = () => {
 UPLOAD_DRIVER=local   # dev : disque local, pas de Docker/MinIO requis
 UPLOAD_DRIVER=minio   # prod : via docker compose
 ```
+```js
+// ✅ Style wiki : pas de commentaire, le code se lit de haut en bas
+router.post('/api/material', uploadValidator, (req, res, next) => {
+  try {
+    const busboy = Busboy({ headers: req.headers, limits: { fileSize: MAX_SIZE } })
 
+    const fields = {}
+
+    busboy.on('field', (name, value) => { fields[name] = value })
+
+    busboy.on('file', (name, stream, info) => {
+      const objectName = `${Date.now()}-${info.filename}`
+
+      uploadPromise = getUploadDriver().put(stream, objectName, info.mimeType, MAX_SIZE)
+    })
+
+    req.pipe(busboy)
+
+    // ...
+  } catch (err) {
+    next(err)
+  }
+})
+```
 ## Pourquoi c'est le bon pattern ici (et pas les autres)
 
 - **Open/Closed** (SOLID) : ajouter un driver GCS/S3 = nouveau fichier + une ligne dans `drivers` — **zéro modification des routes**.
