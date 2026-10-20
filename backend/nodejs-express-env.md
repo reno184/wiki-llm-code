@@ -29,43 +29,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 **Exception : les applications Node/Express en syntaxe Pug (sites vitrines multipage) restent en CommonJS — `require()` et pas de `"type": "module"`.** Voir stacks.md : la stack sites vitrines (Pug + View Transitions + Firebase) est l'exception historique, ne pas la convertir.
 
-## Principe
 
-Node.js expose les variables d'environnement via `process.env.X`. En local, elles ne sont pas chargées automatiquement : le package `dotenv` lit le fichier `.env` à la racine et les injecte dans `process.env`.
-
-## Étapes
-
-1. `npm install dotenv`
-2. Charger au **tout début** du point d'entrée :
-
-```js
-// index.js — PREMIÈRE ligne
-import 'dotenv/config'
-```
-
-3. `.env` à la racine (non commité) :
-
-```
-RECAPTCHA_LEGAL_COMPLIANCE=<secret api key>
-PORT=3000
-```
-
-4. Lire :
-
-```js
-const secret = process.env.RECAPTCHA_LEGAL_COMPLIANCE
-if (!secret) {
-  throw new Error('Variable RECAPTCHA_LEGAL_COMPLIANCE manquante : vérifier .env (local) ou le secret monté (prod)')
-}
-```
-
-## Règles
-
-- `.env` jamais commité (`.gitignore`) ; committer un `.env.example` avec noms de variables sans valeurs.
-- Aucun secret en dur : tout via `process.env` (prod GCP : voir gcp-secrets.md).
-- **Fail fast** : variable obligatoire manquante = erreur explicite au démarrage.
-- `import 'dotenv/config'` doit s'exécuter **avant** tout module qui lit `process.env`, sinon valeurs `undefined`.
-- Prod GCP : pas besoin de dotenv — secret monté via `secrets:` déjà exposé en variable d'environnement ; même code local/prod.
 
 ## Pense-bête Express : le middleware JSON
 
