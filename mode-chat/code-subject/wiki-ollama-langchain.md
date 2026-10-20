@@ -7,12 +7,15 @@ Usage: snippet de branchement API Node → Ollama. Mode chat Renaud (jamais char
 ```js
 import { ChatOllama } from "@langchain/ollama";
 
-export async function testLlama() {
-    const llm = new ChatOllama({
-        baseUrl: "http://ollama:11434",
-        model: "llama3.2:latest",
-        temperature: 0.3
-    });
+const llm = new ChatOllama({
+    baseUrl: process.env.OLLAMA_BASE_URL || "http://localhost:11434",
+    model: "frob/qwen3.5-instruct:9b",
+    temperature: 0.3
+})
+
+const response = await llm.invoke("Dis moi bonjour")
+
+res.json({message: response.content})
 ```
 
 ## Pièges à ne pas oublier
@@ -20,10 +23,6 @@ export async function testLlama() {
 - **`baseUrl` selon le contexte** :
   - Depuis l'hôte (API Node locale) : `http://localhost:11434`
   - **Depuis Docker** : `localhost` désigne le conteneur, pas la machine → utiliser `http://host.docker.internal:11434`
-  - **Depuis un compose où Ollama tourne en service** : `http://ollama:11434` (nom du service compose, comme dans le snippet)
-- **Paramètres de production** : temperature `0`, top_p `1`, `enable_thinking: false` si modèle think → référence : [wiki-local-model.md](wiki-local-model.md) (le `temperature: 0.3` du snippet est un exemple, la norme production est 0).
-- Le package : `npm install @langchain/ollama langchain`.
-- API complète (prompt canonique chargé au démarrage, squelette Express) : [../../use-cases/anonymisation/langchain-api.md](../../use-cases/anonymisation/langchain-api.md)
 
 ## État
 
