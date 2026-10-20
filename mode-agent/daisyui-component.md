@@ -1,7 +1,14 @@
 # daisyui-component — DaisyUI
 
-Usage: composants DaisyUI. **En attente du contenu de Renaud.**
+Usage: snippets composants DaisyUI.
 
-## À compléter
+## btn loading
 
-(à coller : règles, snippets, conventions)
+À utiliser sur `isFetching` du composable `useApi` :
+
+```html
+<button class="btn">
+  <span class="loading loading-spinner"></span>
+  loading
+</button>
+```
