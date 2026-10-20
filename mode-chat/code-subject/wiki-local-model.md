@@ -23,8 +23,10 @@ Usage: référence unique sur les modèles Ollama utilisés par Renaud (jamais c
 
 Avant tout choix de modèle local, connaître la **puissance de la machine** qui va le faire tourner (le modèle dépend du hardware, pas l'inverse).
 
-- Outils : **llmfit** (installé sur le Mac de Renaud) et **canirun.ai** (https://www.canirun.ai).
-- Commande : `llmfit system` → retourne la config de la machine.
+**Technique de Renaud (la simple)** : coller sa config machine dans un prompt et demander à l'IA de recommander le modèle adapté — pas besoin d'outil dédié.
+
+- Outils si besoin : **llmfit** (installé sur le Mac de Renaud mais jugé trop complexe pour l'usage courant) et **canirun.ai** (https://www.canirun.ai).
+- Commande : `llmfit system` → retourne la config de la machine (source de la config ci-dessous).
 
 Config du Mac (sortie réelle `llmfit system`, octobre 2026) :
 
