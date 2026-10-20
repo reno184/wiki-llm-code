@@ -3,6 +3,9 @@
 Stack: Python + pymupdf (fitz), exécution labo Docker (voir infra/python-docker-labo.md).
 Usage: boîte à outils d'extraction ciblée depuis un PDF natif (texte, styles, zones, images, tableaux, liens) — complément de use-cases/pdf-to-md/ (chaîne OCRmyPDF → PyMuPDF4LLM) quand la conversion intégrale ne suffit pas. Rappel hiérarchie (fiche use-cases/ocr-llm) : PDF natif → PyMuPDF, scan → OCRmyPDF, image complexe/manuscrit → Ollama/qwen.
 
+
+> ⚠️ **Faiblesse : licence AGPL** — attention si usage commercial non-libre. Pour commercialiser, il faut une licence commerciale Artifex (payante).
+
 ## Les 3 modes de lecture du texte
 
 ### 1. `page.get_text("blocks", sort=True)`
