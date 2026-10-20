@@ -9,7 +9,7 @@ Un profil = une vue sur le wiki, pas un rangement. Une fiche peut apparaître da
 - En cas de doute sur le profil : STOP, demander à Renaud (Règle 3).
 
 - **Site vitrine** (Node/Express + Pug multipage, reCAPTCHA) :
-  front/ux-motion-adoption.md (conviction transversale), front/recaptcha-invisible-v3.md, backend/recaptcha-siteverify.md, backend/nodejs-express-env.md, patterns/express-strategy.md, front/daisyui-components.md, stacks.md, ide/webstorm-http-upload.md (tests)
+  front/ux-motion-adoption.md (conviction transversale), backend/nodejs-express-env.md, patterns/express-strategy.md, front/daisyui-components.md, stacks.md, ide/webstorm-http-upload.md (tests)
 - **SPA + API** (Vue 3 front, API Express séparée) :
   front/ux-motion-adoption.md (conviction transversale), backend/nodejs-express-env.md, backend/cors.md, backend/express-error-handling.md, backend/upload-file-busboy.md, patterns/upload-strategy.md, backend/mongoose-connect.md, front/vuejs-router-menu.md, front/vuejs-useapi.md, front/javascript/form-validation.md, front/vuejs-stateless-smart-dumb.md, front/upload-file.md, front/daisyui-components.md, backend/minio-storage-express.md, infra/docker-minio-compose.md
 - **Développeur JavaScript** (briques front interactives Vue 3 — tâches de codage isolées, contexte minimal) :
@@ -27,6 +27,12 @@ Un profil = une vue sur le wiki, pas un rangement. Une fiche peut apparaître da
 
 Point d'entrée pour un LLM : charger INDEX.md, puis seulement les fiches utiles à la tâche.
 
+## Mode chat (Renaud — connaissances générales + snippets d'actions rares, jamais chargé par un agent)
+
+| Fiche | Usage | État |
+|---|---|---|
+| [mode-chat/wiki-recaptcha.md](mode-chat/wiki-recaptcha.md) | Anti-bot complet (~1×/an, copié/collé manuel) : décision d'offre (v3 classique vs Enterprise) + checklist ne rien oublier (secret GCP, front header `g-recaptcha-response`, back siteverify) + code front Pug/JS + code back Express/GCP | vivant |
+
 | Fiche | Stack | Usage | État |
 |---|---|---|---|
 | [backend/cors.md](backend/cors.md) | Node/Express + cors | CORS : cross-origin API (origin via env, headers custom, jamais * avec credentials) vs same-origin Pug = pas de cors du tout | vivant |
@@ -34,7 +40,6 @@ Point d'entrée pour un LLM : charger INDEX.md, puis seulement les fiches utiles
 | [backend/express-error-handling.md](backend/express-error-handling.md) | Node/Express (ESM) | Erreurs API : classe `AppError` (statut + stack propre), middleware `errorHandler` monté en DERNIER (4 args obligatoires), 400 JSON / dev verbeux filtré / prod sobre sans fuite | vivant |
 | [backend/minio-storage-express.md](backend/minio-storage-express.md) | Node/Express + minio sdk + busboy | Stockage S3 MinIO : client singleton, init bucket idempotent + policy publique, upload Buffer, pattern route upload, hook deleteOne Mongoose, **règle clé/URL : clé stockée en base, URL publique dérivée (jamais de pdfUrl/src en base)** | vivant |
 | [backend/mongoose-connect.md](backend/mongoose-connect.md) | Node/Express + mongoose + docker | Connexion MongoDB : config/db.js, connectDB() sans catch avalant l'erreur (fail fast via startServer process.exit(1)), appel avant app.listen, service compose mongodb (external: true, authSource=admin, hostname = nom du service) | vivant |
-| [backend/recaptcha-siteverify.md](backend/recaptcha-siteverify.md) | Node/Express + GCP Cloud Functions | reCAPTCHA : vérification serveur du token (header `g-recaptcha-response` → siteverify) | vivant |
 | [backend/upload-file-busboy.md](backend/upload-file-busboy.md) | Node/Express + busboy | Upload multipart : middleware uploadValidator (Content-Type), streaming busboy (req.pipe, drain des streams, limits fileSize), validation type/taille serveur, route pattern | vivant |
 | [backend/pdftocairo-sharp.md](backend/pdftocairo-sharp.md) | Node + Poppler (pdftocairo) + sharp | Rendu PDF → WebP côté Node : poppler-utils dans l'image Docker (remplace pdftoppm), spawn -png -r dpi, tri naturel, sharp encode WebP, tmpdir nettoyée ; rendu retiré au micro-service Python | vivant |
 | [front/vuejs-stateless-smart-dumb.md](front/vuejs-stateless-smart-dumb.md) | Vue 3 + useApi (pas de Pinia/Vuex) | Architecture composants pour agents : stateless sans store global, smart/dumb à responsabilité unique, props drilling assumé + callbacks en paramètres, pattern 3 composants (parent = list ref + 2 useApi : GET immediate au montage, POST au submit, execute getList rappelé après POST réussi) ; rangement : composants dans components/, views = pages routées suffixées Page appelées par router/index.js ; convention props : préfixe `on` = callback enfant→parent (onRefresh, onClose), sans préfixe = valeur parent→enfant, jamais de required ; préfixe `handle` = fonction exécutée dans le composant même (gère plusieurs actions) ; shortcut si appel direct useApi : :onRefresh="executeGetList" (execute aliasé, binding dynamique : obligatoire, sans wrapper handle) | en construction |
@@ -43,7 +48,6 @@ Point d'entrée pour un LLM : charger INDEX.md, puis seulement les fiches utiles
 | [front/javascript/event-delegation.md](front/javascript/event-delegation.md) | JS DOM (pattern générique) | Delegation : 1 listener sur conteneur, discriminants closest() (superposés d'abord), e.currentTarget stable vs e.target, window-listeners pendant drag, clamp | en construction |
 | [front/javascript/coord-scale-conversion.md](front/javascript/coord-scale-conversion.md) | Math pure (testable isolément) | Double conversion affiché→pixels image (naturalWidth/rect.width dynamique) puis ×72/dpi → espace PDF ; stockage normalisé, jamais en pixels ; dpi de l'image dessinée (300 = ciblage) | en construction |
 | [front/javascript/form-validation.md](front/javascript/form-validation.md) | Vue 3 + @vueuse/core + Constraint Validation API | Formulaires : validation HTML native 100% navigateur (required/type/minlength/pattern, bulles natives, pas de novalidate), bloc CSS obligatoire dans main.css (form:invalid → bouton submit inactif pointer-events none, jamais de :disabled), pas de lib (VeeValidate rejetée), @submit ne se déclenche que si valide, submit = FormData(e.target) + garde checkValidity + reset() après await execute (pas de v-model champ à champ), soumission via useApi | vivant |
-| [front/recaptcha-invisible-v3.md](front/recaptcha-invisible-v3.md) | Pug + JS natif | reCAPTCHA v3 invisible : chargement script + `grecaptcha.execute` + token en header | vivant |
 | [front/upload-file.md](front/upload-file.md) | JS natif / Vue 3 + fetch + FormData | Upload front : input type file, validation type/taille client, FormData multipart (jamais de Content-Type manuel) | vivant |
 | [front/daisyui-components.md](front/daisyui-components.md) | Tailwind + DaisyUI + Vue 3 | Inventaire des classes DaisyUI des projets : composants DaisyUI pour les composants (`file-input`, `menu`, modificateurs) + Tailwind pour les utilitaires ; markup type par composant | vivant |
 | [front/vuejs-useapi.md](front/vuejs-useapi.md) | Vue 3 + @vueuse/core (createFetch) | useApi = wrapper createFetch VueUse : baseUrl, erreurs globales via CustomEvents (400 JSON → snackbar, 500 texte → page 500 avec stack), beforeFetch FormData sans Content-Type, composants sans try/catch | vivant |
@@ -60,7 +64,6 @@ Point d'entrée pour un LLM : charger INDEX.md, puis seulement les fiches utiles
 | [infra/docker-secrets-env.md](infra/docker-secrets-env.md) | Docker / Compose / Node | Secrets et .env : périmètre d'exposition (inspect, layers image), checklist .dockerignore/secrets compose/user MinIO dédié | vivant |
 | [infra/pymupdf.md](infra/pymupdf.md) | Python + pymupdf | Socle extraction de la chaîne PDF (get_text ciblée ; rendu d'affichage transféré à pdftocairo+sharp côté Node, get_pixmap reste pour les zones vers LLM vision) : dic/blocks (sort=True), boucles block→line→span, Rect+clip, search_for, get_pixmap, get_drawings, get_toc, find_tables→extract, get_links, annots ; table de correspondance par besoin | vivant |
 | [patterns/express-strategy.md](patterns/express-strategy.md) | Node/Express (protos) | Style délibéré proto : toute la logique dans la route (pas de controller/service), try/catch + next(err) systématique, AppError pour erreurs attendues, signaux d'extraction | vivant |
-| [patterns/recaptcha-choix-offre.md](patterns/recaptcha-choix-offre.md) | — | Décision : reCAPTCHA v3 classique vs Enterprise/Fraud Defense | vivant |
 | [patterns/upload-strategy.md](patterns/upload-strategy.md) | Strategy pattern (Node) | Drivers de stockage interchangeables : contrat `put`/`delete`, drivers minio/local, factory `UPLOAD_DRIVER` par env, Open/Closed | vivant |
 | [stacks.md](stacks.md) | — | Stack de référence + stacks abandonnées | vivant |
 | [libraries.md](libraries.md) | — | Index librairies qui fait quoi (support Node/Python) : rendu = pdftocairo + sharp (Node), extraction = chaîne 100% PyMuPDF get_text ; Prettier, Ollama (relecture seule, jamais transformation de longs docs), LangChain ; PyMuPDF4LLM, OCRmyPDF, Tesseract autonome & Docling archivés | vivant |
