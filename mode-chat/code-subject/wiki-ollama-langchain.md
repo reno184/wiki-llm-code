@@ -1,6 +1,6 @@
 # wiki-ollama-langchain — appeler Ollama depuis Node (LangChain)
 
-Usage: snippet de branchement API Node → Ollama. Mode chat Renaud (jamais chargé par un agent).
+Usage: snippet de branchement API Node → Ollama. Mode chat Renaud (jamais chargé par un agent). Runtime général → [wiki-ollama.md](wiki-ollama.md), compose conteneur → Ollama natif → [wiki-ollama-docker.md](wiki-ollama-docker.md).
 
 ## Import et instanciation
 

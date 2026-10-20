@@ -1,6 +1,6 @@
 # wiki-ollama-docker — appeler Ollama natif depuis un conteneur (compose)
 
-Usage: le pattern du déploiement client — code API dans Docker (protégé), Ollama **jamais dockerisé** (natif, GPU sur l'hôte). Le conteneur appelle l'Ollama de la machine. Mode chat Renaud, jamais chargé par un agent. Installation Ollama Windows → [wiki-ollama-install-windows.md](wiki-ollama-install-windows.md), branchement LangChain → [wiki-ollama-langchain.md](wiki-ollama-langchain.md).
+Usage: le pattern du déploiement client — code API dans Docker (protégé), Ollama **jamais dockerisé** (natif, GPU sur l'hôte). Le conteneur appelle l'Ollama de la machine. Mode chat Renaud, jamais chargé par un agent. Runtime général → [wiki-ollama.md](wiki-ollama.md), installation Ollama Windows → [wiki-ollama-install-windows.md](wiki-ollama-install-windows.md), branchement LangChain → [wiki-ollama-langchain.md](wiki-ollama-langchain.md).
 
 ## docker-compose.yml
 
