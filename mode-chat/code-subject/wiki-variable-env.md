@@ -37,31 +37,33 @@ if (!secret) {
 
 ## Côté front (Vite / Vue)
 
-Le front ne lit **pas `process.env`** : Vite expose les variables via `import.meta.env`, et **seules celles préfixées `VITE_`** sont injectées dans le bundle. Deux façons de les définir :
+Le front ne lit **pas `process.env`** : Vite expose les variables via `import.meta.env`. Les variables d'environnement se mettent à jour **au lancement** — deux façons :
 
-**1. Fichiers `.env`** (à la racine du front — Vite lit `.env`, `.env.development`, `.env.production` automatiquement) :
+### 1. Dans le script `package.json` (la façon courante)
 
-```
-VITE_API_URL=http://localhost:3000
-VITE_RECAPTCHA_SITE_KEY=6L...
-```
-
-```js
-const apiUrl = import.meta.env.VITE_API_URL
-```
-
-**2. Par le script `package.json`** (utile pour un port ou une URL qui change selon l'environnement) :
+La variable est passée **dans la commande de lancement** du script — préfixée `VITE_` pour être exposée :
 
 ```json
 {
   "scripts": {
     "dev": "VITE_API_URL=http://localhost:3000 vite",
-    "dev:docker": "VITE_API_URL=http://host.docker.internal:3000 vite"
+    "dev:docker": "VITE_API_URL=http://host.docker.internal:3000 vite",
+    "build": "VITE_API_URL=https://api.mondomaine.com vite build"
   }
 }
 ```
 
-**3. Par `vite.config.js`** (pour les variables calculées) :
+```js
+// dans le code
+const apiUrl = import.meta.env.VITE_API_URL
+```
+
+- Changer la valeur = changer le script (ou en créer un par contexte), **pas** le code.
+- Avantage : chaque contexte (local, docker, prod) a son script explicite — rien de caché dans un fichier.
+
+### 2. Dans `vite.config.js`
+
+Pour les variables **calculées** ou dérivées, via `define` :
 
 ```js
 import { defineConfig } from 'vite'
@@ -73,8 +75,26 @@ export default defineConfig({
 })
 ```
 
-**Règles front** :
-- **Jamais de secret dans le front** : tout `VITE_*` est compilé dans le bundle = public (visible par quiconque ouvre la console réseau). Clé de site reCAPTCHA = OK (publique par conception) ; secret/mot de passe = back uniquement.
+Ou pour injecter des `VITE_` selon l'environnement de launch :
+
+```js
+import { defineConfig, loadEnv } from 'vite'
+
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '')
+  return {
+    define: {
+      __API_URL__: JSON.stringify(env.VITE_API_URL)
+    }
+  }
+})
+```
+
+### Règles
+
+- **Préfixe `VITE_` obligatoire** pour qu'une variable passée au lancement soit exposée via `import.meta.env` (tout ce qui n'est pas préfixé reste invisible du code front).
+- Vite lit aussi des fichiers `.env` / `.env.development` / `.env.production` à la racine — méthode valable, mais la pratique Renaud = scripts package.json ou vite.config.js.
+- **Jamais de secret dans le front** : tout `VITE_*` est compilé dans le bundle = public (visible dans la console réseau). Clé de site reCAPTCHA = OK (publique par conception) ; secret/mot de passe = back uniquement.
 - `import.meta.env.MODE` (`development`/`production`), `.DEV` / `.PROD` pour brancher des comportements.
 - Exemple complet (reCAPTCHA front + fetch `Content-Type: application/json`) : [wiki-recaptcha.md](wiki-recaptcha.md).
 
