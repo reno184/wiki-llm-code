@@ -31,6 +31,8 @@ exports.maFonction = onRequest({
 - [ ] Secret GCP créé avec **exactement le même nom de clé**
 - [ ] Secret déclaré dans l'export de la Cloud Function
 - [ ] `process.env.MA_CLEF` utilisé dans le code (jamais de valeur en dur)
+- [ ] IAM x-> compte service `wiki-crm@appspot.gserviceaccount.com` ajouter role `Accesseur de secrets Secret Manager`
+
 
 ## État
 
