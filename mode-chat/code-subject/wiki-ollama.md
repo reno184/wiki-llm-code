@@ -1,7 +1,5 @@
 # wiki-ollama — LLM local : généralités + détail complet
 
-Usage: connaissances générales mode chat Renaud (jamais chargé par un agent). Fusion des anciennes fiches `ia-local/ollama.md` + `ia-local/models.md` (supprimées).
-
 ## Généralités : comment ça tourne sur le Mac
 
 - **Ollama s'utilise en client desktop sur macOS** : on installe l'app, pas un serveur à configurer.
@@ -9,11 +7,11 @@ Usage: connaissances générales mode chat Renaud (jamais chargé par un agent).
 - Conséquence : tant que l'app / le CLI est lancé, **l'API locale est disponible** ; si rien ne répond sur le port 11434, c'est que la tâche de fond n'est pas lancée → ouvrir l'app.
 - Tout vit en local (modèles, poids, données) : **rien ne sort de la machine** → données sensibles OK (santé, contrats).
 
-## Setup labo
+## Ligne de commande
 
-- **Installation** : CLI desktop Ollama (app macOS). L'app lance le serveur local automatiquement.
-- **API HTTP locale** : `http://localhost:11434` — appelable depuis Node, Python, curl.
 - **CLI** : `ollama run <modele>`, `ollama pull <modele>`, `ollama list`, `ollama rm <modele>`.
+
+  > Attention les modèles sont téléchargés sur le mac ils pèsent parfois plusieurs giga donc ne pas éhsiter à supprimer les models qui ne servent pas.
 
 ## Pattern production : Ollama chez le client (médecin / avocat)
 
@@ -21,8 +19,11 @@ Pattern mutualisé des deux produits (voir [../../business-idea/ia-medical-ocr-c
 
 - **Workflow full Node.js, zéro Python** : API **Express** + **LangChain** pour donner les instructions au modèle (squelette : [../../use-cases/anonymisation/langchain-api.md](../../use-cases/anonymisation/langchain-api.md)).
 - **Ollama installé en local chez chaque client** pour l'accès GPU (le GPU est chez le client, pas chez l'éditeur — le prérequis matériel est cadré dans l'offre).
+
 - **Modèle** : frob/qwen3.5-instruct:9b pour la vision (voir section ci-dessous).
+
 - **Accès depuis conteneur Docker via localhost** : piège Docker — `localhost` dans un conteneur ≠ localhost de l'hôte → utiliser `host.docker.internal` (à valider au premier déploiement réel).
+
 - Argument de vente dérivé : le LLM tourne chez le client → l'éditeur n'a même pas accès aux données (secret professionnel avocat, données de santé).
 
 ## Appel type (API generate)
