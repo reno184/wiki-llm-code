@@ -12,37 +12,6 @@ Usage: procédure d'installation sur PC client (piste médecin/avocat — Ollama
 4. **`.wslconfig`** : si la RAM de WSL est limitée (fichier `.wslconfig` sur le PC), Ollama en hérite — une limite trop basse fait échouer le chargement des modèles.
 5. **API inchangée** : `localhost:11434` fonctionne depuis Windows ET depuis WSL2 (réseau partagé) → les appels Node (API Express du client) ne changent pas.
 
-## Piège Docker compose (le déploiement client utilise TOUJOURS Docker)
-
-L'API Node (code protégé) tourne en conteneur ; Ollama en natif avec le GPU. Le piège concerne le **cas où Ollama lui-même est conteneurisé** (ex. stack entièrement dockerisée) :
-
-- **GPU dans le compose** : sans le bloc ci-dessous, Ollama en conteneur tourne CPU = très lent.
-
-```yaml
-services:
-  ollama:
-    image: ollama/ollama:0.5.x        # pinner la version, pas :latest
-    container_name: ollama_service
-    ports:
-      - "11434:11434"
-    volumes:
-      - ollama:/root/.ollama         # volume nommé : modèles persistants (jamais ~/.ollama_data sur Windows — le ~ se résout différemment selon le shell)
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu]
-volumes:
-  ollama:
-```
-
-- **Le prérequis qui fait échouer 90 % des cas** : le bloc compose ne suffit pas. Il faut le driver NVIDIA installé **côté Windows** (pas dans WSL) **et** le NVIDIA Container Toolkit configuré (`nvidia-ctk runtime configure --runtime=docker`), sinon erreur `could not select device driver nvidia`.
-- **Test avant tout** : `docker run --rm --gpus all nvidia/cuda:12.5.0-base-ubuntu22.04 nvidia-smi`. `nvidia-smi` qui marche dans WSL ne prouve PAS que Docker a accès au GPU.
-- **Piège port 11434** : install natif ET conteneur sur le même PC = conflit de port. Chez le client : un seul des deux (architecture cible = Ollama natif, donc pas de conteneur ollama).
-- **GPU AMD/Intel** : le bloc `driver: nvidia` ne s'applique pas — support partiel, à valider avant provisionnement.
-
 ## Checklist installation PC client
 
 - [ ] Vérifier GPU client (NVIDIA ✅ / AMD-Intel : support partiel, à valider)
