@@ -1,4 +1,4 @@
-# wiki-fontawesome-chat — Font Awesome : versions et setup Vue (fiche perso Renaud)
+# wiki-fontawesome-chat
 
 Usage: fiche perso (mode-chat), complément de [../mode-agent/wiki-fontawesome-agent.md](../mode-agent/wiki-fontawesome-agent.md) (instructions minimales agent).
 
