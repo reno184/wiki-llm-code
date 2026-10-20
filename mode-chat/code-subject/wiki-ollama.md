@@ -53,6 +53,7 @@ Pour la vision : champ `images` avec le contenu du fichier en base64.
 
 ## Liens
 
+- Installation sur PC client Windows : [wiki-ollama-install-windows.md](wiki-ollama-install-windows.md)
 - Use case OCR : [../../use-cases/ocr-llm/README.md](../../use-cases/ocr-llm/README.md)
 - Reformatage sémantique (chunking obligatoire) : [../../use-cases/reformat-markdown/README.md](../../use-cases/reformat-markdown/README.md)
 - Entrée libraries.md : Node.js / Python ✅ les deux (API HTTP locale)
