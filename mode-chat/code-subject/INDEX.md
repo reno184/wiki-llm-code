@@ -12,3 +12,4 @@ Sujets de code rares (~1×/an ou moins) : snippet complet + checklist « ne rien
 | [wiki-ollama-langchain.md](wiki-ollama-langchain.md) | Appeler Ollama depuis Node via LangChain : `ChatOllama` (`@langchain/ollama`), baseUrl selon contexte (localhost / host.docker.internal / nom service compose), paramètres production | vivant |
 | [wiki-ollama-install-windows.md](wiki-ollama-install-windows.md) | Installer Ollama sur PC client Windows : WSL2 intégré automatique, GPU NVIDIA = driver CUDA côté Windows, limite = VRAM dédiée (≠ Mac mémoire unifiée) | vivant |
 | [wiki-ollama-docker.md](wiki-ollama-docker.md) | Conteneur API → Ollama natif de l'hôte : compose avec `OLLAMA_BASE_URL=http://host.docker.internal:11434`, Ollama jamais dockerisé, URL par env | vivant |
+| [wiki-git.md](wiki-git.md) | Config Git machine : `pull.rebase true` (historique linéaire, rebase auto au pull), `rebase.autoStash true`, erreurs types (stash, conflit, abort), niveaux de config | vivant |
