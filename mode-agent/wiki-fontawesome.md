@@ -1,15 +1,16 @@
 # wiki-fontawesome — Font Awesome : icônes front
 
-Usage: générique (Vue/Vite et sites vitrines Pug). **En attente du contenu de Renaud** (snippets, pièges rencontrés) — la structure ci-dessous est à compléter.
+Usage: instructions minimales pour l'agent. Balise `<i>` toujours. **Par défaut : solid.** Si rien n'est précisé, l'agent utilise `fa` (solid).
 
-## À compléter — snippets / configuration
+## Modes
 
-(à coller : installation, code d'usage, contexte Vue/Pug)
+- solid (défaut) : `<i class="fa fa-trash"></i>`
+- light : `<i class="fal fa-trash"></i>`
 
-## Pièges rencontrés
+## Icônes les plus utilisées
 
-(à compléter selon retours d'expérience)
+fa-plus, fa-trash, fa-lock, fa-user, fa-file, fa-file-pdf, fa-file-edit, fa-copy
 
 ## État
 
-**en cours** — squelette créé, contenu à fournir.
+**vivant** — instructions agent (défaut = solid).
