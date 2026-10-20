@@ -19,6 +19,27 @@ Usage: référence unique sur les modèles Ollama utilisés par Renaud (jamais c
 - `enable_thinking: false` (chat_template_kwargs) si le modèle think est actif
 - Gestion timeout / retry : à définir (squelette API : [../../use-cases/anonymisation/langchain-api.md](../../use-cases/anonymisation/langchain-api.md))
 
+## Choisir le bon modèle : connaître sa machine EN PRIORITÉ
+
+Avant tout choix de modèle local, connaître la **puissance de la machine** qui va le faire tourner (le modèle dépend du hardware, pas l'inverse).
+
+- Outils : **llmfit** (installé sur le Mac de Renaud) et **canirun.ai** (https://www.canirun.ai).
+- Commande : `llmfit system` → retourne la config de la machine.
+
+Config du Mac (sortie réelle `llmfit system`, octobre 2026) :
+
+```
+=== System Specifications ===
+CPU: Apple M4 (10 cores)
+Total RAM: 16.00 GB
+Available RAM: 11.55 GB
+RAM Bandwidth: ~211 GB/s (measured)
+Backend: Metal
+GPU: Apple M4 (unified memory, 11.84 GB GPU-available of 16.00 GB shared, Metal)
+```
+
+Lecture : Mac M4 16 Go, mémoire unifiée — ~11,84 Go adressables par le GPU (Metal). C'est ce plafond qui décide de la taille de modèle raisonnable (~9B type qwen3.5 tourne bien ; les très gros modèles sont hors de portée).
+
 ## Autres modèles locaux (mentionnés, non testés à fond)
 
 Runtime Ollama via llama.cpp : `llama3.1`, `mistral`, `qwen2.5`… (inventaire libraries.md). Un modèle non testé n'entre pas dans le détail de cette fiche.
