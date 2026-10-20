@@ -30,7 +30,7 @@ Chaîne testée :
 ## Chaîne cible (assistance à la relecture, jamais automatique)
 
 ```
-Markdown source (sortie pdf-to-md)
+Markdown source (extraction PDF → Markdown, ex. OCRmyPDF + PyMuPDF4LLM)
    │
    ▼
 Découpage (sections ou page_chunks)
@@ -45,7 +45,6 @@ Contrôle complétude (paragraphes/titres entrée vs sortie) + relecture humaine
 ## Fiches liées
 
 - [../../mode-chat/code-subject/wiki-ollama.md](../../mode-chat/code-subject/wiki-ollama.md) — limites constatées du modèle local
-- [../pdf-to-md/README.md](../pdf-to-md/README.md) — amont
 - [../../business-idea/ia-legaltech-contrat.md](../../business-idea/ia-legaltech-contrat.md) — décision produit qui repositionne ce use case
 
 ## État
