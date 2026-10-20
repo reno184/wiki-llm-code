@@ -5,7 +5,7 @@ version: 2
 
 # Use case : reformatage sémantique Markdown (reformat-markdown)
 
-Corrige ce que les passes déterministes (Prettier) ne peuvent pas corriger : tableaux markdown emboîtés dans des listes, hiérarchie de titres illogique, balises `**strong**` inutiles dans les titres. Reformatage **sémantique** par LLM, complément du use case [correction-syntax-markdown](../correction-syntax-markdown/README.md) (syntaxe mécanique).
+Corrige ce que les passes déterministes (Prettier) ne peuvent pas corriger : tableaux markdown emboîtés dans des listes, hiérarchie de titres illogique, balises `**strong**` inutiles dans les titres. Reformatage **sémantique** par LLM.
 
 ## Positionnement (octobre 2026)
 
@@ -44,8 +44,7 @@ Contrôle complétude (paragraphes/titres entrée vs sortie) + relecture humaine
 
 ## Fiches liées
 
-- [../correction-syntax-markdown/README.md](../correction-syntax-markdown/README.md) — passes déterministes (avant ce use case)
-- [../../ia-local/ollama.md](../../ia-local/ollama.md), [../../ia-local/models.md](../../ia-local/models.md) — limites constatées du modèle local
+- [../../mode-chat/code-subject/wiki-ollama.md](../../mode-chat/code-subject/wiki-ollama.md) — limites constatées du modèle local
 - [../pdf-to-md/README.md](../pdf-to-md/README.md) — amont
 - [../../business-idea/ia-legaltech-contrat.md](../../business-idea/ia-legaltech-contrat.md) — décision produit qui repositionne ce use case
 
