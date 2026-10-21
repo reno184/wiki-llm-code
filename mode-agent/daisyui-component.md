@@ -22,7 +22,7 @@ A utiliser pour les requêtes vers les router backend qui utilisent `invoke` Lan
 
 
 
-## input file masé — label btn (à la place de file-input)
+## input file masqué — label btn (à la place de file-input)
 
 Ne pas utiliser le `<input type="file">` affiché de daisyUI (`file-input`) :
 
