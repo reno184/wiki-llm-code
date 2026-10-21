@@ -17,3 +17,4 @@ Sujets de code rares (~1×/an ou moins) : snippet complet + checklist « ne rien
 | [wiki-fontawesome-chat.md](wiki-fontawesome-chat.md) | Font Awesome perso : versions 6.4.0 Pro (ancien compte) / 7.3.1 Free, setup Vue (assets/css/all.min.css + webfonts, `@import` dans main.css), styles fa/fad/fal | vivant |
 | [wiki-upload-dragdrop-pdf.md](wiki-upload-dragdrop-pdf.md) | Upload drag & drop PDF : useDropZone + label input caché, useApi post FormData blob, useObjectUrl pour l'aperçu | vivant |
 | [wiki-minio-pdf.md](wiki-minio-pdf.md) | MinIO : config singleton + démarrage (initBucket après connectDB), upload PDF/WebP Mongoose, hook deleteOne suppression cascade, docker compose | vivant |
+| [upload-file-busboy.md](upload-file-busboy.md) | Upload backend Express + busboy : middleware `uploadValidator`, pattern minimal route, contrôles optionnels (types 500, poids 400, fichier unique, champs + Joi), métadonnées regex nom de fichier | vivant |
