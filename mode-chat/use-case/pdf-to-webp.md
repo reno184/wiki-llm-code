@@ -1,9 +1,33 @@
----
-name: pdftocairo-sharp
-layer: backend
-version: 1
----
+Pas besoin de bench en live pour trancher — voici l'analyse pratique des deux stacks pour "PDF → images WebP" depuis une API.
 
+## Comparatif
+
+| Critère | Python `pymupdf` | Node + `pdftocairo` + sharp |
+|---|---|---|
+| Vitesse de rendu | Le plus rapide (moteur MuPDF, souvent 2–5× plus rapide que Poppler à DPI égal) | Correct, mais Poppler est plus lent par page |
+| Sortie WebP | ❌ Pas natif : `pixmap.save()` ne sort que PNG/PNM/JPEG → il faut repasser par Pillow/cwebp (étape + I/O disque ou buffer) | ✅ Direct : sharp encode WebP nativement (libvips) |
+| Overhead par appel | Lib chargée en mémoire, pas de fork | Spawn de process (`pdftocairo`) ~quelques ms + pipeline sharp (souvent 2 process si vous pipez via tmpfile/stdout) |
+| Intégration API | Nécessite un microservice Python à côté de l'API Node | 100 % dans votre runtime Node ESM actuel |
+| Parallélisme | Simple : pool de workers Python, pas de GIL pour le rendu C | Simple : `Promise.all` sur des pages, mais attention aux forks concurrents de `pdftocairo` |
+
+**En synthèse** : PyMuPDF gagne sur le rendu brut, mais la perte WebP + l'ajout d'un service Python annulent souvent l'avantage. Pour une API Node existante, la stack pdftocairo + sharp est le choix pragmatique.
+
+## Optimisations concrètes (stack Node)
+
+1. **Une seule invocation par PDF** : `pdftocairo -png -r 150 prefix fichier.pdf` rend *toutes* les pages d'un coup — ne faites pas un spawn par page.
+2. **Vérifiez votre version de Poppler** : les versions récentes supportent `pdftocairo -webp -q` directement → vous supprimez sharp et une étape complète. Testez `pdftocairo -h | grep webp`.
+3. **Si sharp reste nécessaire** : pipez sans fichier temporaire. `pdftocairo -png -singlefile -f N -l N pdf.pdf -` sur stdout n'est pas supporté proprement pour `-png`, donc préférez `pdftocairo -png` vers un répertoire tmp (tmpfs de préférence), puis `sharp()` → `.webp({ quality: 80 })` → stream HTTP.
+4. **DPI raisonnable** : `-r 150` suffit pour de la preview (le rendu domine le temps CPU ; passer de 300 à 150 DPI divise le temps par ~4).
+5. **Cache** : clé `hash(pdf) + page + dpi + quality` sur disque/S3 — la vraie perf gagnante c'est de ne pas re-rendre.
+6. **Limitez la concurrence** : un worker pool (p-limit à 2–4) sur le rendu ; forker 20 `pdftocairo` en parallèle sature le CPU et dégrade les latences P99.
+
+## Quand basculer sur PyMuPDF
+
+- Gros volumes batch (rendu dominant, WebP via Pillow `save(..., format="WebP")` en mémoire).
+- PDF complexes/corrompus : MuPDF est nettement plus tolérant que Poppler.
+- Dans ce cas, exposez-le en sidecar FastAPI appelé par Node, plutôt que de tout migrer.
+
+Si vous voulez, je peux vous écrire le snippet Node ESM complet (spawn + sharp + gestion d'erreurs) — dites-le moi.
 # pdftocairo + sharp — rendu PDF → WebP côté Node
 
 Stack: Node.js (ESM) + binaire `pdftocairo` (Poppler, paquet `poppler-utils`) + sharp.
