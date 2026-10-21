@@ -145,14 +145,6 @@ volumes:
   minio_data:
     external: true
 ```
-
-## Manquants (à fournir si besoin)
-
-- `initBucket()` et `uploadToMinio()` : helpers utilisés mais absents du snippet.
-- `BUCKET_NAME` : importé du config MinIO mais pas exporté dans l'exemple de config.
-- `parseSinglePdf` (busboy) : voir [../../backend/upload-file-busboy.md](../../backend/upload-file-busboy.md).
-- `convertPdfToWebp` : voir [../../backend/pdftocairo-sharp.md](../../backend/pdftocairo-sharp.md).
-
 ## État
 
 **vivant** — snippet brut Renaud (oct. 2026), sans amélioration.
