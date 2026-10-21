@@ -124,6 +124,37 @@ pdfDocumentSchema.pre('deleteOne', {document: true, query: false}, async functio
 })
 ```
 
+## Lister les objets d'un bucket — listObjects (renvoyer une liste au front)
+
+MinIO expose `listObjects` : récupère la liste des objets d'un bucket (stream) pour la renvoyer au front. Pas besoin de synchroniser ces données dans Mongoose. Cas idéal : liste simple, non évolutive (pas de filtres complexes, pas de pagination).
+
+```js
+const listBucketObjects = (bucketName) => async (req, res, next) => {
+    try {
+        const objects = []
+
+        const stream = minioClient.listObjects(bucketName, '', true)
+
+        await new Promise((resolve, reject) => {
+            stream.on('data', (obj) => {
+                objects.push({
+                    key: obj.name,
+                    size: obj.size,
+                    lastModified: obj.lastModified
+                })
+            })
+            stream.on('end', resolve)
+            stream.on('error', reject)
+        })
+
+        return res.status(200).json({objects})
+
+    } catch (err) {
+        next(err)
+    }
+}
+```
+
 ## Docker compose
 
 ```yaml
