@@ -41,3 +41,28 @@ Utiliser à la place un **label stylé btn** contenant l'input masqué (`class="
 
 - Le `file-input` natif de daisyUI est moche ; le label btn donne un vrai bouton, l'input est invisible mais fonctionnel (clic sur le label = ouverture du sélecteur de fichiers).
 - Adapter `btn-olive` et `accept` au projet.
+
+## carousel full width — défiler des groupes d'images (ex. pages WebP d'un upload)
+
+Parfait pour faire défiler des images WebP une par une (pages d'un PDF converti, groupe d'images) :
+
+```html
+<div class="carousel rounded-box w-64">
+  <div class="carousel-item w-full">
+    <img
+      src="https://img.daisyui.com/images/stock/photo-1559703248-dcaaec9fab78.webp"
+      class="w-full"
+      alt="Tailwind CSS Carousel component" />
+  </div>
+  <div class="carousel-item w-full">
+    <img
+      src="https://img.daisyui.com/images/stock/photo-1565098772267-60af42b81ef2.webp"
+      class="w-full"
+      alt="Tailwind CSS Carousel component" />
+  </div>
+</div>
+```
+
+- `carousel-item w-full` = un seul item visible à la fois, scroll horizontal (drag/touch ou flèches clavier) entre les items ; `w-64` sur le conteneur = largeur du carousel.
+- En Vue : boucle `v-for` sur la liste des images (ex. `v-for="page in group.pages"`) avec le `src` de chaque WebP — les divs `carousel-item` sont générés dynamiquement.
+- Pas de JS nécessaire : le scroll natif fait défiler ; pour un contrôle programmatique, viser l'élément avec `scrollIntoView`.
