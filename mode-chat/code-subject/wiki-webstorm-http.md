@@ -37,11 +37,9 @@ Les 3 briques :
 
 ## Pièges à ne pas oublier
 
-- **Ordre d'exécution** : exécuter les requêtes dans l'ordre (icône play à gauche de chaque `###`). `{{group}}` est vide tant que le step1 n'a pas été joué → URL `.../step1/` → 404/erreur.
 - **Portée des variables** : `client.global.set` = persistant pour toute la session du fichier. `client.set` = variable locale (même valeur par défaut dans tous les environnements mais pas enregistrée globalement). Pour un id chaîné d'une requête à l'autre, `client.global` est le bon choix.
 - **Vérifier la valeur stockée** : le panneau Variables (icône en haut à droite du fichier `http`) liste toutes les variables globales et leur valeur courante — dépannage immédiat quand `{{group}}` semble vide.
 - **Réinitialiser** : `client.global.clearAll()` dans un handler, ou bouton reset des variables du panneau, si une valeur obsolète persiste entre deux sessions.
-- **Environnements** : pour host/port, préférer un env `dev` (`{{host}}` + fichier `http-client.env.json`) plutôt que des variables globales — `client.global` est réservé aux valeurs **dynamiques** issues des réponses.
 - **Fichier binaire** : la syntaxe `< ./chemin/relatif.pdf` envoie le fichier en binaire ; le chemin est relatif au fichier `.http`.
 - **Réponse non-JSON** : `response.body` est le JSON parsé ; si le back renvoie du texte brut, utiliser `response.body` comme string telle quelle.
 
