@@ -4,13 +4,13 @@ Fiches **perso** de Renaud, copié/collé manuel (~1×/mois ou moins). Jamais ch
 
 ## code-subject/ — snippets par sujet
 
-Détail : [code-subject/INDEX.md](code-subject/INDEX.md) — 15 fiches (recaptcha, GCP secrets, Cloud Function publique, ollama ×5, git, variables env, fontawesome, upload drag&drop, minio, busboy, webstorm http).
+Détail : [code-subject/INDEX.md](code-subject/INDEX.md) — 16 fiches (recaptcha, GCP secrets, Cloud Function publique, ollama ×5, git, variables env, fontawesome, vueuse, upload drag&drop, minio, busboy, webstorm http).
 
 | Regroupement | Fiches |
 |---|---|
 | GCP / déploiement | [wiki-recaptcha.md](code-subject/wiki-recaptcha.md), [wiki-secret-gcp.md](code-subject/wiki-secret-gcp.md), [wiki-cloud-function-public.md](code-subject/wiki-cloud-function-public.md) |
 | Ollama / modèles locaux | [wiki-ollama.md](code-subject/wiki-ollama.md), [wiki-local-model.md](code-subject/wiki-local-model.md), [wiki-ollama-langchain.md](code-subject/wiki-ollama-langchain.md), [wiki-ollama-install-windows.md](code-subject/wiki-ollama-install-windows.md), [wiki-ollama-docker.md](code-subject/wiki-ollama-docker.md) |
-| Outils dev | [wiki-git.md](code-subject/wiki-git.md), [wiki-variable-env.md](code-subject/wiki-variable-env.md), [wiki-fontawesome-chat.md](code-subject/wiki-fontawesome-chat.md), [wiki-webstorm-http.md](code-subject/wiki-webstorm-http.md) |
+| Outils dev | [wiki-git.md](code-subject/wiki-git.md), [wiki-variable-env.md](code-subject/wiki-variable-env.md), [wiki-fontawesome-chat.md](code-subject/wiki-fontawesome-chat.md), [wiki-vueuse.md](code-subject/wiki-vueuse.md), [wiki-webstorm-http.md](code-subject/wiki-webstorm-http.md) |
 | Upload / stockage fullstack | [wiki-upload-dragdrop-pdf.md](code-subject/wiki-upload-dragdrop-pdf.md), [upload-file-busboy.md](code-subject/upload-file-busboy.md), [wiki-minio-pdf.md](code-subject/wiki-minio-pdf.md) |
 
 ## use-case/ — cas d'usage PDF/OCR
