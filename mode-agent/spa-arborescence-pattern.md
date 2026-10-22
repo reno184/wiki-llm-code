@@ -5,3 +5,4 @@
 - **`src/views/` = uniquement les pages appelées par `router/index.js`**, suffixées `Page` : `ConvertWebpPage.vue`, `OcrExtractPage.vue`, ou `Layout` : `UserLayout.vue`.
 - **Toutes les vues qui ne sont pas dans `router/index.js`** : vont dans le dossier `src/components/`.
 - Quand tu créer un composant vérifie si il est appelé par view-router sinon alors `/components`
+- Utilise CamelCase quand tu créer un composant.
