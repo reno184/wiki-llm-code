@@ -8,5 +8,7 @@ Liste de vérification rapide pour l'agent : AVANT d'implémenter un utilitaire 
 |---|---|---|
 | `useClipboard` | copier texte bouton | [vueuse-clipboard.md](vueuse-clipboard.md) |
 | `useEventListener` | écouter event auto-unmount | [vueuse-clipboard.md](vueuse-clipboard.md) |
+| `useObjectUrl` | aperçu image locale auto-revoke | — |
+| `useDropZone` | drop fichiers zone upload | — |
 
 Règle : à chaque nouveau composable adopté, ajouter une ligne ici (même trivial) — sinon l'agent le réimplémente à la main.
