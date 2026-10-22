@@ -12,6 +12,7 @@ Fiches pour agents (Vue/Vite + daisyUI front, Express back). Jamais chargées au
 | [wiki-fontawesome-agent.md](wiki-fontawesome-agent.md) | Icônes front : balise `<i>`, solid par défaut (`fa`), light `fal`, icônes usuelles | vivant |
 | [vuejs-reset.md](vuejs-reset.md) | Reset projet Vue : page Erreur 500 — chercher/créer `Error500Page.vue` dans `/views` (stack en dev, message simple en prod) | vivant |
 | [api-express.md](api-express.md) | Stack backend Node/Express : logique dans la route, try/catch + `next(err)`, `AppError` (2 exceptions 400), vérifier `express.json()` | vivant |
+| [vueuse-clipboard.md](vueuse-clipboard.md) | Copier presse-papier : composant `ClipBoardBase` (`useClipboard` VueUse, `legacy: true`, tooltip "Copié !", jamais de button imbriqué) | vivant |
 
 ## Liens entre fiches
 
