@@ -1,6 +1,6 @@
 # PyMuPDF — extraction de texte, ciblage géométrique, images, tableaux et liens
 
-Stack: Python + pymupdf (fitz), exécution labo Docker (voir infra/python-docker-labo.md).
+Stack: Python + pymupdf , exécution labo Docker (voir infra/python-docker-labo.md).
 Usage: boîte à outils d'extraction ciblée depuis un PDF natif (texte, styles, zones, images, tableaux, liens) — complément de use-cases/pdf-to-md/ (chaîne OCRmyPDF → PyMuPDF4LLM) quand la conversion intégrale ne suffit pas. Rappel hiérarchie (fiche use-cases/ocr-llm) : PDF natif → PyMuPDF, scan → OCRmyPDF, image complexe/manuscrit → Ollama/qwen.
 
 
@@ -128,6 +128,11 @@ Liste les liens de la page : chaque lien porte `kind` (LINK_URI, LINK_GOTO…), 
 ## Mémo
 
 Le `dic` donne structure et style, `search_for` + `Rect` + `clip` ciblent, `get_images`/`extract_image`/`get_pixmap` gèrent les images, `find_tables` les tableaux, `get_links` les liens. Ensemble = pipeline d'extraction ciblée PDF → Markdown, alternative à la conversion intégrale à l'aveugle (pymupdf4llm combine plusieurs de ces briques en interne).
+
+## Anonymisation
+
+PyMuPDF permet de manipuler directement les PDF — dessiner sur le document, insérer du texte, ou supprimer du texte existant. Grâce à la fonction search_for, on peut localiser automatiquement des zones sensibles et donc réaliser une anonymisation de PDF, sans passer par un outil externe.
+
 
 ## État
 
