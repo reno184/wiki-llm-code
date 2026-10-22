@@ -13,6 +13,7 @@ Fiches pour agents (Vue/Vite + daisyUI front, Express back). Jamais chargées au
 | [vuejs-reset.md](vuejs-reset.md) | Reset projet Vue : page Erreur 500 — chercher/créer `Error500Page.vue` dans `/views` (stack en dev, message simple en prod) | vivant |
 | [api-express.md](api-express.md) | Stack backend Node/Express : logique dans la route, try/catch + `next(err)`, `AppError` (2 exceptions 400), vérifier `express.json()` | vivant |
 | [vueuse-clipboard.md](vueuse-clipboard.md) | Presse-papier : `useClipboard` = COPIER texte (`ClipBoardBase`, `legacy: true`) ≠ `useEventListener(document, 'paste')` = COLLER image → aperçu + `FormData` POST busboy (revokeObjectURL, check `image/`) | vivant |
+| [vueuse-composables.md](vueuse-composables.md) | Liste des composables VueUse adoptés — l'agent vérifie cette liste avant d'implémenter un utilitaire front (clipboard, storage, events…) | vivant |
 
 ## Liens entre fiches
 
