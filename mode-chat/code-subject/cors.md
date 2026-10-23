@@ -46,3 +46,8 @@ Site vitrine classique (fiche stacks.md) : Express rend les pages Pug et reçoit
 ## État
 
 **vivant** — validé 2026-10, à instancier au premier projet réel cross-origin.
+
+
+## tags
+
+[backend,express,security]

@@ -25,6 +25,11 @@ git config --global rebase.autoStash true
 
 Sans lui, un rebase refuse de démarrer si des modifs sont en cours (`error: cannot pull with rebase: Your index contains uncommitted changes`). Avec lui : stash automatique avant le rebase, unstash après — l'erreur ne peut plus se produire.
 
+## supprimer le cache
+
+- Si déjà committé : `git rm --cached ./xx/xx.json` 
+
+
 ## État
 
 **vivant** — config appliquée sur le Mac de Renaud (oct. 2026) : `pull.rebase true` + `rebase.autoStash true`.

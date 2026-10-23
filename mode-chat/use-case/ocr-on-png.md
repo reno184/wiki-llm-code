@@ -1,6 +1,6 @@
-# Use case : OCR via LLM vision local (Ollama)
+# Use case : OCR via Ollama
 
-Entrée : image (PNG capture, scan). Sortie : Markdown ou informations extraites. Alternative aux outils OCR Python classiques quand l'image est complexe ou que le texte n'est pas filaire.
+Entrée : png, Sortie : Markdown.
 
 ## Test de référence (octobre 2026)
 
@@ -20,8 +20,13 @@ Entrée : image (PNG capture, scan). Sortie : Markdown ou informations extraites
 
 ### Leçon
 
-Un LLM vision peut rater une zone dense d'un document long. **Le découpage de l'image sur les zones denses résout le problème.** Pour un document à zones hétérogènes : découper et passer les zones séparément.
+Un LLM vision peut rater une zone dense d'un document long. **Le découpage de l'image sur les zones denses résout le problème.** Pour un document à zones hétérogènes : découper et passer les zones séparément, en fsaisn des copier coller des screenshot.
 
 ## État
 
-**vivant** — 2 tests réels validés octobre 2026 : Harry Potter (convenable, contournement découpage) et note manuscrite médicale (parfait).
+**vivant** 
+
+
+## tags
+
+[ollama,OCR,convert-png]

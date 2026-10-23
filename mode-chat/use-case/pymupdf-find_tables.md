@@ -1,10 +1,9 @@
-# PyMuPDF4LLM : extraction des tableaux (find_tables)
+# PyMuPDF :find_tables 
 
-**Rôle** : récupérer les tableaux d'un PDF avec leurs cellules, via `page.find_tables()` de PyMuPDF/PyMuPDF4LLM.
+**Rôle** : récupérer les tableaux d'un PDF avec leurs cellules, via `page.find_tables()` de PyMuPDF.
 
 ## Point clé
 
-Alors que la conversion Markdown complète (`to_markdown`) est jugée non fiable — voir [pdf-to-markown.md](pdf-to-markown.md) — l'extraction de tableaux, elle, **fonctionne bien** :
 
 - `page.find_tables()` renvoie chaque tableau avec ses cellules individuelles ;
 - reconstruire un tableau Markdown est trivial : join de `|` sur les cellules de chaque ligne ;
@@ -26,7 +25,16 @@ for page in doc:
 
 Préfixer/suffixer la ligne d'entête avec `|---|---|` selon la première ligne du tableau.
 
-## Liens
 
-- [pdf-to-markown.md](pdf-to-markown.md) : pourquoi `to_markdown` global est écarté, mais `find_tables` garde PyMuPDF4LLM pertinent pour les tableaux.
-- [ocr-on-png.md](ocr-on-png.md) : OCR quand le PDF n'a pas de texte sélectionnable.
+## todo
+
+A tester
+
+## État
+
+**vivant** 
+
+
+## tags
+
+[python,pymupdf,find_tables, pdf]
