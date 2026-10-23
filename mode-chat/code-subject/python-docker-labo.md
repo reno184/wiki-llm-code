@@ -22,6 +22,11 @@ Usage: environnement de labo pour tester des bibliothèques Python ; Docker priv
 - Monter le venv du Mac dans le conteneur (incompatibilité de chemins, plateformes différentes).
 - Une seule image fourre-tout qui mélange toutes les libs testées : préférer une image par domaine (OCR, PDF, images) quand les dépendances entrent en conflit.
 
+
+## todo
+
+- Après proto, faire le grand ménage des libs par exmple fitz remplacer par pymupdf, ne pas mettre :latest car problème de compatiblité, quelle lib en javascript, les lib python, le requirements le apt get, le catch, les performances. bref il faut que dans un an je puisse comprendre tout des libs, que j'ai utilisé pour convertir pdf (anonymisation), extraction, OCR, convertion image, slection text d'un pdf scanné, langchain llm local...
+
 ## État
 
 **vivant** — décision validée 2026-10 : Docker systématique, venv réservé aux rares cas où une lib native est impossible à conteneuriser.

@@ -8,7 +8,9 @@ Usage: image Python minimaliste et sûre pour lancer des scripts/pipelines en co
 > **requirements.txt = ce que ton code importe ; apt-get = ce que les packages de requirements.txt appellent ou compilent en sous-main.**
 
 - `pip install ocrmypdf` → au runtime il appelle `tesseract`, `ghostscript`, `pngquant` (binaires système, pas Python) → **apt-get**.
+
 - `pip install` d'un package avec extension C → compile avec `g++` et les headers `-dev` (leptonica, tesseract) → **apt-get** (build-time).
+
 - Symptôme « command not found » ou « gcc failed » au runtime/install → dépendance système manquante → **apt-get, pas pip**.
 
 Chronologie du Dockerfile : **apt-get AVANT pip** (pip a besoin du compilateur et des headers pendant l'installation), **pip AVANT le code** (cache des layers).
@@ -38,7 +40,7 @@ CMD ["python", "main.py"]
 
 Points critiques :
 
-- **Base slim** (pas alpine par défaut : wheels souvent absents sur musl, build plus lent ; slim = bon compromis standard).
+
 - **apt-get : `--no-install-recommends` + purge des lists** (`rm -rf /var/lib/apt/lists/*`) → image légère.
 - **requirements.txt copié seul, installé, PUIS copie du code** : le layer pip est mis en cache tant que requirements ne change pas (le changement de code ne re-télécharge pas les deps).
 - **`--no-cache-dir`** : pas de cache pip dans l'image.
@@ -93,6 +95,10 @@ services:
 - venv copié depuis la machine hôte (incompatible, paths absolus) : installer dans l'image.
 - **Dockerfile sans .dockerignore** : contexte de build gonflé, secrets/historique Git dans l'image, cache invalidé.
 - **apt-get après pip ou mélangé au code** : casserait la chrono et le cache (compilateur requis PENDANT pip install).
+
+## todo
+
+- comprendre apt-ge, le cache le build, et une fois bien maitrisé faire une fiche mode-agent pour expliquer comment générer un docker file avec les bonne configurations
 
 ## État
 

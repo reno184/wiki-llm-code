@@ -2,14 +2,19 @@
 
 ## Contexte d'usage
 - Une app conteneurisée injecte ses secrets (DB, MinIO, JWT) via des variables d'environnement. Comprendre **qui peut les lire** et réduire ce périmètre de risque.
+
 - **Pourquoi cette fiche** : mettre des mots de passe et clés API dans un `.env` exposé via Docker est risqué car ils peuvent être lus (voir ci-dessous). L'enjeu dépend surtout du contexte de déploiement.
 
 ## Verdict selon le contexte (la règle de décision)
+
 - **VPS sécurisé / projet perso / dev local** : compose `environment` + `.env` = acceptable, pas de problème bloquant.
+
 - **Docker déployé chez un client** : il faut faire attention — le client (ou quiconque a un accès docker sur sa machine) peut lire les secrets. Vérifier la checklist ci-dessous, envisager Docker Secrets ou un secrets manager.
+
 - Ce risque est aussi couvert par le skill Vibe `audit-securite-code` (checklist 1) : l'audit rappelle systématiquement de gérer les `.env` quand le docker est déployé chez un client.
 
 ## Stack
+
 Docker / Docker Compose / Node
 
 ## Comment les secrets sont exposés
@@ -27,16 +32,25 @@ Celui qui peut lancer `docker inspect` a déjà un accès root de facto sur l'h�
 ## Checklist par niveau d'effort
 
 1. **Minimum (toujours)** :
+
    - `.dockerignore` contenant `.env`
    - Secrets injectés uniquement au **runtime** (compose `environment`/`env_file`), jamais au build
    - Jamais de secrets en `ARG`/`ENV` de build
+
 2. **Mieux** : Docker Compose **Secrets** (`secrets:` → fichier monté `/run/secrets/<nom>`) : non visibles dans `docker inspect`, lisibles seulement par le process
+
 3. **MinIO** : ne pas utiliser les creds root dans l'app. Créer un user de service dédié borné à un bucket :
    - `mc admin user add <alias> <svcUser> <svcPassword>`
    - `mc admin policy attach <alias> readwrite --user <svcUser>` (ou policy custom limitée au bucket)
    - Creds root réservés à la console :9001. Fuite des creds app = impact borné
+
 4. **Prod** : secrets manager (GCP Secret Manager — cf. fiche gcp-secrets.md, Vault, SOPS) injectés au démarrage
+
+## todo
+
+- Comprendre comment protéger le secret quand image docker chez un client
+- Comprendre pourquoi il est possible de lire une image en clair avec docker inspect, comment crypter l'image
 
 ## État
 
-vivant
+vivant 

@@ -2,13 +2,15 @@
 
 ## Contexte d'usage
 - Fiche pense-bête : **règle unique pour savoir si un volume survit à une commande Docker**, sans avoir à réfléchir à chaque `down`.
-- Complète [docker-minio-compose.md](docker-minio-compose.md) (volume `external: true` en application) et [docker-secrets-env.md](docker-secrets-env.md).
+
+- Complète [docker-minio-compose.md](docker-minio-compose.md) (volume `external: true` en application).
 
 ## La règle en une phrase
 
 > **`down -v` supprime les volumes gérés par le fichier compose. Un volume `external: true` n'est PAS géré par le fichier compose → il survit.**
 
 - Volume **normal** (déclaré dans la section `volumes:` du compose, sans `external`) : compose l'a créé avec un préfixe (`monprojet_mongo_data`) → compose **peut le supprimer** (`down -v`).
+
 - Volume **`external: true`** : créé hors compose (`docker volume create minio_data`), le compose ne fait que le **brancher** → compose **ne le touche jamais**.
 
 ## Tableau de survie
@@ -40,6 +42,11 @@ docker volume inspect minio_data              # l'external : pas de label compos
 ```
 
 Un volume créé par compose a un label `com.docker.compose.*` dans `inspect` ; un `external` n'a pas ces labels (il n'appartient à aucun projet).
+
+## todo
+
+- aller dasn docker dashboard est faire le ménage, container nommé et anonyme, compprendre, apprendre et compléter cette fiche
+
 
 ## État
 
