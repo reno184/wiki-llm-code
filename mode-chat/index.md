@@ -19,6 +19,7 @@ Détail : [code-subject/INDEX.md](code-subject/INDEX.md) — 16 fiches (recaptch
 |---|---|
 | [pdf-to-text.md](use-case/pdf-to-text.md) | Extraction texte PDF |
 | [pdf-to-markown.md](use-case/pdf-to-markown.md) | PDF → Markdown |
+| [pdf-tables-pymupdf4llm.md](use-case/pdf-tables-pymupdf4llm.md) | Extraction tableaux PDF (find_tables) |
 | [pdf-text-selectionable.md](use-case/pdf-text-selectionable.md) | PDF texte sélectionnable |
 | [ocr-on-png.md](use-case/ocr-on-png.md) | OCR sur PNG |
 
