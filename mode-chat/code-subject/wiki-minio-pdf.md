@@ -38,6 +38,15 @@ const startServer = async () => {
 ## Exemple d'upload (PDF + conversion WebP + Mongoose)
 
 ```js
+
+export const uploadToMinio = async (bucketName, objectName, buffer, mimeType) => {
+    await minioClient.putObject(bucketName, objectName, buffer, buffer.length, {
+        'Content-Type': mimeType,
+    })
+
+    return `${bucketName}/${objectName}`
+}
+
 const handlePdfUpload = ({limitMo, firstPageOnly}) => async (req, res, next) => {
     try {
         const fileData = await parseSinglePdf(req, limitMo)
