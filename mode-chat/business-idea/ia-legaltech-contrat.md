@@ -38,3 +38,16 @@ Deux régimes documentaires dans le même produit :
 ## État
 
 **vivant (idée non exploitée)** — architecture recadrée : PyMuPDF ciblage Vue.js + human-in-the-loop pour le cas principal, pipeline vision mutualisé avec la piste médecin pour le manuscrit ponctuel. Pas de prospect identifié.
+
+## Killer features « avocats » (retours terrain cabinets, oct. 2026)
+
+Le besoin n'est pas le juridique pur mais le **travail de masse sur les pièces** (PDF, scans). Classement par valeur :
+
+1. **Anonymisation / pseudonymisation intelligente (top 1, RGPD)** — anonymisation **contextuelle et sélective** : masquer le client A et ses entreprises mais garder la partie adverse ; fichier de correspondance généré (M. X → « Monsieur [A] ») pour rester lisible dans la rédaction. Obligatoire en France avant publication/partage des décisions de justice.
+2. **Document splitting automatique** — un méga-PDF de 300 pages (pièces scannées à la chaîne) découpé en documents individuels avec **nommage intelligent** (`2024-01-15_Contrat_de_travail_ClientX.pdf`) : détection IA du début de chaque pièce.
+3. **Extraction de données → Excel** — matrices de comparaison en un clic : 36 fiches de paie → *période / brut / heures supp / cumul imposable* ; 100 factures → *n° / date / HT / TTC / échéance*. **Killer : export Excel avec hyperliens vers le bloc source du PDF** (traçabilité pièce).
+4. **Détection de signatures & métadonnées par lot** (due diligence, gros contentieux) — filtre rapide : signé / non signé (manuscrit ou tampon), identité des signataires et dates, alerte contrats à échéance sans tacite reconduction.
+5. **Recherche transversale de clauses** — 50 contrats → « extrais toutes les clauses de limitation de responsabilité ou d'exclusivité » dans un document comparatif.
+6. **Chronologie automatique des faits** — toutes les dates extraites de toutes les pièces (mails, contrats, RAR) → **fiche chronologique synthétique** pour la plaidoirie.
+
+Points communs : **traitement par lots de documents scannés** (OCR requis, pas seulement texte natif), **sorties structurées traçables** (lien retour à la source), confidentialité locale — cohérent avec l'architecture de cette fiche. La feature 1 (anonymisation) croise [pymupdf_tech_anonymisation.md](../use-case/pymupdf_tech_anonymisation.md).
