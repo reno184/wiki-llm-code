@@ -53,38 +53,52 @@ print(*big, sep="\n")  # les plus gros fichiers = hotspots à auditer en priorit
 4. Interview des devs : qui sait quoi, qui peut partir.
 5. Chiffrer : provision = jours de refactoring × TJM.
 
-## Red flags contrats — la liste copier/coller
+## Red flags contrats — la liste copier/coller, classée par catégorie
 
-Liste brute pour relecture rapide de contrats (clients, fournisseurs, baux, prêts, licences). Destinée à servir de base de prompts/checklist pour une IA locale en due diligence M&A. Chaque item trouvé = creuser avant de signer, pas forcément walk away.
+Liste brute pour relecture rapide de contrats et d'éléments humains/commerciaux/financiers. Destinée à servir de base de prompts/checklist pour une IA locale en due diligence M&A. Chaque item trouvé = creuser avant de signer, pas forcément walk away.
 
-**Clauses déclenchées par la transaction**
+### 1. Transaction (clauses déclenchées par le deal)
 - Change of control : prêt, bail ou licence qui devient exigible / résiliable au changement d'actionnariat → dette cachée à provisionner
 - Clause d'assignment : contrat non cessible sans accord du cocontractant → les revenus peuvent ne pas suivre l'actif
 - Droit de préemption / anti-dilution déclenché par l'entrée d'un investisseur
 
-**Propriété intellectuelle**
+### 2. Propriété intellectuelle
 - Devs freelance sans contrat de cession de droits (en France la cession n'est PAS automatique hors salariés) → tout ou partie du code n'appartient pas à la cible
 - Contrat de développement communautaire/conjoint
 - Marques/domaines déposés au nom du fondateur, pas de la société
 - Dépendances copyleft non détectées (cf. checklist technique)
 
-**Engagements financiers et passifs**
-- Caution personnelle du fondateur solidaire des dettes
-- Garantie de résultat / pénalités sans plafond
-- Responsabilité illimitée / solidarité dans un contrat
-- Dettes cachées : comptes courants d'associés, arrière de salaires/factures fournisseurs
-- Abonnements auto-renouvelables longue durée avec préavis tardif (6-12 mois)
-- **Préavis de rupture de 12 mois** : en pratique impossible de se désengager d'un contrat/fournisseur avant 1 an — bloquant si on veut changer de stack, renégocier ou arrêter la ligne de produit après le deal ; vérifier aussi si le préavis court à compter de la demande (pire : renouvelé tacitement avant la fenêtre d'envoi) → chiffrer le coût immobilisé 12 mois × montant mensuel
-- **Litige potentiel non mentionné par le vendeur** : le vendeur « oublie » de déclarer un contentieux en cours ou menaçant (client mécontent, salarié, ex-associé, fournisseur, litige IP) → passer au crible : question directe dans le data room (« tout litige, menaces de mise en demeure, réclamations ? »), clauses de non-garantie à négocier, garantie de passif spécifique litiges, et recherche autonome (greffes/Infogreffe, registres, avis de recours, lettres d'avocats dans les emails/DocuSign, mentions « sous réserve », « sans reconnaissance de responsabilité ») ; croiser avec la presse locale et les réseaux du secteur
+### 3. Social (équipe et obligations employeur)
+- Dépendance à une key person (fondateur ou dev qui détient TOUT le savoir) → prévoir période d'accompagnement/lock-in
+- Contentieux prud'homaux en cours ou menaçants (interroger vendeur + recherche greffes)
+- Arrière de salaires, heures sup non payées, congés non pris au-delà des provisions comptables
+- Retards URSSAF/organismes sociaux (contrôles URSSAF récents ou en cours)
+- Clauses de non-concurrence du fondateur/des salariés clés : valides (contrepartie financière, durée/territoire raisonnables) ou triggered par la vente ?
+- Risque d'exode : équipe prévenue ? plan de rétention (bonus de stay) ? clause de maintien d'effectif négociée ?
+- Contrats de travail irréguliers (CDD abusifs, statuts dirigeant non formalisés)
+- Représentants du personnel / CSE non mis en place alors que les seuils l'imposent
 
-**Relation client / revenus**
+### 4. Commercial (clients et revenus)
 - Client unique > 20-30% du CA → risque de perte à retournement
 - Contrats verbaux ou side letters non comptabilisés
 - Contrats à prix fixes avec périmètre mouvant (scope creep) sous-évalués
 - Exclusivité accordée à un partenaire
 - **Clause d'exclusivité totale** : la cible s'interdit de travailler avec TOUT autre client/partenaire du même segment (≠ exclusivité limitée à un produit ou territoire) → tue la croissance post-acquisition, empêche les cross-sells, et si elle concerne un fournisseur unique : dépendance totale sans plan B ; vérifier la durée, le périmètre exact (« secteur », « territoire », « le monde ») et si elle survit au changement de contrôle
 - **Contrat arrivant à échéance bientôt, non mentionné par le vendeur** : un contrat majeur (client clé, licence, bail) qui expire dans les 6-12 mois post-deal sans renouvellement acquis → le vendeur vend un CA qui va disparaître ; vérifications : lister les dates de fin de TOUS les contrats (pas seulement ceux présentés dans le data room), calculer le % du CA/panier des contrats qui expirent < 12 mois, vérifier si un renouvellement est déjà négocié et à quelles conditions (souvent renégociation à la baisse au renouvellement), et si les contrats courts sont temporaires par nature (projets one-shot ≠ revenu récurrent) → ajuster le prix ou exiger un earn-out adossé au renouvellement
+- Pipeline commercial gonflé ou inventé (vérifier la réalité des opportunités CRM)
 - SLA impossibles à tenir (uptime 99,9% sans équipe on-call)
+
+### 5. Financier & passifs
+- Caution personnelle du fondateur solidaire des dettes
+- Garantie de résultat / pénalités sans plafond
+- Responsabilité illimitée / solidarité dans un contrat
+- Dettes cachées : comptes courants d'associés, arrière de salaires/factures fournisseurs
+- Abonnements auto-renouvelables longue durée avec préavis tardif (6-12 mois)
+- **Préavis de rupture de 12 mois** : en pratique impossible de se désengager d'un contrat/fournisseur avant 1 an — bloquant si on veut changer de stack, renégocier ou arrêter la ligne de produit après le deal ; vérifier aussi si le préavis court à compter de la demande (pire : renouvelé tacitement avant la fenêtre d'envoi) → chiffrer le coût immobilisé 12 mois × montant mensuel
+
+### 6. Litiges & non-déclarations du vendeur
+- **Litige potentiel non mentionné par le vendeur** : le vendeur « oublie » de déclarer un contentieux en cours ou menaçant (client mécontent, salarié, ex-associé, fournisseur, litige IP) → passer au crible : question directe dans le data room (« tout litige, menaces de mise en demeure, réclamations ? »), clauses de non-garantie à négocier, garantie de passif spécifique litiges, et recherche autonome (greffes/Infogreffe, registres, avis de recours, lettres d'avocats dans les emails/DocuSign, mentions « sous réserve », « sans reconnaissance de responsabilité ») ; croiser avec la presse locale et les réseaux du secteur
+- Pattern général : tout ce que le vendeur ne mentionne pas spontanément (contrat, litige, engagement) est suspect → croiser systématiquement data room VS recherche autonome
 
 **Recherches textuelles (grep) que font les auditeurs dans les contrats**
 
