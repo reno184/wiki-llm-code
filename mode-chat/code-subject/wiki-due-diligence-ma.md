@@ -67,6 +67,7 @@ Liste brute pour relecture rapide de contrats et d'éléments humains/commerciau
 - Contrat de développement communautaire/conjoint
 - Marques/domaines déposés au nom du fondateur, pas de la société
 - Dépendances copyleft non détectées (cf. checklist technique)
+- **Question-piège acheteur : « Pouvez-vous nous prouver que vos logiciels ne violent aucun brevet ? »** — réponse honnête : NON, personne ne peut prouver une absence de violation (des millions de brevets existent, impossible de tous les vérifier) ; le vrai sujet est le FTO (freedom to operate) : une analyse FTO a-t-elle été faite sur les fonctionnalités cœur ? dans quelles juridictions (brevets US ≠ FR, le logiciel n'est brevetable qu'aux US pas en Europe) ? y a-t-il des signaux (mise en demeure, letter from counsel, brevet concurrent proche du périmètre) ? → si l'acheteur pose la question : négocier une clause de garantie/indemnification spécifique atteinte aux brevets, un escrow, vérifier l'assurance RC produit ; côté vendeur : ne JAMAIS répondre « oui on est sûr », documenter les analyses FTO existantes et leurs limites
 
 ### 3. Social (équipe et obligations employeur)
 - Dépendance à une key person (fondateur ou dev qui détient TOUT le savoir) → prévoir période d'accompagnement/lock-in
