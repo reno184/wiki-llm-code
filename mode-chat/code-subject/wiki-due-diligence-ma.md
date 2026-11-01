@@ -49,7 +49,7 @@ print(*big, sep="\n")  # les plus gros fichiers = hotspots à auditer en priorit
 
 1. Repo + setup local (si >1h de bloquer, noter).
 2. Scripts ci-dessus (secrets, audit, dette, licences).
-3. Lire les 10 plus gros fichiers + les 10 fichiers les plus modifiés (`git log --format= --name-name | sort | uniq -c | sort -rn | head`).
+3. Lire les 10 plus gros fichiers + les 10 fichiers les plus modifiés (`git log --format= --name-only | sort | uniq -c | sort -rn | head`).
 4. Interview des devs : qui sait quoi, qui peut partir.
 5. Chiffrer : provision = jours de refactoring × TJM.
 
@@ -83,6 +83,7 @@ Liste brute pour relecture rapide de contrats (clients, fournisseurs, baux, prê
 - Contrats à prix fixes avec périmètre mouvant (scope creep) sous-évalués
 - Exclusivité accordée à un partenaire
 - **Clause d'exclusivité totale** : la cible s'interdit de travailler avec TOUT autre client/partenaire du même segment (≠ exclusivité limitée à un produit ou territoire) → tue la croissance post-acquisition, empêche les cross-sells, et si elle concerne un fournisseur unique : dépendance totale sans plan B ; vérifier la durée, le périmètre exact (« secteur », « territoire », « le monde ») et si elle survit au changement de contrôle
+- **Contrat arrivant à échéance bientôt, non mentionné par le vendeur** : un contrat majeur (client clé, licence, bail) qui expire dans les 6-12 mois post-deal sans renouvellement acquis → le vendeur vend un CA qui va disparaître ; vérifications : lister les dates de fin de TOUS les contrats (pas seulement ceux présentés dans le data room), calculer le % du CA/panier des contrats qui expirent < 12 mois, vérifier si un renouvellement est déjà négocié et à quelles conditions (souvent renégociation à la baisse au renouvellement), et si les contrats courts sont temporaires par nature (projets one-shot ≠ revenu récurrent) → ajuster le prix ou exiger un earn-out adossé au renouvellement
 - SLA impossibles à tenir (uptime 99,9% sans équipe on-call)
 
 **Recherches textuelles (grep) que font les auditeurs dans les contrats**
@@ -92,11 +93,12 @@ Liste brute pour relecture rapide de contrats (clients, fournisseurs, baux, prê
 grep -inE "changement de contrôle|cession|exclusiv|préavis|reconduction|tacite|pénal|garantie|solidar|illimité|caution|indemnis|litige|contentieux|mise en demeure|disput" *.pdf.txt
 
 # Anglais
-grep -inE "change of control|assignment|exclusiv|terminat|renewal|auto-renew|penalt|liability|indemnif|unlimited|personal guarantee|side letter|dispute|litigation|claim|demand letter" contracts/*.txt
+grep -inE "change of control|assignment|exclusiv|terminat|renewal|auto-renew|penalt|liability|indemnif|unlimited|personal guarantee|side letter|dispute|litigation|claim|demand letter|expir" contracts/*.txt
 ```
 
 - Rechercher aussi dans les emails/DocuSign « side letter », « excepté », « néanmoins », « sous réserve » → aménagements et prémices de litiges hors contrat principal
 - Croiser avec la checklist technique ci-dessus (secrets git, licences copyleft, comptes perso)
+- Extraire systématiquement les dates d'échéance : `grep -inE "expire|échéance|prend fin|effectif jusqu|valid until" *.txt` puis trier par date pour repérer les contrats qui sautent < 12 mois
 
 ## Liens croisés
 
