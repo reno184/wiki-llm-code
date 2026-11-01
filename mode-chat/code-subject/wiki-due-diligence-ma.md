@@ -74,12 +74,14 @@ Liste brute pour relecture rapide de contrats (clients, fournisseurs, baux, prê
 - Responsabilité illimitée / solidarité dans un contrat
 - Dettes cachées : comptes courants d'associés, arrière de salaires/factures fournisseurs
 - Abonnements auto-renouvelables longue durée avec préavis tardif (6-12 mois)
+- **Préavis de rupture de 12 mois** : en pratique impossible de se désengager d'un contrat/fournisseur avant 1 an — bloquant si on veut changer de stack, renégocier ou arrêter la ligne de produit après le deal ; vérifier aussi si le préavis court à compter de la demande (pire : renouvelé tacitement avant la fenêtre d'envoi) → chiffrer le coût immobilisé 12 mois × montant mensuel
 
 **Relation client / revenus**
 - Client unique > 20-30% du CA → risque de perte à retournement
 - Contrats verbaux ou side letters non comptabilisés
 - Contrats à prix fixes avec périmètre mouvant (scope creep) sous-évalués
 - Exclusivité accordée à un partenaire
+- **Clause d'exclusivité totale** : la cible s'interdit de travailler avec TOUT autre client/partenaire du même segment (≠ exclusivité limitée à un produit ou territoire) → tue la croissance post-acquisition, empêche les cross-sells, et si elle concerne un fournisseur unique : dépendance totale sans plan B ; vérifier la durée, le périmètre exact (« secteur », « territoire », « le monde ») et si elle survit au changement de contrôle
 - SLA impossibles à tenir (uptime 99,9% sans équipe on-call)
 
 **Recherches textuelles (grep) que font les auditeurs dans les contrats**
