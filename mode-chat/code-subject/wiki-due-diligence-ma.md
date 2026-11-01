@@ -49,7 +49,7 @@ print(*big, sep="\n")  # les plus gros fichiers = hotspots à auditer en priorit
 
 1. Repo + setup local (si >1h de bloquer, noter).
 2. Scripts ci-dessus (secrets, audit, dette, licences).
-3. Lire les 10 plus gros fichiers + les 10 fichiers les plus modifiés (`git log --format= --name-only | sort | uniq -c | sort -rn | head`).
+3. Lire les 10 plus gros fichiers + les 10 fichiers les plus modifiés (`git log --format= --name-name | sort | uniq -c | sort -rn | head`).
 4. Interview des devs : qui sait quoi, qui peut partir.
 5. Chiffrer : provision = jours de refactoring × TJM.
 
@@ -75,6 +75,7 @@ Liste brute pour relecture rapide de contrats (clients, fournisseurs, baux, prê
 - Dettes cachées : comptes courants d'associés, arrière de salaires/factures fournisseurs
 - Abonnements auto-renouvelables longue durée avec préavis tardif (6-12 mois)
 - **Préavis de rupture de 12 mois** : en pratique impossible de se désengager d'un contrat/fournisseur avant 1 an — bloquant si on veut changer de stack, renégocier ou arrêter la ligne de produit après le deal ; vérifier aussi si le préavis court à compter de la demande (pire : renouvelé tacitement avant la fenêtre d'envoi) → chiffrer le coût immobilisé 12 mois × montant mensuel
+- **Litige potentiel non mentionné par le vendeur** : le vendeur « oublie » de déclarer un contentieux en cours ou menaçant (client mécontent, salarié, ex-associé, fournisseur, litige IP) → passer au crible : question directe dans le data room (« tout litige, menaces de mise en demeure, réclamations ? »), clauses de non-garantie à négocier, garantie de passif spécifique litiges, et recherche autonome (greffes/Infogreffe, registres, avis de recours, lettres d'avocats dans les emails/DocuSign, mentions « sous réserve », « sans reconnaissance de responsabilité ») ; croiser avec la presse locale et les réseaux du secteur
 
 **Relation client / revenus**
 - Client unique > 20-30% du CA → risque de perte à retournement
@@ -88,13 +89,13 @@ Liste brute pour relecture rapide de contrats (clients, fournisseurs, baux, prê
 
 ```bash
 # Français
-grep -inE "changement de contrôle|cession|exclusiv|préavis|reconduction|tacite|pénal|garantie|solidar|illimité|caution|indemnis" *.pdf.txt
+grep -inE "changement de contrôle|cession|exclusiv|préavis|reconduction|tacite|pénal|garantie|solidar|illimité|caution|indemnis|litige|contentieux|mise en demeure|disput" *.pdf.txt
 
 # Anglais
-grep -inE "change of control|assignment|exclusiv|terminat|renewal|auto-renew|penalt|liability|indemnif|unlimited|personal guarantee|side letter" contracts/*.txt
+grep -inE "change of control|assignment|exclusiv|terminat|renewal|auto-renew|penalt|liability|indemnif|unlimited|personal guarantee|side letter|dispute|litigation|claim|demand letter" contracts/*.txt
 ```
 
-- Rechercher aussi dans les emails/DocuSign « side letter », « excepté », « néanmoins » → aménagements hors contrat principal
+- Rechercher aussi dans les emails/DocuSign « side letter », « excepté », « néanmoins », « sous réserve » → aménagements et prémices de litiges hors contrat principal
 - Croiser avec la checklist technique ci-dessus (secrets git, licences copyleft, comptes perso)
 
 ## Liens croisés
