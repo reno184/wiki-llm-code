@@ -18,6 +18,7 @@ Détail : [code-subject/INDEX.md](code-subject/INDEX.md) — 19 fiches (recaptch
 
 | Fiche | Sujet |
 |---|---|
+| [ocr-gateway.md](use-case/ocr-gateway.md) | OCR gateway : probe scan (image pleine-page ≥80% + pas de texte natif) → route OCRmyPDF (--skip-text), résultat stocké dans le fingerprint d'import |
 | [ocr-on-png.md](use-case/ocr-on-png.md) | OCR sur PNG |
 | [pdf-text-selectionable.md](use-case/pdf-text-selectionable.md) | PDF texte sélectionnable |
 | [pdf-to-markown.md](use-case/pdf-to-markown.md) | PDF → Markdown |
