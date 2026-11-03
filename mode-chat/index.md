@@ -25,6 +25,7 @@ Détail : [code-subject/INDEX.md](code-subject/INDEX.md) — 19 fiches (recaptch
 | [pymupdf-find_tables.md](use-case/pymupdf-find_tables.md) | Extraction tableaux PDF (find_tables) |
 | [pymupdf-generality.md](use-case/pymupdf-generality.md) | Généralités PyMuPDF |
 | [pymupdf-images-position.md](use-case/pymupdf-images-position.md) | Position des images/dessins : get_drawings → "rect", get_images ≠ position, bbox via get_image_info / get_image_rects |
+| [pymupdf-detection-signature.md](use-case/pymupdf-detection-signature.md) | Détection signature : fingerprint (incremental_updates, /Sig, producer) → aiguillage capteurs (annots, images inline, drawings denses) |
 | [pymupdf-get_text.md](use-case/pymupdf-get_text.md) | Extraction texte (get_text) |
 | [pymupdf_tech_anonymisation.md](use-case/pymupdf_tech_anonymisation.md) | Anonymisation : masquer / supprimer / remplacer du texte |
 | [anonymous-rectangle-clip.md](use-case/anonymous-rectangle-clip.md) | Rédaction PyMuPDF : pourquoi le rectangle supprime réellement le texte (add_redact_annot + apply_redactions) — pas un masque |
