@@ -9,9 +9,12 @@ Il existe une **version Pro** : https://pymupdf.readthedocs.io/en/latest/pymupdf
 
 > ⚠️ **Faiblesse : licence AGPL** — attention si usage commercial non-libre. Pour commercialiser, il faut une licence commerciale Artifex (payante).
 
+## Positions images / dessins
+
+Voir la fiche dédiée : [pymupdf-images-position.md](pymupdf-images-position.md) — `get_drawings()` donne `"rect"` directement ; `get_images()` ne donne PAS la position, il faut `get_image_info()` (bbox) ou `get_image_rects(xref)`.
+
 ## todo
 
-- voir la méthode get_drawings (extraire tableau sans bordure ? demander à l'ia je ne comprends pas)
 - finir dans le porjet proto selection clip(rect) via dessin rectangle cleu en front
 
 ```
