@@ -21,6 +21,7 @@ Détail : [code-subject/INDEX.md](code-subject/INDEX.md) — 19 fiches (recaptch
 | [ocr-on-png.md](use-case/ocr-on-png.md) | OCR sur PNG |
 | [pdf-text-selectionable.md](use-case/pdf-text-selectionable.md) | PDF texte sélectionnable |
 | [pdf-to-markown.md](use-case/pdf-to-markown.md) | PDF → Markdown |
+| [pdf-avoid-hallucination.md](use-case/pdf-avoid-hallucination.md) | Éviter hallucinations LLM : suppression de zones = anti-PII/anti-bruit (tokens quasi inchangés en mode texte), text=1 sur headers/footers, garbage=3 au save |
 | [pdf2htmlex-standby.md](use-case/pdf2htmlex-standby.md) | pdf2htmlEX en veille |
 | [pymupdf-find_tables.md](use-case/pymupdf-find_tables.md) | Extraction tableaux PDF (find_tables) |
 | [pymupdf-generality.md](use-case/pymupdf-generality.md) | Généralités PyMuPDF |
