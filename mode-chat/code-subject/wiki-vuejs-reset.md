@@ -5,13 +5,16 @@
 Dans `index.html`, poser systématiquement :
 
 ```html
+<html lang="en" data-theme="light">
 <body class="min-h-screen bg-linear-to-b from-gray-100 to-gray-300">
     <div id="app" class="min-h-screen"></div>
 ```
 
-**Pourquoi** : `min-h-screen` sur `body` ET sur `#app` garantit que le background (dégradé `bg-linear-to-b` ici) s'étend sur toute la hauteur même quand on scrolle. Sans ça, le background s'arrête à la hauteur du viewport initial et le bas de page devient blanc au scroll. À répéter sur tout nouveau projet Vue.
+**Pourquoi `min-h-screen` sur `body` ET `#app`** : garantit que le background (dégradé `bg-linear-to-b` ici) s'étend sur toute la hauteur même quand on scrolle. Sans ça, le background s'arrête à la hauteur du viewport initial et le bas de page devient blanc au scroll. À répéter sur tout nouveau projet Vue.
 
 **Piège** : mettre le dégradé seulement sur `#app` ou seulement sur `body` ne suffit pas selon le layout des vues — le pattern validé = les deux.
+
+**Pourquoi `data-theme="light"` sur `<html>`** : bloque l'application en thème clair, indépendamment de la configuration macOS (mode sombre du système). Sans cet attribut, les composants DaisyUI suivent `prefers-color-scheme` et l'app passe en thème sombre sur un mac en dark mode. `lang="en"` (ou `fr`) posé au passage sur la même balise.
 
 ## Règle 2 — Page d'erreur 500
 
