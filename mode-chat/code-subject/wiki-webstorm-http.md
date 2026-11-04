@@ -101,6 +101,37 @@ GET http://localhost:3000/anonymisation/step1/{{group}}
 - **Blank line obligatoire** entre le `Content-Disposition` d'un fichier et son contenu `< ./chemin` — sans elle, le fichier part en pièce jointe vide ou corrompue.
 - Le `--WebStormBoundary--` final ferme le multipart, un seul pour toute la requête.
 
+## Fichier + champ JSON dans le même multipart
+
+Un champ d'options typé `application/json` suit la même mécanique qu'un bloc fichier : `Content-Disposition` + `Content-Type: application/json` + ligne blanche + payload JSON brut. Le back reçoit le champ comme objet si son parser tient compte du Content-Type du bloc.
+
+```http
+### highLight strC — upload PDF + options JSON
+POST http://localhost:3000/api/python/highLight/strC
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="Non-concurrence-et-Preavis-1.pdf"
+Content-Type: application/pdf
+
+< ./mock/Non-concurrence-et-Preavis-1.pdf
+
+--WebAppBoundary
+Content-Disposition: form-data; name="options"
+Content-Type: application/json
+
+{
+  "test": true
+}
+--WebAppBoundary--
+```
+
+À noter :
+
+- **`Content-Type: application/json` sur le bloc `options`** : sans lui, le back peut recevoir l'objet comme string brute — selon le parser (busboy, multer), vérifier comment le champ est lu.
+- **Ligne blanche obligatoire** entre le `Content-Type` et le JSON, exactement comme pour le contenu d'un fichier.
+- Un seul boundary final `--WebAppBoundary--` ferme le multipart : fichiers + champs texte + champs JSON.
+
 ## Pièges à ne pas oublier
 
 - **Portée des variables** : `client.global.set` = persistant pour toute la session du fichier. `client.set` = variable locale (même valeur par défaut dans tous les environnements mais pas enregistrée globalement). Pour un id chaîné d'une requête à l'autre, `client.global` est le bon choix.
@@ -127,4 +158,4 @@ Authorization: Bearer {{token}}
 
 ## État
 
-**vivant** — pattern utilisé sur le projet anonymisation (chaînage step1 upload PDF → step1 GET pages par `group`, oct. 2026) et sur le projet import bulk (multi-fichiers `Bulletins 2022` + variable in-place `@titleBulk`, oct. 2026).
+**vivant** — pattern utilisé sur le projet anonymisation (chaînage step1 upload PDF → step1 GET pages par `group`, oct. 2026) et sur le projet import bulk (multi-fichiers `Bulletins 2022` + variable in-place `@titleBulk`, oct. 2026). Endpoint `/api/python/highLight/strC` (upload PDF + champ `options` JSON) validé nov. 2026.
