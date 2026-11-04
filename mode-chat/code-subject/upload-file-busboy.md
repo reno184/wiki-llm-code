@@ -130,12 +130,40 @@ busboy.on('file', (fieldName, file, { filename, mimeType }) => {
 
 ### Récupération des champs supplémentaires (`on field`)
 
-Permet de récupérer la valeur de champs texte du formulaire envoyés avec le fichier.
+Champs texte ou JSON envoyés avec le fichier. Exemple requête WebStorm (`.http`) : bloc `file` PDF + bloc `options` typé `application/json` :
+
+```http
+--WebAppBoundary
+Content-Disposition: form-data; name="options"
+Content-Type: application/json
+
+{"test": true}
+--WebAppBoundary--
+```
+
+⚠️ busboy livre un champ JSON en **string** : le parser doit faire `JSON.parse` avec fallback valeur brute. Helper `busboySingleFile` (résout `{file, fields}`) :
 
 ```js
-const fields = {}
+busboy.on('field', (name, value) => {
+    try {
+        fields[name] = JSON.parse(value)
+    } catch {
+        fields[name] = value
+    }
+})
 
-busboy.on('field', (name, value) => { fields[name] = value })
+busboy.on('finish', () => resolve({file: fileData, fields}))
+```
+
+Controller — le champ `options` est prioritaire, sinon on envoie tous les fields :
+
+```js
+const {file, fields} = await busboySingleFile(req)
+
+if (!file) throw new AppError('Fichier manquant dans la requête', 400)
+
+const bodyData = fields.options || fields
+formData.append('body', JSON.stringify(bodyData))
 ```
 
 ### Optionnel — validation Joi des fields (erreur 400)
@@ -250,4 +278,4 @@ Notes :
 
 ## État
 
-**vivant** — pattern busboy minimal + middleware `uploadValidator` + contrôles optionnels (types, poids, fichier unique, champs + Joi) + délégation du stockage au driver via la fiche Strategy.
+**vivant** — pattern busboy minimal + middleware `uploadValidator` + contrôles optionnels (types, poids, fichier unique, champs + Joi) + délégation du stockage au driver via la fiche Strategy. Helper `busboySingleFile` (champs JSON parsés via `JSON.parse` sur `on('field')`, ex. `options` de highLight/strC) validé nov. 2026.
