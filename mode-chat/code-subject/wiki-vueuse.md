@@ -1,4 +1,4 @@
-# wiki-vueuse — composables VueUse rares (useDropZone, useObjectUrl, useApi blob, presse-papier)
+# wiki-vueuse — composables VueUse rares (useDropZone, useObjectUrl, useApi blob, presse-papier, watchDebounced)
 
 Usage : référence des composables `@vueuse/core` utilisés rarement — signatures, pièges, options. Pattern complet d'une page d'upload : [wiki-upload-dragdrop-pdf.md](wiki-upload-dragdrop-pdf.md) (la fiche ici ne répète pas le code de la page).
 
@@ -136,10 +136,42 @@ L'`<input type="text" hidden required>` branché sur `imageUrl` force la validat
 
 Liens : réception du `FormData` côté back → [upload-file-busboy.md](upload-file-busboy.md) ; assemblage complet page upload → [wiki-upload-dragdrop-pdf.md](wiki-upload-dragdrop-pdf.md).
 
+## watchDebounced — watcher avec debounce (redraw, resize, sauvegarde différée)
+
+Use case : déclencher une action coûteuse (redraw canvas, appel API) après qu'une donnée réactive a cessé de bouger — typiquement un `rect` redimensionné à la souris.
+
+```js
+import { watchDebounced } from '@vueuse/core';
+
+let stopWatcher = null;
+
+onMounted(() => {
+  stopWatcher = watchDebounced(
+    () => rectDimension,
+    () => {
+      onDrawDebounce({ indexPage: indexPage, rect });
+    },
+    { debounce: 3000, maxWait: 5000 }
+  );
+});
+
+onUnmounted(() => {
+  if (stopWatcher) {
+    stopWatcher();
+  }
+});
+```
+
+Pièges :
+- `debounce: 3000` seul : si la source bouge en continu (drag continu), le callback peut ne jamais partir → `maxWait: 5000` garantit un déclenchement au plus tard 5s après le premier changement.
+- Source en getter `() => rectDimension` pour watcher une ref/objet réactif ; on peut watcher plusieurs sources (tableau).
+- `watchDebounced` renvoie un stop handle : contrairement aux composables auto-nettoyés de VueUse (`useEventListener`), **pas de nettoyage automatique à l'unmount** → stop manuel dans `onUnmounted`.
+- Pour une valeur debouncée (et non un callback), voir `refDebounced` / `debouncedRef`.
+
 ## Complément (fiche upload)
 
 Assemblage complet dans une page (zone drop + label input + aperçu) : [wiki-upload-dragdrop-pdf.md](wiki-upload-dragdrop-pdf.md).
 
 ## État
 
-**vivant** — créé oct. 2026 depuis la page PdftoWebp ; section presse-papier fusionnée depuis mode-agent/vueuse-clipboard.md (22/10/2026).
+**vivant** — créé oct. 2026 depuis la page PdftoWebp ; section presse-papier fusionnée depuis mode-agent/vueuse-clipboard.md (22/10/2026) ; section watchDebounced ajoutée (07/11/2026, page annotateur PDF).
