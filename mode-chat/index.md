@@ -32,5 +32,6 @@ Détail : [code-subject/INDEX.md](code-subject/INDEX.md) — 21 fiches (recaptch
 | [pymupdf_tech_anonymisation.md](use-case/pymupdf_tech_anonymisation.md) | Anonymisation : masquer / supprimer / remplacer du texte |
 | [anonymous-rectangle-clip.md](use-case/anonymous-rectangle-clip.md) | Rédaction PyMuPDF : pourquoi le rectangle supprime réellement le texte (add_redact_annot + apply_redactions) — pas un masque |
 | [workflow-pdf2md.md](use-case/workflow-pdf2md.md) | Workflow PDF → Markdown |
+| [vue-dom-manipulation.md](use-case/vue-dom-manipulation.md) | Manipulation DOM vanilla JS dans Vue : await nextTick avant querySelector, bubbling click petit-enfant→enfant→parent (@click.stop), piège v-if + emit + querySelector sur div démontée (guard if/el, template refs, v-if vs v-show, addEventListener nettoyé onBeforeUnmount) |
 
 Fiches back/front liées hors mode-chat : [../backend/upload-file-busboy.md](../backend/upload-file-busboy.md), [../backend/pdftocairo-sharp.md](../backend/pdftocairo-sharp.md), [../front/upload-file.md](../front/upload-file.md), [../patterns/upload-strategy.md](../patterns/upload-strategy.md).
