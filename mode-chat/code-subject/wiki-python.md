@@ -38,6 +38,24 @@ print(request.files.to_dict(), flush=True)
 - [ ] Retirer les prints avant commit (debug uniquement)
 - [ ] Côté client : vérifier le `Content-Type` du bloc (un champ `Content-Type: application/json` arrive dans `form` en texte brut, pas parsé)
 
+## Section débogage — boucle for avec index (enumerate)
+
+Pour déboguer une liste (ex. `body_raw`) en voyant la position de chaque élément :
+
+```python
+for index, item in enumerate(body_raw):
+    print(f"Index: {index}, Objet: {item}", flush=True)
+```
+
+### Pourquoi enumerate
+- `enumerate(liste)` renvoie des tuples `(index, élément)` — pas besoin de gérer un compteur manuel (`i += 1`) ni d'itérer sur `range(len(liste))`.
+- Départ à 0 par défaut ; `enumerate(liste, start=1)` pour commencer à 1.
+- Piège classique : ordre des variables `(index, item)` — inverse de `dict.items()` qui est `(clé, valeur)`.
+
+### Checklist
+- [ ] `flush=True` conservé (même piège que les prints de requête — bufférisation Docker/gunicorn)
+- [ ] Si les objets sont gros : afficher une clé d'identification plutôt que l'objet entier (`item.get("id")`) pour éviter des logs illisibles
+
 ## Liens croisés
 - [webstorm/](webstorm/) — fiches WebStorm (config, HTTP client, agents) : WebStorm pour JS/TS, jamais pour déboguer Python.
 - [wiki-webstorm-http.md](wiki-webstorm-http.md) — tester ces mêmes requêtes depuis WebStorm (client HTTP `.http`, multipart, champs JSON).
