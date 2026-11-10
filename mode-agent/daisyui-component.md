@@ -4,6 +4,16 @@
 
 Usage: snippets composants DaisyUI.
 
+## généralités
+
+### centrer le contenu
+
+Pour centrer le contenu, ajouter la classe `mx-auto` à la classe `container` :
+
+```html
+<div data-role="page" class="container mx-auto">
+```
+
 ## btn loading
 
 À utiliser sur `isFetching` du composable `useApi` :
