@@ -15,6 +15,12 @@ Détail : [code-subject/INDEX.md](code-subject/INDEX.md) — 23 fiches (recaptch
 | Upload / stockage fullstack | [wiki-upload-dragdrop-pdf.md](code-subject/wiki-upload-dragdrop-pdf.md), [upload-file-busboy.md](code-subject/upload-file-busboy.md), [wiki-minio-pdf.md](code-subject/wiki-minio-pdf.md) |
 | Audit / M&A | [wiki-due-diligence-ma.md](code-subject/wiki-due-diligence-ma.md) |
 
+## Mises en page
+
+| Fiche | Sujet |
+|---|---|
+| [inspiration-html-css.md](inspiration-html-css.md) | Mises en page HTML/CSS à réutiliser : footer de formulaire (Reset + submit alignés à droite `flex justify-end`), liens vers fiches formulaires |
+
 ## use-case/ — cas d'usage PDF/OCR
 
 | Fiche | Sujet |
