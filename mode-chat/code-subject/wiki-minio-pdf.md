@@ -141,6 +141,13 @@ const stat = await minioClient.statObject(BUCKET_NAME, objectName)
 const originalName = decodeURIComponent(stat.metaData['filename']) // → "Rapport été.pdf"
 ```
 
+⚠️ **Balises de métadonnées : kebab-case, minuscule, mots séparés par des traits d'union.** MinIO n'aime pas le camelCase dans les balises meta — utiliser `total-page`, jamais `totalPage` (la balise est ignorée/corrompue à la lecture dans `stat.metaData`). Toutes les balises suivent le même gabarit :
+
+```js
+'X-Amz-Meta-total-page': pages.length,
+'X-Amz-Meta-filename': encodeURIComponent(cleanFilename),
+```
+
 ## Suppression — hook Mongoose deleteOne
 
 ```js
