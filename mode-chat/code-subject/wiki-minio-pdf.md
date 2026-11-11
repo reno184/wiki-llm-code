@@ -109,6 +109,38 @@ const handlePdfUpload = ({limitMo, firstPageOnly}) => async (req, res, next) => 
 }
 ```
 
+## Chemin d'objet : toujours un UID + nom original en métadonnée
+
+Jamais de filename (espaces, accents) dans la clé MinIO : le chemin est **toujours un UID**, le nom affichable voyage en métadonnée.
+
+1. Réparer le mojibake du multipart — le filename arrive encodé latin1, un nom avec accents (`Rapport été.pdf`) est corrompu à la réception :
+
+```js
+const cleanFilename = Buffer.from(uploadedFile.filename, 'latin1').toString('utf8')
+```
+
+2. Clé d'objet = UID, rien d'autre :
+
+```js
+const objectName = crypto.randomUUID()
+```
+
+3. Upload avec le nom original en métadonnée **encodée** — un header de métadonnée doit être ASCII, d'où le `encodeURIComponent` :
+
+```js
+await minioClient.putObject(BUCKET_NAME, objectName, buffer, buffer.length, {
+    'Content-Type': mimeType,
+    'X-Amz-Meta-filename': encodeURIComponent(cleanFilename),
+})
+```
+
+4. Lecture du nom original (`statObject`) — le fichier est autoporteur, récupérable sans passer par Mongoose :
+
+```js
+const stat = await minioClient.statObject(BUCKET_NAME, objectName)
+const originalName = decodeURIComponent(stat.metaData['filename']) // → "Rapport été.pdf"
+```
+
 ## Suppression — hook Mongoose deleteOne
 
 ```js
@@ -187,4 +219,4 @@ volumes:
 ```
 ## État
 
-**vivant** — snippet brut Renaud (oct. 2026), sans amélioration.
+**vivant** — snippet brut Renaud (oct. 2026), sans amélioration. Pattern clé UID + nom original en métadonnée `X-Amz-Meta-filename` (latin1→utf8, encodeURIComponent, decodeURIComponent) ajouté nov. 2026.
