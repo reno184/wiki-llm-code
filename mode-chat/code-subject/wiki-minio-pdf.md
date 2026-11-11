@@ -148,6 +148,24 @@ const originalName = decodeURIComponent(stat.metaData['filename']) // → "Rappo
 'X-Amz-Meta-filename': encodeURIComponent(cleanFilename),
 ```
 
+## statObject est asynchrone — dans une boucle, encapsuler dans un Promise.all
+
+`statObject` renvoie une promesse : dans une boucle sur plusieurs objets (ex. lister les pages d'un PDF et lire leurs métadonnées), on mappe chaque objet en un `async` qui fait le `await` individuel, puis on déroule le tout en parallèle avec `Promise.all`. Jamais de `for...of` avec `await` séquentiel : n appels réseau à la suite au lieu de n appels en parallèle.
+
+```js
+Promise.all(
+    pageObjects.map(async (pageObj) => {
+        const pageStat = await minioClient.statObject(BUCKET_NAME, pageObj.name)
+        return {
+            page: parseInt(pageStat.metaData['page']),
+            url: `/${BUCKET_NAME}/${pageObj.name}`
+        }
+    })
+)
+```
+
+Note : les métadonnées arrivent en string (`parseInt` pour `page`), et le nom de balise reste en kebab-case.
+
 ## Suppression — hook Mongoose deleteOne
 
 ```js
