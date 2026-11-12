@@ -1,1 +1,1 @@
-{"error":"Resource not found: 'repo://reno184/wiki-llm-code/sha/fea914de5f1c00974e833d156aa1b75489917e2a/contents/mode-chat/code-subject/INDEX.md'","rawResponse":{"jsonrpc":"2.0","id":1,"error":{"code":-32602,"message":"Resource not found: 'repo://reno184/wiki-llm-code/sha/fea914de5f1c00974e833d156aa1b75489917e2a/contents/mode-chat/code-subject/INDEX.md'","data":{"uri":"repo://reno184/wiki-llm-code/sha/fea914de5f1c00974e833d156aa1b75489917e2a/contents/mode-chat/code-subject/INDEX.md"}}}}
+<ÿòEÿ®
