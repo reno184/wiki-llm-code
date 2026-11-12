@@ -1,14 +1,14 @@
-# Gestion d'erreur personnalisÃ©e â du micro-service Python Ã  la snackbar front
+# Gestion d'erreur personnalisée — du micro-service Python à la snackbar front
 
-> Exemple complet du trajet d'une erreur mÃ©tier de bout en bout : `ValueError` levÃ©e dans un micro-service Python â HTTP 400 JSON â middleware d'erreurs Express â `onFetchError` du composable `useApi` (VueUse) â snackbar visible par l'utilisateur.
+> Exemple complet du trajet d'une erreur métier de bout en bout : `ValueError` levée dans un micro-service Python → HTTP 400 JSON → middleware d'erreurs Express → `onFetchError` du composable `useApi` (VueUse) → snackbar visible par l'utilisateur.
 
-Cas concret : prÃ©venir l'utilisateur que le rectangle de clip posÃ© sur un PDF ne permet de trouver aucun mot.
+Cas concret : prévenir l'utilisateur que le rectangle de clip posé sur un PDF ne permet de trouver aucun mot.
 
-Fiches liÃ©es :
-- [express-error-handling.md](../express-error-handling.md) â le pattern centralisÃ© Express (`AppError` + `errorHandler`), dont ce middleware est un extrait
-- [anonymous-rectangle-clip.md](../../use-case/anonymous-rectangle-clip.md) â la suppression rÃ©elle du texte par rectangle de rÃ©daction (vs simple masque)
+Fiches liées :
+- [express-error-handling.md](../express-error-handling.md) — le pattern centralisé Express (`AppError` + `errorHandler`), dont ce middleware est un extrait
+- [anonymous-rectangle-clip.md](../../use-case/anonymous-rectangle-clip.md) — la suppression réelle du texte par rectangle de rédaction (vs simple masque)
 
-## 1. Micro-service Python â lever l'erreur mÃ©tier (`searchWordService.py`)
+## 1. Micro-service Python — lever l'erreur métier (`searchWordService.py`)
 
 ```python
 def words_in_rect(doc: pymupdf.Document, req_body: Dict) -> List[List[Dict[str, Any]]]:
@@ -17,12 +17,12 @@ def words_in_rect(doc: pymupdf.Document, req_body: Dict) -> List[List[Dict[str, 
     text_under_clip = current_page.get_text("text", clip=rect_clip).strip()
 
     if not text_under_clip:
-        raise ValueError("Aucun texte trouvÃ© dans la zone sÃ©lectionnÃ©e")
+        raise ValueError("Aucun texte trouvé dans la zone sélectionnée")
 
     return words2_in_clip(doc, text_under_clip, True)
 ```
 
-## 2. Micro-service Python â traduire en HTTP 400 (`searchWordController.py`)
+## 2. Micro-service Python — traduire en HTTP 400 (`searchWordController.py`)
 
 ```python
 def handle_searchWord_byRect():
@@ -40,7 +40,7 @@ def handle_searchWord_byRect():
         return Response(stack, status=500, mimetype='text/plain')
 ```
 
-## 3. Backend Node â propager au middleware (`searchWordController.js`)
+## 3. Backend Node — propager au middleware (`searchWordController.js`)
 
 ```js
 export async function byRectMinioController(req, res, next) {
@@ -58,7 +58,7 @@ export async function byRectMinioController(req, res, next) {
 }
 ```
 
-## 4. Backend Node â middleware d'erreurs (`errorHandler`)
+## 4. Backend Node — middleware d'erreurs (`errorHandler`)
 
 ```js
 export function errorHandler(err, req, res, _next) {
@@ -70,7 +70,7 @@ export function errorHandler(err, req, res, _next) {
 }
 ```
 
-## 5. Front â intercepter dans `useApi` et Ã©mettre l'Ã©vÃ©nement snackbar
+## 5. Front — intercepter dans `useApi` et émettre l'événement snackbar
 
 ```js
 export const useApi = createFetch({
@@ -97,7 +97,7 @@ export const useApi = createFetch({
 })
 ```
 
-## 6. Front â Ã©couter l'Ã©vÃ©nement dans `App.vue`
+## 6. Front — écouter l'événement dans `App.vue`
 
 ```html
 <template>
