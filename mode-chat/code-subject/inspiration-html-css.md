@@ -23,4 +23,4 @@ Boutons d'action en fin de formulaire, alignés à droite (`flex justify-end`), 
 - [../front/vuejs-form.md](../front/vuejs-form.md) — contrôles de formulaire Vue + daisyUI (select required + option placeholder via v-model).
 - [../front/daisyui-components.md](../front/daisyui-components.md) — composants daisyUI.
 - [../mode-agent/daisyui-component.md](../mode-agent/daisyui-component.md) — version agent (btn loading, input file masqué).
-- [code-subject/wiki-tailwindcss.md](code-subject/wiki-tailwindcss.md) — utilitaires Tailwind.
+- [code-subject/wiki-tailwindcss.md](wiki-tailwindcss.md) — utilitaires Tailwind.

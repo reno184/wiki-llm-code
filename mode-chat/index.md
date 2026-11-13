@@ -19,7 +19,7 @@ Détail : [code-subject/INDEX.md](code-subject/INDEX.md) — 24 fiches (recaptch
 
 | Fiche | Sujet |
 |---|---|
-| [inspiration-html-css.md](inspiration-html-css.md) | Mises en page HTML/CSS à réutiliser : footer de formulaire (Reset + submit alignés à droite `flex justify-end`), liens vers fiches formulaires |
+| [inspiration-html-css.md](code-subject/inspiration-html-css.md) | Mises en page HTML/CSS à réutiliser : footer de formulaire (Reset + submit alignés à droite `flex justify-end`), liens vers fiches formulaires |
 
 ## use-case/ — cas d'usage PDF/OCR
 
@@ -41,4 +41,4 @@ Détail : [code-subject/INDEX.md](code-subject/INDEX.md) — 24 fiches (recaptch
 | [workflow-pdf2md.md](use-case/workflow-pdf2md.md) | Workflow PDF → Markdown |
 | [vue-dom-manipulation.md](use-case/vue-dom-manipulation.md) | Manipulation DOM vanilla JS dans Vue : await nextTick avant querySelector, bubbling click petit-enfant→enfant→parent (@click.stop), piège v-if + emit + querySelector sur div démontée (guard if/el, template refs, v-if vs v-show, addEventListener nettoyé onBeforeUnmount) |
 
-Fiches back/front liées hors mode-chat : [../backend/upload-file-busboy.md](../backend/upload-file-busboy.md), [../backend/pdftocairo-sharp.md](../backend/pdftocairo-sharp.md), [../front/vuejs-form.md](../front/vuejs-form.md) (formulaires Vue+daisyUI : select required + placeholder via v-model), [../front/upload-file.md](../front/upload-file.md), [../patterns/upload-strategy.md](../patterns/upload-strategy.md).
+Fiches back/front liées hors mode-chat : [../backend/upload-file-busboy.md](../backend/upload-file-busboy.md), [../backend/pdftocairo-sharp.md](../backend/pdftocairo-sharp.md), [../front/vuejs-form.md](code-subject/vuejs-form.md) (formulaires Vue+daisyUI : select required + placeholder via v-model), [../front/upload-file.md](../front/upload-file.md), [../patterns/upload-strategy.md](../patterns/upload-strategy.md).

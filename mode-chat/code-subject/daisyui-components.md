@@ -34,23 +34,9 @@ Usage: inventaire des classes DaisyUI réellement utilisées dans les projets du
 ```
 
 - `menu` : le composant navigation (verticalement par défaut), `menu-horizontal` : en barre horizontale.
-- L'état actif passe par `linkActiveClass: 'menu-active'` dans vue-router — voir [../front/vuejs-router-menu.md](../front/vuejs-router-menu.md).
+- L'état actif passe par `linkActiveClass: 'menu-active'` dans vue-router — voir [../front/vuejs-router-menu.md](vuejs-router-menu.md).
 
-### `table` — table zébrée avec en-tête sticky
 
-```html
-<table class="table table-zebra w-full">
-    <thead class="sticky top-0 bg-base-200 z-10 shadow-sm">
-        <tr><th>Titre</th><th>Prix</th></tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td class="font-bold text-base-content">{{ product.title }}</td>
-            <td>{{ product.price }}</td>
-        </tr>
-    </tbody>
-</table>
-```
 
 - `table table-zebra` : le composant DaisyUI + lignes alternées. `w-full` : largeur.
 - `thead` : `sticky top-0` + `bg-base-200 z-10 shadow-sm` — l'en-tête reste visible au scroll dans le conteneur. Le `bg-base-200` est **obligatoire** (sans fond, les lignes passent sous l'en-tête transparent).

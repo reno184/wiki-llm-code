@@ -1,7 +1,7 @@
 # Architecture composants — stateless, smart/dumb, props + callbacks (Vue 3)
 
 Stack: Vue 3 Composition API, @vueuse/core (useApi), aucune lib de state (pas de Pinia).
-Usage: **règle d'architecture front pour tout agent IA** — les composants sont codés en stateless, sans store global. Découpage smart/dumb à responsabilité unique, données portées par les props vers le bas, actions remontées par des callbacks passées en paramètre. Fiche transversale front, à charger avec [vuejs-useapi.md](../vuejs-useapi.md) et [javascript/form-validation.md](javascript/form-validation.md).
+Usage: **règle d'architecture front pour tout agent IA** — les composants sont codés en stateless, sans store global. Découpage smart/dumb à responsabilité unique, données portées par les props vers le bas, actions remontées par des callbacks passées en paramètre. Fiche transversale front, à charger avec [vuejs-useapi.md](../vuejs-useapi.md) et [javascript/form-validation.md](form-validation.md).
 
 ## Règles pour les agents
 
@@ -62,7 +62,7 @@ const { isFetching: pending, execute: postItem } = useApi('/api/items', { immedi
 ```
 
 - `useApi` GET : **immediate `true` par défaut** — la liste est appelée quand le composant parent est monté, `data` alimente la liste.
-- `useApi` POST : `{ immediate: false }` — ne part qu'au submit (voir [javascript/form-validation.md](javascript/form-validation.md)).
+- `useApi` POST : `{ immediate: false }` — ne part qu'au submit (voir [javascript/form-validation.md](form-validation.md)).
 - `execute: getList` : le GET est nommé pour être **rappelé explicitement** — le rafraîchissement de la liste après un POST réussi est un appel délibéré, pas un effet magique.
 - `list` en `ref` réactif dans le smart : les dumbs le reçoivent en props et se re-rendent seuls au refresh.
 
@@ -78,7 +78,7 @@ Structure des 3 composants :
 - `onRefresh` (dumb → parent) est la version callback du `getList` explicite du smart : le dumb n'appelle jamais `useApi` lui-même, il remonte la demande.
 - Fiche **en construction** : les détails seront complétés par la suite (découpage exact, cas du refresh après POST, exemples de dumbs types).
 - Le refresh par re-GET après POST (plutôt qu'une mise à jour locale optimiste de `list`) est le choix par défaut de simplicité — à confirmer/compléter.
-- Liens : [vuejs-useapi.md](../vuejs-useapi.md) (wrapper, erreurs, conventions isFetching), [javascript/form-validation.md](javascript/form-validation.md) (submit + immediate false), [daisyui-components.md](../daisyui-components.md).
+- Liens : [vuejs-useapi.md](../vuejs-useapi.md) (wrapper, erreurs, conventions isFetching), [javascript/form-validation.md](form-validation.md) (submit + immediate false), [daisyui-components.md](../daisyui-components.md).
 
 ## État
 
