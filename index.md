@@ -17,6 +17,7 @@ Fiches perso de Renaud. Toutes **à plat à la racine du repo**, une fiche = une
 | [fail2ban.md](fail2ban.md) | Bannir IP, jail sshd, heredoc tee, logs inondés |
 | [fermer-ports-firewall.md](fermer-ports-firewall.md) | Port 22, fausse bonne idée, firewall Infomaniak, IP box |
 | [reseau-interne-docker.md](reseau-interne-docker.md) | Réseau interne Docker, expose vs ports, quoi exposer publiquement, protection API publique |
+| [express-trust-proxy.md](express-trust-proxy.md) | trust proxy Express, vraie IP derrière Caddy/nginx, rate-limit cassé |
 | [docker-commandes.md](docker-commandes.md) | Commandes Docker utiles |
 | [config-docker-file.md](config-docker-file.md) | Configuration Dockerfile |
 | [docker-file-vuejs.md](docker-file-vuejs.md) | Dockerfile app Vue.js |
