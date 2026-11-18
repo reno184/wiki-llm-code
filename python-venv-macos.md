@@ -54,7 +54,7 @@ WebStorm propose une liste d'interpréteurs Python : le système (`/usr/bin/pyth
 ## Pièges Mac M4
 
 - **Oublier d'activer le venv** avant `pip install` ou `python app.py` → erreurs `ModuleNotFoundError` identiques au bug initial. Vérifier : `which python` doit pointer dans `.venv/bin/`.
-- **Les wheels arm64** : Flask, PyMuPDF, lxml et Pillow fournissent tous des wheels natifs Apple Silicon, `pip install -r requirements.txt` s installe en quelques secondes sans compilation. Si pip veut compiler, vérifier qu'on n'est pas sur un Python Intel sous Rosetta (`file $(which python3)`).
+- **Les wheels arm64** : Flask, PyMuPDF, lxml et Pillow fournissent tous des wheels natifs Apple Silicon, `pip install -r requirements.txt` s'installe en quelques secondes sans compilation. Si pip veut compiler, vérifier qu'on n'est pas sur un Python Intel sous Rosetta (`file $(which python3)`).
 - **`/usr/bin/python3` = version unique et figée** par macOS : ne jamais y toucher pour les projets, uniquement pour créer les venv. Si besoin d'une autre version : `brew install python@3.12` puis créer le venv avec ce binaire.
 
 ## Checklist
@@ -67,6 +67,6 @@ WebStorm propose une liste d'interpréteurs Python : le système (`/usr/bin/pyth
 
 ## Liens croisés
 
-- [wiki-python.md](wiki-python.md) — déboguer ce serveur Flask (points d'arrêt, prints `flush=True`), car WebStorm ne débogue pas le Python.
+- [wiki-python.md](wiki-python.md) — déboguer ce serveur Flask (points d'arrêt, prints `flush=True`), le débogage Python reste PyCharm / VS Code.
 - [webstorm-gitignore-run-configurations.md](webstorm-gitignore-run-configurations.md) — gérer le `.gitignore` et les run configurations versionnées.
 - [checklist-initialize-project.md](checklist-initialize-project.md) — checklist d'initialisation projet, le venv en fait partie côté Python.
