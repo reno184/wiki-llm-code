@@ -1,44 +1,118 @@
-# INDEX — mode-chat
+# INDEX — wiki-llm-code
 
-Fiches **perso** de Renaud, copié/collé manuel (~1×/mois ou moins). Jamais chargées par un agent — pour ça, voir `../mode-agent/`.
+Fiches perso de Renaud. Toutes **à plat à la racine du repo**, une fiche = une responsabilité. Recherche : partir d'ici, puis `search_code` plein texte si l'index ne suffit pas.
 
-## code-subject/ — snippets par sujet
+## Tags autorisés (vocabulaire fermé, 2 axes)
 
-Détail : [code-subject/INDEX.md](code-subject/INDEX.md) — 24 fiches (recaptcha, GCP secrets, Cloud Function publique, ollama ×5, git, variables env, fontawesome, vueuse, vue props réactivité, vuejs reset, tailwindcss ×2, upload drag&drop, minio, busboy, webstorm http, python debug, due diligence M&A, purejs proxy, webcomponents stack).
+- **Domaine** (1-2 par fiche) : `securite`, `infra`, `docker`, `reseau`, `frontend`, `backend`, `build`, `mail`, `hebergement`, `outils`, `python`, `pdf`
+- **Type d'information** (1 par fiche) : `howto` (recette), `piege` (truc qui a coûté du temps), `checklist`, `decision` (choix argumenté)
 
-| Regroupement | Fiches |
+## VPS / Infra / Déploiement
+
+| Fiche | Sujet / mots-clés |
 |---|---|
-| GCP / déploiement | [wiki-recaptcha.md](wiki-recaptcha.md), [wiki-secret-gcp.md](wiki-secret-gcp.md), [wiki-cloud-function-public.md](wiki-cloud-function-public.md) |
-| Ollama / modèles locaux | [wiki-ollama.md](wiki-ollama.md), [wiki-local-model.md](wiki-local-model.md), [wiki-ollama-langchain.md](wiki-ollama-langchain.md), [wiki-ollama-install-windows.md](wiki-ollama-install-windows.md), [wiki-ollama-docker.md](wiki-ollama-docker.md) |
-| Outils dev | [wiki-git.md](wiki-git.md), [wiki-variable-env.md](wiki-variable-env.md), [wiki-python.md](wiki-python.md), [wiki-font-awesome.md](wiki-font-awesome.md), [wiki-vueuse.md](wiki-vueuse.md), [wiki-vue-props-reactivity.md](wiki-vue-props-reactivity.md), [wiki-vuejs-reset.md](wiki-vuejs-reset.md), [wiki-tailwindcss.md](wiki-tailwindcss.md), [wiki-tailwindcss-grid-bootstrap.md](wiki-tailwindcss-grid-bootstrap.md), [wiki-webstorm-http.md](wiki-webstorm-http.md) |
-| JS natif | [wiki-purejs.md](wiki-purejs.md), [wiki-webcomponents-stack.md](wiki-webcomponents-stack.md) |
-| Upload / stockage fullstack | [wiki-upload-dragdrop-pdf.md](wiki-upload-dragdrop-pdf.md), [upload-file-busboy.md](upload-file-busboy.md), [wiki-minio-pdf.md](wiki-minio-pdf.md) |
-| Audit / M&A | [wiki-due-diligence-ma.md](wiki-due-diligence-ma.md) |
+| [infomaniak.md](infomaniak.md) | Hébergeur VPS, offre, console, firewall |
+| [caddy.md](caddy.md) | Reverse-proxy, HTTPS automatique, Caddyfile, sslip.io/nip.io, Let's Encrypt, compose |
+| [nginx.md](nginx.md) | Serveur web, reverse-proxy, config |
+| [fail2ban.md](fail2ban.md) | Bannir IP, jail sshd, heredoc tee, logs inondés |
+| [fermer-ports-firewall.md](fermer-ports-firewall.md) | Port 22, fausse bonne idée, firewall Infomaniak, IP box |
+| [docker-commandes.md](docker-commandes.md) | Commandes Docker utiles |
+| [config-docker-file.md](config-docker-file.md) | Configuration Dockerfile |
+| [docker-file-vuejs.md](docker-file-vuejs.md) | Dockerfile app Vue.js |
+| [dockerfile-python.md](dockerfile-python.md) | Dockerfile Python |
+| [docker-secrets-env.md](docker-secrets-env.md) | Secrets et .env dans Docker |
+| [docker-volumes-persistence.md](docker-volumes-persistence.md) | Volumes, persistance des données |
+| [python-docker-labo.md](python-docker-labo.md) | Labo Python + Docker |
+| [nodejs-express-env.md](nodejs-express-env.md) | Variables d'env Node.js/Express |
 
-## Mises en page
+## Sécurité
 
-| Fiche | Sujet |
+| Fiche | Sujet / mots-clés |
 |---|---|
-| [inspiration-html-css.md](inspiration-html-css.md) | Mises en page HTML/CSS à réutiliser : footer de formulaire (Reset + submit alignés à droite `flex justify-end`), liens vers fiches formulaires |
+| [bruteforce-protection.md](bruteforce-protection.md) | DDoS, bots, bruteforce, Cloudflare, WAF, rate limiting, express-rate-limit |
+| [wiki-recaptcha.md](wiki-recaptcha.md) | reCAPTCHA, protection formulaires |
+| [wiki-secret-gcp.md](wiki-secret-gcp.md) | Secrets GCP |
+| [cors.md](cors.md) | CORS, origines |
 
-## use-case/ — cas d'usage PDF/OCR
+## PDF / OCR / PyMuPDF
 
-| Fiche | Sujet |
+| Fiche | Sujet / mots-clés |
 |---|---|
-| [ocr-gateway.md](ocr-gateway.md) | OCR gateway : probe scan (image pleine-page ≥80% + pas de texte natif) → route OCRmyPDF (--skip-text), résultat stocké dans le fingerprint d'import |
-| [ocr-on-png.md](ocr-on-png.md) | OCR sur PNG |
-| [pdf-text-selectionable.md](pdf-text-selectionable.md) | PDF texte sélectionnable |
-| [pdf-to-markown.md](pdf-to-markown.md) | PDF → Markdown |
-| [pdf-avoid-hallucination.md](pdf-avoid-hallucination.md) | Éviter hallucinations LLM : suppression de zones = anti-PII/anti-bruit (tokens quasi inchangés en mode texte), text=1 sur headers/footers, garbage=3 au save |
+| [ocr-gateway.md](ocr-gateway.md) | Router PDF scannés vers OCRmyPDF, probe image pleine-page |
+| [ocr-on-png.md](ocr-on-png.md) | OCR via Ollama vision sur PNG, découpage zones denses |
+| [pdf-text-selectionable.md](pdf-text-selectionable.md) | OCRmyPDF, couche texte invisible sur scanné |
+| [pdf-to-markdown.md](pdf-to-markdown.md) | PyMuPDF4LLM, chunking par page, verdict : abandonné |
+| [pdf-avoid-hallucination.md](pdf-avoid-hallucination.md) | Anti-hallucination LLM, suppression zones, garbage=3 |
 | [pdf2htmlex-standby.md](pdf2htmlex-standby.md) | pdf2htmlEX en veille |
-| [pymupdf-find_tables.md](pymupdf-find_tables.md) | Extraction tableaux PDF (find_tables) |
-| [pymupdf-generality.md](pymupdf-generality.md) | Généralités PyMuPDF |
-| [pymupdf-images-position.md](pymupdf-images-position.md) | Position des images/dessins : get_drawings → "rect", get_images ≠ position, bbox via get_image_info / get_image_rects |
-| [pymupdf-detection-signature.md](pymupdf-detection-signature.md) | Détection signature : fingerprint (incremental_updates, /Sig, producer) → aiguillage capteurs (annots, images inline, drawings denses) |
-| [pymupdf-get_text.md](pymupdf-get_text.md) | Extraction texte (get_text) |
-| [pymupdf_tech_anonymisation.md](pymupdf_tech_anonymisation.md) | Anonymisation : masquer / supprimer / remplacer du texte |
-| [anonymous-rectangle-clip.md](anonymous-rectangle-clip.md) | Rédaction PyMuPDF : pourquoi le rectangle supprime réellement le texte (add_redact_annot + apply_redactions) — pas un masque |
-| [workflow-pdf2md.md](workflow-pdf2md.md) | Workflow PDF → Markdown |
-| [vue-dom-manipulation.md](vue-dom-manipulation.md) | Manipulation DOM vanilla JS dans Vue : await nextTick avant querySelector, bubbling click petit-enfant→enfant→parent (@click.stop), piège v-if + emit + querySelector sur div démontée (guard if/el, template refs, v-if vs v-show, addEventListener nettoyé onBeforeUnmount) |
+| [pymupdf-get_text.md](pymupdf-get_text.md) | Extraction texte : blocks/dic/words, clip+Rect, search_for, get_toc, licence Pro AGPL |
+| [pymupdf-find_tables.md](pymupdf-find_tables.md) | Extraction tableaux PDF, find_tables |
+| [pymupdf-images-position.md](pymupdf-images-position.md) | Position images/dessins, get_drawings, get_image_info |
+| [pymupdf-detection-signature.md](pymupdf-detection-signature.md) | Détection signature, fingerprint, capteurs |
+| [pymupdf_tech_anonymisation.md](pymupdf_tech_anonymisation.md) | Anonymisation : masquer/supprimer/remplacer |
+| [anonymous-rectangle-clip.md](anonymous-rectangle-clip.md) | add_redact_annot, pourquoi le rectangle supprime le texte |
+| [anonymisation-divers.md](anonymisation-divers.md) | Anonymisation, divers |
+| [workflow-pdf2md.md](workflow-pdf2md.md) | Pipeline complet PDF → texte pour LLM |
 
-Fiches back/front liées hors mode-chat : [../backend/upload-file-busboy.md](../backend/upload-file-busboy.md), [../backend/pdftocairo-sharp.md](../backend/pdftocairo-sharp.md), [../front/vuejs-form.md](vuejs-form.md) (formulaires Vue+daisyUI : select required + placeholder via v-model), [../front/upload-file.md](../front/upload-file.md), [../patterns/upload-strategy.md](../patterns/upload-strategy.md).
+## LLM locaux / Ollama
+
+| Fiche | Sujet / mots-clés |
+|---|---|
+| [wiki-ollama.md](wiki-ollama.md) | Runtime Ollama macOS, généralités |
+| [wiki-local-model.md](wiki-local-model.md) | Inventaire modèles, paramètres, limites long format |
+| [wiki-ollama-langchain.md](wiki-ollama-langchain.md) | Appeler Ollama depuis Node via LangChain |
+| [wiki-ollama-docker.md](wiki-ollama-docker.md) | Conteneur → Ollama natif hôte, host.docker.internal |
+| [wiki-ollama-install-windows.md](wiki-ollama-install-windows.md) | Installer Ollama sur PC client Windows |
+| [wiki-scaling-index.md](wiki-scaling-index.md) | Scaling, index |
+| [wiki-cloud-function-public.md](wiki-cloud-function-public.md) | Cloud Function publique GCP |
+
+## Frontend / Vue.js
+
+| Fiche | Sujet / mots-clés |
+|---|---|
+| [vuejs-init.md](vuejs-init.md) | Init projet Vue.js |
+| [vuejs-form.md](vuejs-form.md) | Formulaires Vue + DaisyUI, select required + placeholder |
+| [form-validation.md](form-validation.md) | Validation de formulaires |
+| [vuejs-router-menu.md](vuejs-router-menu.md) | Router, menu |
+| [vuejs-stateless-smart-dumb.md](vuejs-stateless-smart-dumb.md) | Smart/dumb components |
+| [vuejs-useapi.md](vuejs-useapi.md) | useApi, appels API |
+| [wiki-vue-props-reactivity.md](wiki-vue-props-reactivity.md) | Réactivité props, interpolation dynamique |
+| [wiki-vuejs-reset.md](wiki-vuejs-reset.md) | Shell projet Vue (Tailwind v4 + DaisyUI v5) |
+| [vue-dom-manipulation.md](vue-dom-manipulation.md) | DOM vanilla dans Vue, nextTick, bubbling, v-if pièges |
+| [modal-daisyui-vuejs.md](modal-daisyui-vuejs.md) | Modal DaisyUI + Vue |
+| [daisyui-components.md](daisyui-components.md) | Composants DaisyUI |
+| [wiki-tailwindcss.md](wiki-tailwindcss.md) | Tailwind safelist, classes dynamiques invisibles au build |
+| [wiki-tailwindcss-grid-bootstrap.md](wiki-tailwindcss-grid-bootstrap.md) | Tailwind v4, reproduire grid Bootstrap |
+| [inspiration-html-css.md](inspiration-html-css.md) | Mises en page HTML/CSS à réutiliser, footer formulaire |
+| [wiki-font-awesome.md](wiki-font-awesome.md) | Font Awesome |
+| [wiki-webcomponents-stack.md](wiki-webcomponents-stack.md) | Stack web components |
+| [wiki-purejs.md](wiki-purejs.md) | JS natif, proxy |
+| [ux-motion-adoption.md](ux-motion-adoption.md) | UX, motion, adoption |
+
+## Backend / Node.js / Mongo
+
+| Fiche | Sujet / mots-clés |
+|---|---|
+| [express-error-handling.md](express-error-handling.md) | Gestion d'erreurs Express |
+| [example-error-management.md](example-error-management.md) | Exemples gestion d'erreurs |
+| [user-schemas.md](user-schemas.md) | Schéma utilisateur Mongoose, bcrypt, validation |
+| [mongoose-connect.md](mongoose-connect.md) | Connexion Mongoose |
+| [mongodb.md](mongodb.md) | MongoDB |
+| [upload-file-busboy.md](upload-file-busboy.md) | Upload fichiers, busboy |
+| [wiki-upload-dragdrop-pdf.md](wiki-upload-dragdrop-pdf.md) | Upload drag & drop de PDF |
+| [wiki-minio-pdf.md](wiki-minio-pdf.md) | MinIO, stockage PDF |
+| [wiki-download-blob.md](wiki-download-blob.md) | Download blob |
+| [wiki-variable-env.md](wiki-variable-env.md) | Variables d'env, build vs runtime Vite |
+| [wiki-webstorm-http.md](wiki-webstorm-http.md) | Requêtes HTTP côté WebStorm |
+| [webstorm-http-upload.md](webstorm-http-upload.md) | Upload HTTP WebStorm |
+
+## Outils dev / Divers
+
+| Fiche | Sujet / mots-clés |
+|---|---|
+| [wiki-git.md](wiki-git.md) | Git |
+| [wiki-python.md](wiki-python.md) | Python, debug |
+| [checklist-initialize-project.md](checklist-initialize-project.md) | Checklist initialisation projet |
+| [webstorm-settings-ai.md](webstorm-settings-ai.md) | Réglages IA WebStorm |
+| [webstorm-agents-junie-vibe.md](webstorm-agents-junie-vibe.md) | Agents WebStorm, Junie, Vibe |
+| [wiki-due-diligence-ma.md](wiki-due-diligence-ma.md) | Due diligence M&A |
+| [stages.md](stages.md) | Stages |
