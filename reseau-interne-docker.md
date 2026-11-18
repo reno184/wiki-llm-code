@@ -6,7 +6,7 @@ tags: [reseau, securite, decision]
 
 ## Principe
 
-Un serveur ne doit être **publique que si un client extérieur en a besoin**. Tout le reste vit sur le réseau interne Docker. C'est le même principe que pour les bases de données : pour un site vitrine en Node.js, aucun serveur de base de données ni de mail n'a besoin d'être exposé publiquement.
+Une api ne doit être **publique* qui si utilisée par une application vuejs. pour un site vitrine en Node.js, aucun serveur de base de données ni de mail n'a besoin d'être exposé publiquement, réseau interne Docker suffit.
 
 ## Communication "serveur à serveur" : le réseau interne Docker
 
@@ -19,12 +19,12 @@ networks:
   - internal-net
 ```
 
-- Le backend se connecte aux autres services via le **nom du service** (ex. `http://backend:3000`) — Docker résout le nom sur le réseau interne.
-- `expose` = visible uniquement sur le réseau Docker interne ; `ports` = publié sur le VPS, donc potentiellement public. Règle : `expose` par défaut, `ports` uniquement pour la porte d'entrée publique (souvent uniquement Caddy/nginx).
+- Le backend (pug) se connecte aux autres backend (mail, BDD...) via **url locales** (ex. `http://backend:3000`) — Docker résout le nom sur le réseau interne.
+- `expose` = visible uniquement sur le réseau Docker interne pour informations pas de conflit avec d'autres api ayant le même ports ; `ports` = publié sur le VPS, donc potentiellement public. Règle : `ports` uniquement pour la porte d'entrée publique (souvent uniquement Caddy/nginx).
 
 ## Communication "client à serveur" : obligatoirement public, donc protégé
 
-Le navigateur web est à l'extérieur. Il a **obligatoirement** besoin d'une URL publique (`api-demo...`) pour communiquer avec le backend. Ce qui est public doit donc être protégé :
+ Ce qui est public doit donc être protégé :
 
 - fail2ban (couper le bruit bruteforce) → [fail2ban.md](fail2ban.md)
 - rate limiting dans Express (`express-rate-limit`) → [bruteforce-protection.md](bruteforce-protection.md)
