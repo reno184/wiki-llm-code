@@ -1,7 +1,7 @@
 ---
 title: MongoDB - commandes mongosh, populate, data modeling
 tags: [backend, howto]
-fiches-liees: [user-schemas]
+fiches-liees: [wiki-mongoose]
 ---
 # MongoDB
 
