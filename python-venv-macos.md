@@ -54,8 +54,23 @@ WebStorm propose une liste d'interpréteurs Python : le système (`/usr/bin/pyth
 ## Pièges Mac M4
 
 - **Oublier d'activer le venv** avant `pip install` ou `python app.py` → erreurs `ModuleNotFoundError` identiques au bug initial. Vérifier : `which python` doit pointer dans `.venv/bin/`.
+- **D'où vient ce « Python 3.9 »** : `/usr/bin/python3` est le Python 3.9.6 embarqué avec macOS (CommandLineTools), sans aucune librairie tierce. Le venv créé avec lui hérite de sa version (3.9) tout en ayant ses propres paquets dupuis `requirements.txt`. Le système reste intact : c'est le comportement voulu, chaque projet gère ses dépendances isolément.
 - **Les wheels arm64** : Flask, PyMuPDF, lxml et Pillow fournissent tous des wheels natifs Apple Silicon, `pip install -r requirements.txt` s'installe en quelques secondes sans compilation. Si pip veut compiler, vérifier qu'on n'est pas sur un Python Intel sous Rosetta (`file $(which python3)`).
 - **`/usr/bin/python3` = version unique et figée** par macOS : ne jamais y toucher pour les projets, uniquement pour créer les venv. Si besoin d'une autre version : `brew install python@3.12` puis créer le venv avec ce binaire.
+
+## Mettre à jour les dépendances du projet
+
+Si une librairie est ajoutée au `requirements.txt`, la réinstaller dans le venv :
+
+```bash
+# depuis un terminal où le venv est activé
+pip install -r requirements.txt
+
+# sans activer le venv, en appelant pip par son chemin complet
+/Users/<user>/Code/<projet>/.venv/bin/pip install -r requirements.txt
+```
+
+Le chemin complet `.venv/bin/pip` marche sans activation : pratique dans les scripts/CI. `pip freeze > requirements.txt` pour mettre à jour le fichier après un `pip install <nouvelle-lib>`.
 
 ## Checklist
 
