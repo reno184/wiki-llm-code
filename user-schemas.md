@@ -1,11 +1,13 @@
 ---
-title: Schéma utilisateur Mongoose (bcrypt, validation)
+title: Schéma utilisateur Mongoose (bcrypt, connexion DB)
 tags: [backend, howto]
+fiches-liees: [mongodb]
 ---
-# Schéma utilisateur Mongoose
+# Schéma utilisateur Mongoose & connexion DB
+
+## models/User.js
 
 ```js
-// models/User.js
 import bcrypt from 'bcrypt'
 import mongoose, {Schema} from 'mongoose'
 
@@ -57,3 +59,66 @@ export const UserModel = mongoose.model('User', _userSchema)
 const user = await UserModel.findOne({email}).select('+password')
 const ok = await user.isValidPassword(candidate)
 ```
+
+## Connexion MongoDB via Mongoose (config/db.js)
+
+Backend Express (ESM), MongoDB containerisé Docker Compose. Importé dans `index.js` et appelé dans `startServer()` **avant** `app.listen()`.
+
+```bash
+npm install mongoose
+```
+
+> Pas de catch qui avale l'erreur : si `mongoose.connect` throw, l'erreur remonte au `startServer()` de `index.js` qui fait `process.exit(1)` (fail fast). Un serveur démarré sans base ne doit jamais accepter de requêtes.
+
+```js
+// config/db.js
+import mongoose from 'mongoose'
+
+export async function connectDB() {
+    await mongoose.connect(process.env.MONGO_URI)
+    console.log('MongoDB connecté avec succès')
+}
+```
+
+```js
+// index.js (pattern)
+const startServer = async () => {
+    try {
+        await connectDB()
+
+        const PORT = process.env.PORT || 3000
+        app.listen(PORT, '0.0.0.0', () => {
+            console.log(`Serveur backend démarré sur le port ${PORT}`)
+        })
+    } catch (error) {
+        console.error('❌ Échec du démarrage du serveur :', error)
+        process.exit(1)
+    }
+}
+```
+
+```yaml
+# Service MongoDB dans docker-compose.yml
+services:
+  mongodb:
+    image: mongo:latest
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD}
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
+    external: true
+```
+
+### Points attention
+
+- `MONGO_URI` côté backend : hôte = **nom du service compose** (`mongodb`), pas `localhost` : `mongodb://${MONGO_USER}:${MONGO_PASSWORD}@mongodb:27017/${MONGO_DB}?authSource=admin` (authSource=admin obligatoire avec les identifiants root).
+- `depends_on` seul garantit seulement que le container est démarré, pas que Mongo accepte les connexions. Pour être strict : healthcheck `mongosh --eval "db.adminCommand('ping')"` + `condition: service_healthy` chez le backend. En pratique `mongoose.connect` retry nativement au premier appel — mais le fail fast de `startServer` reste le filet.
+- Volume `mongo_data` en `external: true` : résiste à `docker compose down -v` / `docker system prune`. Le créer une fois avec `docker volume create mongo_data`.
+- Variables `.env` (non commité) : `MONGO_USER`, `MONGO_PASSWORD`, `MONGO_DB`.
