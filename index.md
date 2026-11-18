@@ -117,6 +117,7 @@ Fiches perso de Renaud. Toutes **à plat à la racine du repo**, une fiche = une
 | [checklist-initialize-project.md](checklist-initialize-project.md) | Checklist initialisation projet |
 | [webstorm-settings-ai.md](webstorm-settings-ai.md) | Réglages IA WebStorm |
 | [webstorm-agents-junie-vibe.md](webstorm-agents-junie-vibe.md) | Agents WebStorm, Junie, Vibe |
+| [mistral-vibe-cli.md](mistral-vibe-cli.md) | Vibe CLI terminal, agent custom avis rapide, lenteur 3 min boucle d'outils, ~/.vibe/agents/, active_model nom API invalide, Shift+Tab |
 | [webstorm-gitignore-run-configurations.md](webstorm-gitignore-run-configurations.md) | Gitignore .idea/*, réinclusion !.idea/runConfigurations/, configs debug Front-end/Back-end versionnées, piège slash final |
 | [wiki-due-diligence-ma.md](wiki-due-diligence-ma.md) | Due diligence M&A |
 | [stages.md](stages.md) | Stages |
