@@ -37,20 +37,35 @@ Sortir du venv : `deactivate`. Le lendemain, un simple `source .venv/bin/activat
 
 ## Workflow 100 % ligne de commande (sans IDE Python)
 
-Aucun IDE Python nécessaire : le venv gère tout depuis le terminal.
+Aucun IDE Python nécessaire : le venv gère tout depuis le terminal. Toujours depuis la racine du dossier du projet.
+
+**Créer (ou recréer) le venv — une fois par projet**
 
 ```bash
-# une fois par projet
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-
-# chaque session
-cd <projet>
-source .venv/bin/activate
-python app.py        # Ctrl+C pour arrêter
-deactivate           # sortir du venv
+cd /Users/<user>/Code/<projet>
+rm -rf .venv                                     # détruit l'ancien venv et ses paquets (OK, requirements.txt fait foi)
+/opt/homebrew/bin/python3.12 -m venv .venv       # Homebrew = Apple Silicon natif, version upgradable
+.venv/bin/pip install -r requirements.txt
 ```
+
+- `rm -rf .venv` avant re-création : inutile de le faire à chaque fois, seulement pour changer de version de Python ou repartir propre (les paquets se réinstallent depuis `requirements.txt`).
+- Utiliser `/opt/homebrew/bin/python3.12` explicite plutôt que `python3` du PATH évite de retomber sur le 3.9.6 système.
+
+**Lancer le serveur — deux variantes équivalentes**
+
+```bash
+# variante directe, sans activation (le chemin complet pointe dans le venv)
+cd /Users/<user>/Code/<projet>
+.venv/bin/python app.py          # Ctrl+C pour arrêter
+
+# variante avec activation (python/pip tapés courts)
+cd /Users/<user>/Code/<projet>
+source .venv/bin/activate
+python app.py
+deactivate                      # sortir du venv
+```
+
+Le serveur démarre sur http://127.0.0.1:5000/ ; tester avec `curl http://127.0.0.1:5000/` ou le navigateur. Arrêter : `Ctrl+C`. Choisir une variante et s'y tenir : les deux font exactement la même chose.
 
 Lancement typique d'un serveur Flask (`app.py`) :
 
