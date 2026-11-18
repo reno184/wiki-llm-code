@@ -63,7 +63,7 @@ if __name__ == "__main__":
 ```
 
 - `FLASK_DEBUG=1` (défaut ici) : recharge à chaque sauvegarde + page d'erreur interactive. `FLASK_DEBUG=0 python app.py` pour couper.
-- `host="127.0.0.1"` en local. `0.0.0.0` écoute sur toutes les interfaces : avec debug=1, le debugger interactif Flask est (exécution de code arbitraire) exposé au réseau. `0.0.0.0` uniquement en déploiement derrière reverse-proxy.
+- `host="127.0.0.1"` en local. `0.0.0.0` écoute sur toutes les interfaces : avec debug=1, le debugger interactif Flask (qui permet l'exécution de code arbitraire) est exposé au réseau. `0.0.0.0` uniquement en déploiement derrière reverse-proxy.
 - Vérifier au doute : `which python` doit pointer dans `.venv/bin/`.
 
 ## Choisir l'interpréteur dans WebStorm (piège de la liste "Python 3.9")
