@@ -35,10 +35,20 @@ python app.py            # ou: flask run, ou: python -m flask --app app run
 
 Sortir du venv : `deactivate`. Le lendemain, un simple `source .venv/bin/activate` suffit, rien à réinstaller.
 
-## Dans WebStorm (Mac M4)
+## Choisir l'interpréteur dans WebStorm (piège de la liste "Python 3.9")
 
-- **Terminal intégré** : `View → Tool Windows → Terminal`. Si le venv n'est pas activé automatiquement, `source .venv/bin/activate` dans ce terminal, puis lancer le serveur comme ci-dessus (utile pour voir les prints `flush=True` en direct).
-- WebStorm **ne peut pas déboguer Python** (plugin réservé à PyCharm / IntelliJ Ultimate) mais il lance et lit les logs sans problème via le terminal. Voir la fiche dédiée au débogage.
+WebStorm propose une liste d'interpréteurs Python : le système (`/usr/bin/python3`, souvent 3.9 sur macOS), les installs Homebrew, et les venv du projet. **Le venv n'est pas une alternative à l'interpréteur : il EST l'un des interpréteurs de la liste.** Il apparaît comme `.venv/bin/python`, souvent affiché « Python 3.x (nom-du-projet) ».
+
+- Choisir la ligne « 3.9 » toute seule = le Python système à nu = `ModuleNotFoundError: No module named 'flask'` (il n'a jamais les paquets du requirements.txt).
+- Choisir la ligne du venv = l'environnement avec Flask, PyMuPDF, lxml, Pillow installés.
+- Vérification imparable : la commande de run affichée doit être `<projet>/.venv/bin/python <projet>/app.py`. Si le chemin ne contient pas `.venv/bin/python`, mauvais interpréteur.
+- L'app est ensuite servie sur http://127.0.0.1:5000/.
+
+## Lancer / lire les logs dans WebStorm (Mac M4)
+
+- **Terminal intégré** : `View → Tool Windows → Terminal`. `source .venv/bin/activate` si le venv n'est pas activé automatiquement, puis lancer le serveur (utile pour voir les prints `flush=True` en direct).
+- Flèche verte ▶ à côté de `app.py` une fois le bon interpréteur sélectionné.
+- Le débogage avancé (points d'arrêt) reste PyCharm / VS Code : voir la fiche dédiée.
 - Ajouter `.venv/` au `.gitignore` du projet.
 
 ## Pièges Mac M4
