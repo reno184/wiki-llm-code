@@ -103,7 +103,7 @@ Le chemin complet `.venv/bin/pip` marche sans activation : pratique dans les scr
 
 ## Checklist
 
-- [ ] `python3 -m venv .venv` à la racine
+- [ ] `/opt/homebrew/bin/python3.12 -m venv .venv` à la racine du projet
 - [ ] `source .venv/bin/activate` avant toute commande pip/python
 - [ ] `pip install -r requirements.txt`
 - [ ] `.venv/` dans le `.gitignore`
