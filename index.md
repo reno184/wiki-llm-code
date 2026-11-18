@@ -113,7 +113,7 @@ Fiches perso de Renaud. Toutes **à plat à la racine du repo**, une fiche = une
 |---|---|
 | [wiki-git.md](wiki-git.md) | Git |
 | [wiki-python.md](wiki-python.md) | Python, debug |
-| [python-venv-macos.md](python-venv-macos.md) | venv, Python système vs virtuel, Mac M4, lancer serveur Flask WebStorm, PEP 668 externally-managed, .venv gitignore |
+| [python-venv-macos.md](python-venv-macos.md) | venv, Python système vs virtuel, Mac M4, lancer API Flask port 5000 en ligne de commande, flèche verte WebStorm ne marche pas, python3.12 Homebrew, PEP 668 |
 | [checklist-initialize-project.md](checklist-initialize-project.md) | Checklist initialisation projet |
 | [webstorm-settings-ai.md](webstorm-settings-ai.md) | Réglages IA WebStorm |
 | [webstorm-agents-junie-vibe.md](webstorm-agents-junie-vibe.md) | Agents WebStorm, Junie, Vibe |
