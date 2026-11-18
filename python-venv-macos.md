@@ -16,24 +16,7 @@ Contexte : un projet a un `requirements.txt` (Flask, PyMuPDF, lxml, Pillow) mais
 
 ## Recette (une fois par projet)
 
-```bash
-# à la racine du projet
-python3 -m venv .venv
-
-# activer (macOS/zsh)
-source .venv/bin/activate   # le prompt affiche (.venv)
-
-# installer les dépendances du projet
-pip install -r requirements.txt
-```
-
-Une fois activé, `python` et `pip` pointent vers le venv. Lancer le serveur :
-
-```bash
-python app.py            # ou: flask run, ou: python -m flask --app app run
-```
-
-Sortir du venv : `deactivate`. Le lendemain, un simple `source .venv/bin/activate` suffit, rien à réinstaller.
+Voir le workflow complet ligne de commande ci-dessous : créer le venv avec `/opt/homebrew/bin/python3.12`, installer les dépendances, puis lancer `app.py` (ou `flask run` via `python -m flask --app app run`). Une fois activé, `python` et `pip` pointent vers le venv ; `deactivate` pour en sortir. Le lendemain, un simple `source .venv/bin/activate` suffit, rien à réinstaller.
 
 ## Workflow 100 % ligne de commande (sans IDE Python)
 
