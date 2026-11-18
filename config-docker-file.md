@@ -42,3 +42,25 @@ C'est tout simplement le nom du programme à exécuter : le serveur web Nginx.
 
 ### En résumé
 Grâce à `"daemon off;"`, Nginx continue de tourner indéfiniment au premier plan, ce qui permet à votre conteneur Docker de **rester allumé et prêt à répondre aux requêtes web**.
+
+
+## Piège : .dockerignore par dossier de service, pas à la racine
+
+Avec un Dockerfile dans chaque sous-dossier (backend/, frontend/, python_api/) et des `COPY . .` dedans, le build se fait avec le **sous-dossier comme contexte**. Conséquence :
+
+- ❌ Un `.dockerignore` à la racine du projet n'est **jamais lu** dans ce cas : il n'existe que pour le dossier passé comme contexte de build.
+- ✅ Il faut donc **un .dockerignore par service** : `backend/.dockerignore`, `frontend/.dockerignore`, `python_api/.dockerignore`.
+
+Minimum dans chacun (à adapter) :
+
+```
+node_modules
+.env
+.git
+__pycache__
+*.pyc
+.venv
+data/
+```
+
+`node_modules` et `.env` sont les deux critiques : node_modules gonfle le contexte de build et casse le layer cache, .env fait fuiter les secrets dans l'image (voir docker-secrets-env.md).
