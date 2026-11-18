@@ -10,7 +10,7 @@ Contexte : un projet a un `requirements.txt` (Flask, PyMuPDF, lxml, Pillow) mais
 
 ## Le rôle de chaque chose
 
-- **Python installé en local (le "système")** : l'interpréteur seul, à nu. Sur macOS c'est `/usr/bin/python3` (stub fourni par les Command Line Tools Xcode). Il ne connaît que la bibliothèque standard. Il sert de **base** pour créer des environnements, pas pour开发 directement.
+- **Python installé en local (le "système")** : l'interpréteur seul, à nu. Sur macOS c'est `/usr/bin/python3` (stub fourni par les Command Line Tools Xcode). Il ne connaît que la bibliothèque standard. Il sert de **base** pour créer des environnements, pas pour développer directement.
 - **Environnement virtuel (venv)** : un dossier (`.venv/`) copiant le nécessaire pour tourner avec son **propre jeu de paquets pip**, isolé du système et des autres projets. Chaque projet a le sien ; les versions de Flask/lxml d'un projet n'écrasent jamais celles d'un autre.
 - **Pourquoi ne pas installer les paquets en global** : conflits de versions entre projets, système pollué, et depuis quelques années pip le **refuse carrément** sur les Python Homebrew/système (`error: externally-managed-environment`, PEP 668). Le venv n'est pas un raffinement d'équipe, c'est le chemin de moindre effort.
 
@@ -44,7 +44,7 @@ Sortir du venv : `deactivate`. Le lendemain, un simple `source .venv/bin/activat
 ## Pièges Mac M4
 
 - **Oublier d'activer le venv** avant `pip install` ou `python app.py` → erreurs `ModuleNotFoundError` identiques au bug initial. Vérifier : `which python` doit pointer dans `.venv/bin/`.
-- **Les wheelers arm64** : Flask, PyMuPDF, lxml et Pillow fournissent tous des wheels natifs Apple Silicon, `pip install -r requirements.txt` s installe en quelques secondes sans compilation. Si pip veut compiler, vérifier qu'on n'est pas sur un Python Intel sous Rosetta (`file $(which python3)`).
+- **Les wheels arm64** : Flask, PyMuPDF, lxml et Pillow fournissent tous des wheels natifs Apple Silicon, `pip install -r requirements.txt` s installe en quelques secondes sans compilation. Si pip veut compiler, vérifier qu'on n'est pas sur un Python Intel sous Rosetta (`file $(which python3)`).
 - **`/usr/bin/python3` = version unique et figée** par macOS : ne jamais y toucher pour les projets, uniquement pour créer les venv. Si besoin d'une autre version : `brew install python@3.12` puis créer le venv avec ce binaire.
 
 ## Checklist
