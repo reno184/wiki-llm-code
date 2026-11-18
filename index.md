@@ -81,6 +81,7 @@ Fiches perso de Renaud. Toutes **à plat à la racine du repo**, une fiche = une
 | [wiki-vuejs-reset.md](wiki-vuejs-reset.md) | Shell projet Vue (Tailwind v4 + DaisyUI v5) |
 | [vue-dom-manipulation.md](vue-dom-manipulation.md) | DOM vanilla dans Vue, nextTick, bubbling, v-if pièges |
 | [modal-daisyui-vuejs.md](modal-daisyui-vuejs.md) | Modal DaisyUI + Vue |
+| [vue-gsap-draw-rectangle.md](vue-gsap-draw-rectangle.md) | GSAP GreenSock Vue, overlay rectangle sélection animé, bounding box, getBoundingClientRect non réactif, triggerRef, sans deep:true |
 | [daisyui-components.md](daisyui-components.md) | Composants DaisyUI |
 | [wiki-tailwindcss.md](wiki-tailwindcss.md) | Tailwind safelist, classes dynamiques invisibles au build |
 | [wiki-tailwindcss-grid-bootstrap.md](wiki-tailwindcss-grid-bootstrap.md) | Tailwind v4, reproduire grid Bootstrap |
