@@ -105,3 +105,8 @@ C'est fait — la fiche [Wiki VPS](knowledge://knowledge/wiki-vps/KNOWLEDGE.md) 
 
 
 > attention a faire attention au vrai trafic car si je restreint un nombre de requete par seconde je peux du coup restreindre un vrai traffic
+
+
+Attention a ne bloquer des ip de google 
+
+Il faut absolument regarder le vidéo de grafikart

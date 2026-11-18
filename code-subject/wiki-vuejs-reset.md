@@ -21,6 +21,7 @@ Dans `index.html`, poser systématiquement :
 Chercher dans le dossier `/views` le composant `Error500Page.vue`. S'il n'existe pas, le créer avec le code suivant :
 
 ```vue
+
 <template>
   <div class="min-h-screen flex items-center justify-center p-4">
     <div class="w-full max-w-2xl">
@@ -53,12 +54,12 @@ Chercher dans le dossier `/views` le composant `Error500Page.vue`. S'il n'existe
 </template>
 
 <script setup>
-import {computed, ref} from 'vue'
+  import {computed, ref} from 'vue'
 
-defineOptions({name: 'Error500Page'})
+  defineOptions({name: 'Error500Page'})
 
-const isDev = computed(() => window.location.hostname === 'localhost')
+  const isDev = computed(() => window.location.hostname === 'localhost')
 
-const errorStack = ref(history.state?.stack || 'Aucune stack trace disponible.')
+  const errorStack = ref(history.state?.stack || 'Aucune stack trace disponible.')
 </script>
 ```

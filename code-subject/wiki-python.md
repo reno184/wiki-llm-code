@@ -1,6 +1,6 @@
 # wiki-python — Déboguer du Python (IDE, points d'arrêt, debug requêtes Flask)
 
-Fiche `mode-chat/code-subject` — usage ~1×/mois, copié/collé manuel.
+Fiche `` — usage ~1×/mois, copié/collé manuel.
 
 ## Points d'arrêt Python : dans quel IDE ?
 

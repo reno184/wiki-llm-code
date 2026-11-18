@@ -13,15 +13,15 @@ Usage: config CORS pour une API Express consommée par un front sur une autre or
 ```js
 import 'dotenv/config';
 import express from 'express';
-import cors from 'cors';
+import cors from 'code-subject/cors';
 
 const app = express();
 app.use(express.json());
 
 app.use(cors({
-  origin: process.env.CORS_ORIGINS?.split(',') ?? ['http://localhost:5173'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'g-recaptcha-response'],
+    origin: process.env.CORS_ORIGINS?.split(',') ?? ['http://localhost:5173'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'g-recaptcha-response'],
 }));
 ```
 
