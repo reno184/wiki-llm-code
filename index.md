@@ -31,8 +31,8 @@ Fiches perso de Renaud. Toutes **à plat à la racine du repo**, une fiche = une
 
 | Fiche | Sujet / mots-clés |
 |---|---|
+| [altcha-antispam.md](altcha-antispam.md) | ALTCHA, remplace reCAPTCHA, proof-of-work, honeypot, formulaire contact |
 | [bruteforce-protection.md](bruteforce-protection.md) | DDoS, bots, bruteforce, Cloudflare, WAF, rate limiting, express-rate-limit |
-| [wiki-recaptcha.md](wiki-recaptcha.md) | reCAPTCHA, protection formulaires |
 | [wiki-secret-gcp.md](wiki-secret-gcp.md) | Secrets GCP |
 | [cors.md](cors.md) | CORS, origines |
 
