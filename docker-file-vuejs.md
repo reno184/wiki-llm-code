@@ -32,7 +32,7 @@ RUN npm install
 Installe toutes les dépendances (y compris `devDependencies`, nécessaires pour le dev).
 
 ```dockerfile
-COPY . .
+COPY code-subject/docker .
 ```
 Copie tout le reste du code source.
 

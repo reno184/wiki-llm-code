@@ -52,6 +52,6 @@ if (el) { /* … */ }   // ou el?.doSomething()
 
 ## Liens croisés
 
-- [wiki-vue-props-reactivity.md](../code-subject/wiki-vue-props-reactivity.md) — enfant notifie le parent par emit avec nouvelle référence
-- [wiki-vuejs-reset.md](../code-subject/wiki-vuejs-reset.md) — shell projet Vue
-- [wiki-vueuse.md](../code-subject/wiki-vueuse.md) — composables VueUse (écouteurs/nettoyage auto)
+- [wiki-vue-props-reactivity.md](wiki-vue-props-reactivity.md) — enfant notifie le parent par emit avec nouvelle référence
+- [wiki-vuejs-reset.md](wiki-vuejs-reset.md) — shell projet Vue
+- [wiki-vueuse.md](wiki-vueuse.md) — composables VueUse (écouteurs/nettoyage auto)

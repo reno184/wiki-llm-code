@@ -13,7 +13,7 @@ Usage: config CORS pour une API Express consommée par un front sur une autre or
 ```js
 import 'dotenv/config';
 import express from 'express';
-import cors from 'code-subject/cors';
+import cors from 'cors';
 
 const app = express();
 app.use(express.json());

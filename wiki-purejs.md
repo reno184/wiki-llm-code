@@ -56,12 +56,12 @@ function reactifProfond(etat, majDom) {
 ### Ce que Vue ajoute par-dessus (les limites du pur Proxy)
 
 - **Tracking fin** : Vue sait *quelle* propriété est lue par *quel* effet (dependency tracking dans `get`) et ne re-render que le nécessaire — le snippet maison recharge tout.
-- **Batching** : plusieurs mutations = un seul patch DOM, puis `nextTick` (cf. [vue-dom-manipulation.md](../use-case/vue-dom-manipulation.md)).
+- **Batching** : plusieurs mutations = un seul patch DOM, puis `nextTick` (cf. [vue-dom-manipulation.md](vue-dom-manipulation.md)).
 - **Clés à gérer à la main** : tableaux (index), `deleteProperty`, `has`.
 - **Nouveaux objets attribués** (`etat.user = {...}`) : à wrapper soi-même (le trap `set` ci-dessus ne le fait pas).
 - **WeakMap obligatoire** pour ne pas re-proxyer un objet déjà wrappé (boucle infinie sinon).
 
 ### Liens croisés
 
-- [vue-dom-manipulation.md](../use-case/vue-dom-manipulation.md) — nextTick, click.stop, pièges v-if + querySelector (le monde réactif vu de Vue)
+- [vue-dom-manipulation.md](vue-dom-manipulation.md) — nextTick, click.stop, pièges v-if + querySelector (le monde réactif vu de Vue)
 - [wiki-vue-props-reactivity.md](wiki-vue-props-reactivity.md) — la réactivité de Vue appliquée aux props

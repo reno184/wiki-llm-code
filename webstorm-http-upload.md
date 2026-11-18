@@ -120,7 +120,7 @@ Content-Type: image/png
 ```
 
 - `{{host}}`, `{{token_iam_gcloud}}`, `{{test-uid}}` : résolus à l'exécution, sélecteur d'env en haut du fichier `.http`.
-- **Tokens non commités** : le vrai `http-client.env.json` va dans `../../.gitignore`, committer un `http-client.env.json.example` sans valeurs (même logique que `.env` — voir [nodejs-express-env.md](../backend/nodejs-express-env.md)).
+- **Tokens non commités** : le vrai `http-client.env.json` va dans `.gitignore`, committer un `http-client.env.json.example` sans valeurs (même logique que `.env` — voir [nodejs-express-env.md](../backend/nodejs-express-env.md)).
 
 ## Notes
 

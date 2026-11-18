@@ -5,8 +5,8 @@
 Cas concret : prévenir l'utilisateur que le rectangle de clip posé sur un PDF ne permet de trouver aucun mot.
 
 Fiches liées :
-- [express-error-handling.md](../express-error-handling.md) — le pattern centralisé Express (`AppError` + `errorHandler`), dont ce middleware est un extrait
-- [anonymous-rectangle-clip.md](../../use-case/anonymous-rectangle-clip.md) — la suppression réelle du texte par rectangle de rédaction (vs simple masque)
+- [express-error-handling.md](express-error-handling.md) — le pattern centralisé Express (`AppError` + `errorHandler`), dont ce middleware est un extrait
+- [anonymous-rectangle-clip.md](anonymous-rectangle-clip.md) — la suppression réelle du texte par rectangle de rédaction (vs simple masque)
 
 ## 1. Micro-service Python — lever l'erreur métier (`searchWordService.py`)
 

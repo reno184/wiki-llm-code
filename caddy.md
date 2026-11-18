@@ -61,7 +61,7 @@ Remplace `TON-IP` par l'IPv4 r√©elle du VPS (ex. si ton IP est `185.99.12.34` ‚Ü
 ```yaml
 services:
   web:
-    build: .
+    build: dev-ops/domaine name
     expose:
       - "80"
     restart: unless-stopped

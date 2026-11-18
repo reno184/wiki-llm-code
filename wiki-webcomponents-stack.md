@@ -58,5 +58,5 @@ Problème de TanStack : il exige un système réactif — c'est le seul point o�
 ## Liens croisés
 
 - [wiki-purejs.md](wiki-purejs.md) — Proxy object, réactivité from scratch (le moteur commun)
-- [vue-dom-manipulation.md](../use-case/vue-dom-manipulation.md) — le monde réactif vu de Vue (nextTick, click.stop, pièges v-if)
+- [vue-dom-manipulation.md](vue-dom-manipulation.md) — le monde réactif vu de Vue (nextTick, click.stop, pièges v-if)
 - [wiki-vue-props-reactivity.md](wiki-vue-props-reactivity.md) — comparaison avec la réactivité Vue props
