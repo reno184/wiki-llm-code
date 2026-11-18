@@ -6,57 +6,54 @@ tags: [backend, howto]
 
 ```js
 // models/User.js
-import mongoose from 'mongoose';
 import bcrypt from 'bcrypt'
-const userSchema = new mongoose.Schema(
+import mongoose, {Schema} from 'mongoose'
+
+const SALT_WORK_FACTOR = 10 // Facteur de coût pour la complexité de Bcrypt
+
+const _userSchema = new Schema(
     {
-        firstName: {
-            type: String,
-            required: [true, 'Le prénom est requis'],
-            trim: true,
-        },
-        lastName: {
-            type: String,
-            required: [true, 'Le nom est requis'],
-            trim: true,
-        },
         email: {
             type: String,
-            required: [true, "L'email est requis"],
-            unique: true,
-            lowercase: true,
+            required: [true, "L'email est obligatoire"],
+            unique: true, // Crée un index unique dans MongoDB
+            lowercase: true, // Uniformise en minuscules pour éviter "Test@..." vs "test@..."
             trim: true,
-            match: [/^\S+@\S+\.\S+$/, 'Email invalide'],
         },
         password: {
             type: String,
-            required: [true, 'Le mot de passe est requis'],
+            required: [true, 'Le mot de passe est obligatoire'],
             minlength: [8, 'Minimum 8 caractères'],
-            select: false, // exclu des requêtes par défaut
+            select: false, // Sécurité : masque le mot de passe dans les find() par défaut
         },
-        role: {
-            type: String,
-            enum: ['user', 'admin'],
-            default: 'user',
-        },
-        isActive: {
-            type: Boolean,
-            default: true,
+        avatar: {
+            imageUrl: {type: String, default: ''},
+            blurHash: {type: String, default: ''},
         },
     },
-    {
-        timestamps: true, // ajoute createdAt et updatedAt automatiquement
-    }
-);
+    {timestamps: true}
+)
 
-userSchema.pre('save', async function () {
-    if (!this.isModified('password')) return;
-    this.password = await bcrypt.hash(this.password, 10);
-});
+// Hook exécuté avant la sauvegarde : ne re-hache le mot de passe que s'il a été modifié (ou créé)
+_userSchema.pre('save', async function () {
+    if (!this.isModified('password')) return
+    const salt = await bcrypt.genSalt(SALT_WORK_FACTOR)
+    this.password = await bcrypt.hash(this.password, salt)
+})
 
-userSchema.methods.correctPassword = async function (candidatePassword, userPassword) {
-    return await bcrypt.compare(candidatePassword, userPassword);
-};
+// Méthode personnalisée pour comparer les mots de passe
+_userSchema.methods.isValidPassword = async function (candidatePassword) {
+    return await bcrypt.compare(candidatePassword, this.password)
+}
 
-export const User = mongoose.model('User', userSchema);
+export const UserModel = mongoose.model('User', _userSchema)
+```
+
+## Piège : login et `select: false`
+
+`select: false` masque `password` dans tous les find() par défaut. Au login, si on récupère l'utilisateur sans le réinclure, `this.password` vaut `undefined` dans `isValidPassword` et la comparaison échoue silencieusement. Il faut le réinclure explicitement :
+
+```js
+const user = await UserModel.findOne({email}).select('+password')
+const ok = await user.isValidPassword(candidate)
 ```

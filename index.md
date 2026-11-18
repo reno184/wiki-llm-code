@@ -96,7 +96,7 @@ Fiches perso de Renaud. Toutes **à plat à la racine du repo**, une fiche = une
 |---|---|
 | [express-error-handling.md](express-error-handling.md) | Gestion d'erreurs Express |
 | [example-error-management.md](example-error-management.md) | Exemples gestion d'erreurs |
-| [user-schemas.md](user-schemas.md) | Schéma utilisateur Mongoose, bcrypt, validation |
+| [user-schemas.md](user-schemas.md) | Schéma utilisateur Mongoose, bcrypt, validation, piège select:+password au login |
 | [mongoose-connect.md](mongoose-connect.md) | Connexion Mongoose |
 | [mongodb.md](mongodb.md) | MongoDB |
 | [upload-file-busboy.md](upload-file-busboy.md) | Upload fichiers, busboy |
