@@ -116,5 +116,6 @@ Fiches perso de Renaud. Toutes **à plat à la racine du repo**, une fiche = une
 | [checklist-initialize-project.md](checklist-initialize-project.md) | Checklist initialisation projet |
 | [webstorm-settings-ai.md](webstorm-settings-ai.md) | Réglages IA WebStorm |
 | [webstorm-agents-junie-vibe.md](webstorm-agents-junie-vibe.md) | Agents WebStorm, Junie, Vibe |
+| [webstorm-gitignore-run-configurations.md](webstorm-gitignore-run-configurations.md) | Gitignore .idea/*, réinclusion !.idea/runConfigurations/, configs debug Front-end/Back-end versionnées, piège slash final |
 | [wiki-due-diligence-ma.md](wiki-due-diligence-ma.md) | Due diligence M&A |
 | [stages.md](stages.md) | Stages |
