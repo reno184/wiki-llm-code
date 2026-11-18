@@ -35,6 +35,37 @@ python app.py            # ou: flask run, ou: python -m flask --app app run
 
 Sortir du venv : `deactivate`. Le lendemain, un simple `source .venv/bin/activate` suffit, rien à réinstaller.
 
+## Workflow 100 % ligne de commande (sans IDE Python)
+
+Aucun IDE Python nécessaire : le venv gère tout depuis le terminal.
+
+```bash
+# une fois par projet
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+# chaque session
+cd <projet>
+source .venv/bin/activate
+python app.py        # Ctrl+C pour arrêter
+deactivate           # sortir du venv
+```
+
+Lancement typique d'un serveur Flask (`app.py`) :
+
+```python
+import os
+
+if __name__ == "__main__":
+    debug_mode = os.getenv("FLASK_DEBUG", "1") == "1"
+    app.run(host="127.0.0.1", port=5000, debug=debug_mode)
+```
+
+- `FLASK_DEBUG=1` (défaut ici) : recharge à chaque sauvegarde + page d'erreur interactive. `FLASK_DEBUG=0 python app.py` pour couper.
+- `host="127.0.0.1"` en local. `0.0.0.0` écoute sur toutes les interfaces : avec debug=1, le debugger interactif Flask est (exécution de code arbitraire) exposé au réseau. `0.0.0.0` uniquement en déploiement derrière reverse-proxy.
+- Vérifier au doute : `which python` doit pointer dans `.venv/bin/`.
+
 ## Choisir l'interpréteur dans WebStorm (piège de la liste "Python 3.9")
 
 WebStorm propose une liste d'interpréteurs Python : le système (`/usr/bin/python3`, souvent 3.9 sur macOS), les installs Homebrew, et les venv du projet. **Le venv n'est pas une alternative à l'interpréteur : il EST l'un des interpréteurs de la liste.** Il apparaît comme `.venv/bin/python`, souvent affiché « Python 3.x (nom-du-projet) ».
