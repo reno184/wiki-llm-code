@@ -7,10 +7,19 @@ fiches-liees: []
 
 ---
 
-### Rechercher
+#### Rechercher
 - les volume : docker volume ls
 - les logs: docker compose logs minio
 - les containers actifs : docker compose ps
+
+#### Nettoyer
+
+Supprimer images fantômes `docker image prune`
+
+Supprimer uniquement les volumes non utilisés, non attachés à un conteneur (anonymes ou non)
+- docker volume prune
+
+
 
 ### Lancer mongosh
 
