@@ -3,8 +3,12 @@ title: Commandes Docker utiles
 tags: [docker, howto]
 fiches-liees: []
 ---
+# Commandes de bases
 
-# Lancer mongosh dans un conteneur
+## Rechercher 
+Retrouver le volume : docker volume ls
+
+## Lancer mongosh
 
 `docker exec -it mongodb_demo mongosh demo`
 
