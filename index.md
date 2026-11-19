@@ -31,6 +31,7 @@ Fiches perso de Renaud. Toutes **à plat à la racine du repo**, une fiche = une
 
 | Fiche | Sujet / mots-clés |
 |---|---|
+| [wiki-securite.md](wiki-securite.md) | Généralités sécurité, checklist vol/perte MacBook, révoquer SSH keys GitHub/GitLab, Localiser mon Mac, tokens/OAuth, régénérer clés |
 | [altcha-antispam.md](altcha-antispam.md) | ALTCHA, remplace reCAPTCHA, proof-of-work, honeypot, formulaire contact |
 | [bruteforce-protection.md](bruteforce-protection.md) | DDoS, bots, bruteforce, Cloudflare, WAF, rate limiting, express-rate-limit |
 | [wiki-secret-gcp.md](wiki-secret-gcp.md) | Secrets GCP |
