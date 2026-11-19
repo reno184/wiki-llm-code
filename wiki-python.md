@@ -2,6 +2,13 @@
 
 Fiche `` — usage ~1×/mois, copié/collé manuel.
 
+### venv version docker
+
+L'avantage d'utiliser docker par rapport à venv, c'est que docker isole aussi et reste plus cohérent avec mes autres developpements 
+
+
+
+
 ## Points d'arrêt Python : dans quel IDE ?
 
 - **WebStorm ne supporte PAS le débogage Python** : le plugin Python est réservé à IntelliJ IDEA Ultimate et PyCharm. Pas de run/debug configuration Python dans WebStorm.
