@@ -30,19 +30,6 @@ cat ~/.ssh/id_ed25519.pub
 ```bash
 ssh -T git@github.com
 ```
-
-Réponse attendue : `Hi <pseudo>! You've successfully authenticated...` (idem `ssh -T git@gitlab.com` : `Welcome to GitLab, @pseudo!`).
-
-### 4. Remote en HTTPS → basculer en SSH
-
-Si le repo a été cloné en HTTPS, Git utilise les identifiants et ignore la clé SSH. Basculer l'URL :
-
-```bash
-git remote set-url origin git@github.com:<pseudo>/<repo>.git
-```
-
-Ou dans WebStorm : Settings → Version Control → Remotes, remplacer l'URL. Vérifier avec `git remote -v`.
-
 ## Multi-clés : une clé GitLab + une clé GitHub
 
 Une seule clé suffit (voir ci-dessus), mais si on veut des clés séparées (ou qu'elles existent déjà), éviter que SSH prenne toujours la première trouvée. Générer une clé dédiée :
@@ -69,23 +56,6 @@ Host github.com
 
 Sans ce fichier, SSH essaie les clés dans l'ordre et peut échouer avec `Permission denied (publickey)` alors que la bonne clé existe.
 
-## Pièges
-
-- **Clé publique vs privée** : sur GitHub/GitLab on colle le `.pub`. Coller la clé privée = fuite, il faut régénérer la paire.
-- **Remote toujours en HTTPS** : l'auth par clé ne s'applique que si l'URL remote est en `git@...`. Vérifier avec `git remote -v`.
-- **Première connexion** : le prompt "fingerprint... yes/no" apparaît ; accepter écrit `github.com` dans `~/.ssh/known_hosts`.
-- **Passphrase redemandée à chaque push/pull** : l'ajouter au trousseau macOS :
-
-```bash
-ssh-add --apple-use-keychain ~/.ssh/id_ed25519
-```
-
-et ajouter dans `~/.ssh/config` sous chaque Host :
-
-```text
-  AddKeysToAgent yes
-  UseKeychain yes
-```
 
 ## Côté serveur (VPS)
 
