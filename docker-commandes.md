@@ -20,10 +20,15 @@ Supprimer uniquement les volumes non utilisés, non attachés à un conteneur (a
 - docker volume prune
 
 
-
 ### Lancer mongosh
 
-- `docker exec -it mongodb_demo mongosh demo`
+Préférer la forme compose : nom du **service** (pas du conteneur) et TTY alloué par défaut, pas besoin de `-it` :
+
+- `docker compose exec mongodb mongosh -u root -p --authenticationDatabase admin`
+
+L'ancienne forme `docker exec -it mongodb_demo mongosh demo` dépend du nom exact du conteneur (préfixe projet inclus) et exige `-it` : à éviter.
+
+Détail complet (auth, pièges, conteneur arrêté) : voir la fiche docker-mongodb.
 
 ## Lancer un seul service
 
@@ -90,5 +95,3 @@ export const minioClient = new Minio.Client({
     secretKey: process.env.MINIO_ROOT_PASSWORD,
 })
 ```
-
-
