@@ -18,7 +18,7 @@ Fiches perso de Renaud. Toutes **à plat à la racine du repo**, une fiche = une
 | [fermer-ports-firewall.md](fermer-ports-firewall.md) | Port 22, fausse bonne idée, firewall Infomaniak, IP box |
 | [reseau-interne-docker.md](reseau-interne-docker.md) | Réseau interne Docker, expose vs ports, quoi exposer publiquement, protection API publique |
 | [express-trust-proxy.md](express-trust-proxy.md) | trust proxy Express, vraie IP derrière Caddy/nginx, rate-limit cassé |
-| [docker-commandes.md](docker-commandes.md) | Commandes Docker utiles |
+| [docker-commandes.md](docker-commandes.md) | Commandes Docker utiles, mongosh, lancer un seul service compose, up -d minio, --no-deps, depends_on |
 | [config-docker-file.md](config-docker-file.md) | Configuration Dockerfile, .dockerignore par dossier de service (contexte de build), node_modules, .env |
 | [docker-file-vuejs.md](docker-file-vuejs.md) | Dockerfile app Vue.js |
 | [dockerfile-python.md](dockerfile-python.md) | Dockerfile Python |
