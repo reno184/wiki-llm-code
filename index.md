@@ -112,6 +112,7 @@ Fiches perso de Renaud. Toutes **à plat à la racine du repo**, une fiche = une
 | Fiche | Sujet / mots-clés |
 |---|---|
 | [wiki-git.md](wiki-git.md) | Git |
+| [wiki-ssh.md](wiki-ssh.md) | Clés SSH Git, clé partagée GitLab/GitHub, ajout clé publique, test ssh -T, remote HTTPS → SSH, multi-clés ~/.ssh/config, passphrase trousseau macOS |
 | [wiki-python.md](wiki-python.md) | Python, debug |
 | [python-venv-macos.md](python-venv-macos.md) | venv, Python système vs virtuel, Mac M4, lancer API Flask port 5000 en ligne de commande, flèche verte WebStorm ne marche pas, python3.12 Homebrew, PEP 668 |
 | [checklist-initialize-project.md](checklist-initialize-project.md) | Checklist initialisation projet |
