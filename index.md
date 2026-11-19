@@ -22,7 +22,7 @@ Fiches perso de Renaud. Toutes **à plat à la racine du repo**, une fiche = une
 | [config-docker-file.md](config-docker-file.md) | Configuration Dockerfile, .dockerignore par dossier de service (contexte de build), node_modules, .env |
 | [docker-file-vuejs.md](docker-file-vuejs.md) | Dockerfile app Vue.js |
 | [dockerfile-python.md](dockerfile-python.md) | Dockerfile Python |
-| [docker-secrets-env.md](docker-secrets-env.md) | Secrets et .env dans Docker |
+| [docker-secrets-env.md](docker-secrets-env.md) | Secrets et .env dans Docker, périmètre d'exposition, docker inspect, piège MinIO : credentials créés par le compose (MINIO_ROOT_USER/PASSWORD), 2 .env identiques requis, SignatureDoesNotMatch |
 | [docker-volumes-persistence.md](docker-volumes-persistence.md) | Volumes, persistance des données |
 | [python-docker-labo.md](python-docker-labo.md) | Labo Python + Docker |
 | [nodejs-express-env.md](nodejs-express-env.md) | Variables d'env Node.js/Express |

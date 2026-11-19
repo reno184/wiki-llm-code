@@ -17,6 +17,43 @@
 
 Docker / Docker Compose / Node
 
+## Piège MinIO : les credentials naissent dans le compose, le backend doit lire les mêmes clés
+
+Les credentials MinIO ne se créent pas dans la console : c'est le service compose qui crée le user root à partir des variables d'env au premier démarrage.
+
+```yaml
+minio:
+  image: cgr.dev/chainguard/minio:latest
+  restart: always
+  user: root
+  ports:
+    - "9000:9000"
+    - "9001:9001"
+  environment:
+    MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+    MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+```
+
+Le backend Node (client minio) doit pointer sur **les mêmes valeurs** :
+
+```js
+export const minioClient = new Minio.Client({
+  endPoint: '127.0.0.1',
+  port: 9000,
+  useSSL: false,
+  accessKey: process.env.MINIO_ROOT_USER,
+  secretKey: process.env.MINIO_ROOT_PASSWORD,
+})
+```
+
+Conséquence : **deux `.env` contenant les mêmes clés** — un à la racine du projet (lu par docker compose pour `MINIO_ROOT_USER`/`MINIO_ROOT_PASSWORD`) et un côté backend (lu par Node au démarrage). Si les valeurs divergent : `SignatureDoesNotMatch` / 403 à chaque appel du backend alors que la console :9001 fonctionne. Symptôme classique du piège, ne pas chercher du côté du code.
+
+Notes :
+
+- L'image chainguard tourne en non-root par défaut, d'où le `user: root` : nécessaire pour que MinIO puisse écrire dans son volume.
+- `endPoint: '127.0.0.1'` ne marche que si le backend tourne **sur l'hôte** (dev). Backend conteneurisé : utiliser le nom du service (`minio`) — cf. docker-commandes.md.
+- Piège annexé : une fois le volume initialisé, changer `MINIO_ROOT_USER/PASSWORD` dans le .env **ne met pas à jour** les creds existants dans le volume. Il faut recréer le volume ou changer le mot de passe via la console/mc.
+
 ## Comment les secrets sont exposés
 
 - `environment` / `env_file` compose : visibles en clair via `docker inspect <container>` (section Env) et `docker exec <container> env`. Tout accès `docker` sur l'hôte = lecture des secrets.
