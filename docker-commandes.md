@@ -3,18 +3,23 @@ title: Commandes Docker utiles
 tags: [docker, howto]
 fiches-liees: []
 ---
-# Commandes de bases
+## Commandes de bases
 
-## Rechercher 
-les volume : docker volume ls
-les logs: docker compose logs minio
-les containers actifs : docker compose ps
+---
 
-## Lancer mongosh
+### Rechercher
+- les volume : docker volume ls
+- les logs: docker compose logs minio
+- les containers actifs : docker compose ps
 
-`docker exec -it mongodb_demo mongosh demo`
+### Lancer mongosh
 
-# Lancer un seul service d'un docker compose
+- `docker exec -it mongodb_demo mongosh demo`
+
+## Lancer un seul service
+
+>Exemple minio
+---
 
 `docker compose up -d` sans argument démarre **toute** la stack. :
 
@@ -33,7 +38,7 @@ docker compose up -d --no-deps minio
 
 - Pour arrêter un seul service : `docker compose stop minio` (sans toucher au reste).
 
-## Exemple concret : ce que crée un lancement isolé de MinIO
+#### Ce que créer un lancement isolé de MinIO
 
 Partie du docker-compose.yml (projet `proto-app`) :
 
@@ -54,4 +59,27 @@ Lecture pratique :
 
 - **Lancer un service isolément aide à comprendre** : on voit exactement ce que compose crée pour ce seul service, sans le bruit des autres conteneurs. `docker compose ps minio` ou `docker inspect minio-1` donnent les détails (ports, réseau, montages).
 - Le préfixe `proto-app` vient du **nom du dossier** du docker-compose.yml, sauf si `name:` est défini en tête de compose ou `COMPOSE_PROJECT_NAME` dans l'env. Ça permet à plusieurs stacks de cohabiter sans collision de noms.
-- Retrouver le volume derrière : `docker volume ls` 
+
+## Endpoints: localhost vs DNS Docker
+
+
+| Où tourne ton backend (nodejs) ? | endPoint à utiliser pour minio |
+|---|---|
+| En local (`npm run dev` sur ta machine) | `127.0.0.1` |
+| Dans un conteneur Docker (compose) | `minio` (nom du service compose) |
+
+Le nom du service est résolu par le DNS interne Docker.
+
+End point à changer dans minio.js
+
+```js
+export const minioClient = new Minio.Client({
+    endPoint: '127.0.0.1',
+    port: 9000,
+    useSSL: false,
+    accessKey: process.env.MINIO_ROOT_USER,
+    secretKey: process.env.MINIO_ROOT_PASSWORD,
+})
+```
+
+
