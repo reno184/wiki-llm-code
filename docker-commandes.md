@@ -6,7 +6,9 @@ fiches-liees: []
 # Commandes de bases
 
 ## Rechercher 
-Retrouver le volume : docker volume ls
+les volume : docker volume ls
+les logs: docker compose logs minio
+les containers actifs : docker compose ps
 
 ## Lancer mongosh
 
