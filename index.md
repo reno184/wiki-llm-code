@@ -99,6 +99,7 @@ Fiches perso de Renaud. Toutes **à plat à la racine du repo**, une fiche = une
 | [express-error-handling.md](express-error-handling.md) | Gestion d'erreurs Express |
 | [example-error-management.md](example-error-management.md) | Exemples gestion d'erreurs |
 | [wiki-mongoose.md](wiki-mongoose.md) | Mongoose : schéma utilisateur (bcrypt, hook pre save, isValidPassword), piège select:+password au login, connexion DB config/db.js fail fast, compose service mongodb, authSource=admin |
+| [docker-mongodb.md](docker-mongodb.md) | MongoDB dans Docker avec auth, MONGO_INITDB_ROOT_USER/PASSWORD, --auth implicite, authSource=admin, piège volume déjà initialisé, connexions anonymes sans auth |
 | [mongodb.md](mongodb.md) | Commandes mongosh, CRUD, opérateurs $inc/$push/$addToSet, COLLSCAN index, populate ObjectId, data modeling patterns |
 | [upload-file-busboy.md](upload-file-busboy.md) | Upload fichiers, busboy |
 | [wiki-upload-dragdrop-pdf.md](wiki-upload-dragdrop-pdf.md) | Upload drag & drop de PDF |
