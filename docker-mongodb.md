@@ -3,7 +3,43 @@ title: MongoDB dans Docker avec authentification
 tags: [docker, backend, howto]
 fiches-liees: [wiki-mongoose, mongodb, docker-commandes, reseau-interne-docker, docker-volumes-persistence]
 ---
-# MongoDB dans Docker avec auth
+# MongoDB dans Docker
+
+
+Pour lancer instance virtuelle mongodb sur mon Mac
+
+1. créer un docker-compose.yml dans un dossier vide
+```
+services:
+  mongodb:
+    image: mongo:latest
+    restart: always
+    ports: <- pas obligatoire
+      - "27017:27017"
+    environment: <- pas obligatoire
+      MONGO_INITDB_DATABASE: ${MONGO_DB}
+    volumes: <- pas obligatoire
+      - test_data:/data/db
+
+volumes:
+  test_data:
+
+```
+2. `docker compose up -d`
+
+Une image moto, une instance <current_folder>.<container_name>-1, volume nommé <current_folder>_test_data
+
+3.Lancer mongo sh
+
+```bash
+docker compose exec <container_name> mongosh
+show dbs
+use test1 <- créer une base
+exit
+```
+
+
+
 
 ## Le piège de base
 
