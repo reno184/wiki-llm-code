@@ -103,7 +103,7 @@ Fiches perso de Renaud. Toutes **à plat à la racine du repo**, une fiche = une
 | [mongodb.md](mongodb.md) | Commandes mongosh, CRUD, opérateurs $inc/$push/$addToSet, COLLSCAN index, populate ObjectId, data modeling patterns |
 | [upload-file-busboy.md](upload-file-busboy.md) | Upload fichiers, busboy |
 | [wiki-upload-dragdrop-pdf.md](wiki-upload-dragdrop-pdf.md) | Upload drag & drop de PDF |
-| [wiki-minio-pdf.md](wiki-minio-pdf.md) | MinIO, stockage PDF |
+| [wiki-minio.md](wiki-minio.md) | MinIO, stockage PDF |
 | [wiki-download-blob.md](wiki-download-blob.md) | Download blob |
 | [wiki-variable-env.md](wiki-variable-env.md) | Variables d'env, build vs runtime Vite |
 | [wiki-webstorm-http.md](wiki-webstorm-http.md) | Requêtes HTTP côté WebStorm |

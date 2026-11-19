@@ -1,40 +1,63 @@
-# wiki-minio-pdf — MinIO : upload/suppression PDF + images, Vue mensuelle
+# wiki-minio
 
-Usage: snippet backend MinIO complet (upload PDF + conversion WebP + hook suppression Mongoose + docker compose). Lecture ~1×/mois, copié/collé manuel.
+Dans cette fiche: 2 sections
 
-## Install
+1. Docker
+2. Nodejs javascript
+
+> Minio est toujours utilisé via docker 
+
+
+## Piège MinIO : les credentials naissent dans le compose, le backend doit lire les mêmes clés
+
+Les credentials MinIO sont créés par le service compose qui crée le user root à partir des variables d'env au premier démarrage.
+
+```yaml
+minio:
+  image: cgr.dev/chainguard/minio:latest
+  restart: always
+  user: root
+  ports:
+    - "9000:9000"
+    - "9001:9001"
+  environment:
+    MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+    MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+```
+
+Donc attention Le backend Node (client minio) doit pointer sur **les mêmes valeurs** :
+
+```js
+export const minioClient = new Minio.Client({
+  endPoint: '127.0.0.1',
+  port: 9000,
+  useSSL: false,
+  accessKey: process.env.MINIO_ROOT_USER,
+  secretKey: process.env.MINIO_ROOT_PASSWORD,
+})
+```
+
+Conséquence : **deux `.env` contenant les mêmes clés** — un à la racine du projet et un côté backend (lu par Node au démarrage).
+
+Notes :
+
+- L'image chainguard tourne en non-root par défaut, d'où le `user: root` : nécessaire pour que MinIO puisse écrire dans son volume.
+- `endPoint: '127.0.0.1'` ne marche que si le backend tourne **sur l'hôte** (dev). Backend conteneurisé : utiliser le nom du service (`minio`) — cf. docker-commandes.md.
+
+### todo
+
+MinIO : ne pas utiliser les creds root dans l'app. Créer un user de service dédié borné à un bucket
+
+# minio et nodejs
+
+---
+## Backend nodejs
+
+> il faut installer minio pour le client
 
 ```bash
 npm install minio
 ```
-
-## Config client (singleton). Dans backend/config
-
-```js
-import * as Minio from 'minio'
-
-export const minioClient = new Minio.Client({
-    endPoint: process.env.MINIO_ENDPOINT || 'minio',
-    port: parseInt(process.env.MINIO_PORT, 10) || 9000,
-    useSSL: false,
-    accessKey: process.env.MINIO_ROOT_USER,
-    secretKey: process.env.MINIO_ROOT_PASSWORD,
-})
-```
-
-## Démarrage — après la base mongodb
-
-Appel dans `index.js`, **avant** `app.listen()` :
-
-```js
-const startServer = async () => {
-
-        await connectDB()
-        await initBucket('pdf-thumbnails')
-
-}
-```
-
 ## Exemple d'upload (PDF + conversion WebP + Mongoose)
 
 ```js
@@ -221,27 +244,3 @@ const listBucketObjects = (bucketName) => async (req, res, next) => {
 }
 ```
 
-## Docker compose
-
-```yaml
-  minio:
-    image: minio/minio:latest
-    restart: always
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-      MINIO_PUBLIC_URL: http://localhost:9000
-    volumes:
-      - minio_data:/data
-    command: server /data --console-address ":9001"
-
-volumes:
-  minio_data:
-    external: true
-```
-## État
-
-**vivant** — snippet brut Renaud (oct. 2026), sans amélioration. Pattern clé UID + nom original en métadonnée `X-Amz-Meta-filename` (latin1→utf8, encodeURIComponent, decodeURIComponent) ajouté nov. 2026.

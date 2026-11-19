@@ -43,4 +43,4 @@ if (blob) {
 
 - [wiki-vueuse.md](wiki-vueuse.md) — `useApi` `immediate: false` + `execute`, `useObjectUrl` (aperçu ≠ download)
 - [wiki-upload-dragdrop-pdf.md](wiki-upload-dragdrop-pdf.md) — le sens inverse (upload PDF drag & drop), même pipeline
-- [wiki-minio-pdf.md](wiki-minio-pdf.md) — stockage/serve des fichiers côté back
+- [wiki-minio.md](wiki-minio.md) — stockage/serve des fichiers côté back
